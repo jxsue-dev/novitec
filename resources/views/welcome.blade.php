@@ -5,154 +5,481 @@
 @section('content')
 
 <style>
-    .reveal {
-        opacity: 0;
-        transform: translateY(40px);
-        transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    .reveal-left {
-        opacity: 0;
-        transform: translateX(-40px);
-        transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal-left.visible {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    .reveal-right {
-        opacity: 0;
-        transform: translateX(40px);
-        transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal-right.visible {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    .delay-1 { transition-delay: 0.1s; }
-    .delay-2 { transition-delay: 0.2s; }
-    .delay-3 { transition-delay: 0.3s; }
-    .delay-4 { transition-delay: 0.4s; }
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@300;400;500&display=swap');
+
+body { font-family: 'Inter', sans-serif; }
+.font-serif { font-family: 'Playfair Display', serif; }
+
+.reveal { opacity:0; transform:translateY(30px); transition:opacity .8s ease,transform .8s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+.reveal-left { opacity:0; transform:translateX(-40px); transition:opacity .8s ease,transform .8s ease; }
+.reveal-left.visible { opacity:1; transform:translateX(0); }
+.reveal-right { opacity:0; transform:translateX(40px); transition:opacity .8s ease,transform .8s ease; }
+.reveal-right.visible { opacity:1; transform:translateX(0); }
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}.d5{transition-delay:.5s}
+
+@keyframes float {
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-16px)}
+}
+.float-anim { animation:float 5s ease-in-out infinite; }
+
+@keyframes shimmer {
+    0%{background-position:-200% center}
+    100%{background-position:200% center}
+}
+.text-gradient {
+    background:linear-gradient(135deg,#1d4ed8,#3b82f6,#0ea5e9);
+    background-size:200% auto;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    animation:shimmer 4s linear infinite;
+}
+
+@keyframes pulse-ring {
+    0%{box-shadow:0 0 0 0 rgba(59,130,246,.3)}
+    70%{box-shadow:0 0 0 10px rgba(59,130,246,0)}
+    100%{box-shadow:0 0 0 0 rgba(59,130,246,0)}
+}
+.pulse-ring { animation:pulse-ring 2s ease-in-out infinite; }
+
+.service-card {
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:16px;
+    padding:1.75rem;
+    transition:all .4s ease;
+    position:relative;
+    overflow:hidden;
+}
+.service-card::after {
+    content:'';
+    position:absolute;
+    bottom:0; left:0;
+    width:0; height:3px;
+    background:linear-gradient(90deg,#1d4ed8,#0ea5e9);
+    transition:width .4s ease;
+}
+.service-card:hover::after { width:100%; }
+.service-card:hover {
+    border-color:#bfdbfe;
+    transform:translateY(-5px);
+    box-shadow:0 20px 40px rgba(59,130,246,.08);
+}
+
+.step-card {
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:16px;
+    padding:1.75rem;
+    transition:all .4s ease;
+    text-align:center;
+}
+.step-card:hover {
+    background:#eff6ff;
+    border-color:#bfdbfe;
+    transform:translateY(-4px);
+}
+
+.testi-card {
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:16px;
+    padding:1.75rem;
+    transition:all .4s ease;
+}
+.testi-card:hover {
+    background:rgba(255,255,255,.08);
+    border-color:rgba(139,92,246,.4);
+    transform:translateY(-4px);
+}
+
+.branch-card {
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:16px;
+    padding:1.75rem;
+    transition:all .4s ease;
+}
+.branch-card:hover {
+    border-color:#93c5fd;
+    box-shadow:0 12px 32px rgba(59,130,246,.08);
+}
 </style>
 
 {{-- HERO --}}
-<div class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-    <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1600&q=80&fit=crop"
-         alt="hero"
-         class="absolute inset-0 w-full h-full object-cover">
-    <div class="absolute inset-0 bg-neutral-900/70"></div>
-    <div class="relative z-10 text-center px-8">
-        <p class="text-xs font-semibold tracking-widest uppercase text-blue-400 mb-4 reveal">Servicio técnico especializado</p>
-        <h1 class="text-6xl md:text-7xl font-bold tracking-tight text-white mb-6 reveal delay-1">
-            Tu equipo de confianza<br>siempre disponible
-        </h1>
-        <p class="text-neutral-300 text-lg max-w-xl mx-auto mb-10 reveal delay-2">
-            Reparamos computadores, celulares e impresoras. Brindamos soporte IT remoto y presencial, redes y CCTV.
-        </p>
-        <div class="flex items-center justify-center gap-4 reveal delay-3">
-            <a href="#servicios" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-8 py-3 rounded transition-colors">
-                Ver servicios
-            </a>
-            <a href="#contacto" class="border border-white/40 hover:border-white text-white text-sm px-8 py-3 rounded transition-colors">
-                Contáctenos
-            </a>
+<section class="relative min-h-screen flex items-center overflow-hidden" style="background:linear-gradient(135deg,#f0f4ff 0%,#e8f0fe 25%,#fdf4ff 50%,#f0f9ff 75%,#ecfdf5 100%);">
+
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-3xl -translate-y-1/3 translate-x-1/4 pointer-events-none" style="background:radial-gradient(circle,rgba(139,92,246,.15),transparent 70%)"></div>
+    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" style="background:radial-gradient(circle,rgba(59,130,246,.12),transparent 70%)"></div>
+    <div class="absolute top-1/2 right-1/3 w-[300px] h-[300px] rounded-full blur-2xl pointer-events-none" style="background:radial-gradient(circle,rgba(16,185,129,.1),transparent 70%)"></div>
+    <div class="absolute inset-0 pointer-events-none" style="background-image:linear-gradient(rgba(59,130,246,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.04) 1px,transparent 1px);background-size:60px 60px"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-8 py-36 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <div>
+            <div class="inline-flex items-center gap-2 bg-white border border-blue-100 rounded-full px-4 py-1.5 mb-7 reveal shadow-sm">
+                <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+                <span class="text-blue-700 text-xs font-medium tracking-widest uppercase">Novitecnología Cia. Ldta.</span>
+            </div>
+            <h1 class="font-serif text-6xl md:text-7xl font-bold mb-6 reveal d1 leading-tight text-slate-900">
+                Tecnología<br>que impulsa<br><span class="text-gradient">tu negocio</span>
+            </h1>
+            <p class="text-slate-500 text-base max-w-md mb-5 reveal d2 leading-relaxed font-light">
+                Reparamos computadores, celulares e impresoras. Soporte IT remoto y presencial, redes y CCTV para personas y empresas en Quito.
+            </p>
+            <div class="inline-flex items-center gap-3 bg-white border border-blue-100 rounded-full px-4 py-2 mb-8 reveal d2 shadow-sm">
+                <span class="bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded-full pulse-ring">50% OFF</span>
+                <span class="text-slate-500 text-xs font-light">clientes registrados —
+                    <a href="/register" class="text-blue-600 hover:text-blue-800 transition-colors font-medium">Regístrate aquí</a>
+                </span>
+            </div>
+            <div class="flex items-center gap-4 reveal d3">
+                <a href="#servicios" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-8 py-3.5 rounded-xl transition-all hover:shadow-lg hover:shadow-blue-600/25 hover:-translate-y-0.5">
+                    Ver servicios
+                </a>
+                <a href="#contacto" class="border border-slate-300 hover:border-blue-400 text-slate-600 hover:text-blue-600 text-sm px-8 py-3.5 rounded-xl transition-all">
+                    Contáctenos
+                </a>
+            </div>
+            <div class="flex items-center gap-8 mt-12 reveal d4">
+                @foreach([['10+','años'],['500+','equipos'],['100%','garantía']] as $s)
+                <div>
+                    <p class="text-2xl font-bold text-slate-900 font-serif">{{$s[0]}}</p>
+                    <p class="text-xs text-slate-400 font-light">{{$s[1]}}</p>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        <div class="reveal-right flex items-center justify-center">
+            <div class="relative group">
+                <div class="absolute -inset-6 bg-blue-100 rounded-3xl blur-2xl group-hover:bg-violet-100 transition-all duration-700"></div>
+                <img src="{{ asset('images/tiers.png') }}"
+                     alt="Certificaciones Novitec"
+                     class="relative w-full max-w-md mx-auto float-anim drop-shadow-xl group-hover:scale-105 transition-transform duration-700">
+            </div>
         </div>
     </div>
-</div>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-300 reveal d5">
+        <span class="text-xs tracking-widest uppercase">scroll</span>
+        <div class="w-px h-8 bg-gradient-to-b from-slate-300 to-transparent"></div>
+    </div>
+</section>
 
 {{-- STATS --}}
-<div class="border-b border-neutral-100">
-    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4">
-        @foreach([
-            ['10+', 'Años de experiencia'],
-            ['500+', 'Equipos reparados'],
-            ['24/7', 'Soporte remoto'],
-            ['100%', 'Garantía de servicio'],
-        ] as $stat)
-        <div class="reveal py-10 px-8 border-r border-neutral-100 last:border-r-0">
-            <p class="text-3xl font-bold text-neutral-900">{{ $stat[0] }}</p>
-            <p class="text-sm text-neutral-500 mt-1">{{ $stat[1] }}</p>
+<div class="bg-slate-900 border-y border-slate-800">
+    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-800">
+        @foreach([['10+','Años de experiencia','🏆'],['500+','Equipos reparados','🔧'],['24/7','Soporte remoto','💻'],['100%','Garantía','✅']] as $i=>$s)
+        <div class="reveal py-10 px-8 hover:bg-slate-800/50 transition-colors" style="transition-delay:{{$i*.1}}s">
+            <div class="text-xl mb-2">{{$s[2]}}</div>
+            <p class="font-serif text-3xl font-bold text-white mb-1">{{$s[0]}}</p>
+            <p class="text-xs text-slate-400 font-light">{{$s[1]}}</p>
         </div>
         @endforeach
     </div>
 </div>
 
 {{-- SERVICIOS --}}
-<section id="servicios" class="py-24 px-6">
+<section id="servicios" class="py-16 md:py-24 px-4 md:px-6" style="background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);">
     <div class="max-w-7xl mx-auto">
-        <p class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3 reveal">Lo que hacemos</p>
-        <h2 class="text-4xl font-bold text-neutral-900 mb-4 reveal delay-1">Nuestros servicios</h2>
-        <p class="text-neutral-500 max-w-lg mb-16 reveal delay-2">Soluciones técnicas completas para personas y empresas — rápido, confiable y con garantía.</p>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="max-w-xl mb-10 md:mb-14">
+            <p class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3 reveal">Lo que hacemos</p>
+            <h2 class="font-serif text-4xl md:text-5xl font-bold text-slate-900 mb-4 reveal d1">Nuestros servicios</h2>
+            <p class="text-slate-500 font-light reveal d2 leading-relaxed text-sm md:text-base">Soluciones tecnológicas completas para personas y empresas — con garantía en cada trabajo.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             @foreach([
-                ['💻', 'Reparación de computadores', 'Diagnóstico, mantenimiento, cambio de piezas y recuperación de datos para laptops y PCs de cualquier marca.'],
-                ['📱', 'Reparación de celulares', 'Cambio de pantallas, baterías, conectores y solución de fallas de software en smartphones y tablets.'],
-                ['🖨️', 'Servicio de impresoras', 'Mantenimiento, recarga de tóner, reparación de cabezales y configuración de impresoras en red.'],
-                ['🖥️', 'Soporte IT remoto y presencial', 'Asistencia técnica para empresas y hogares — resolución de problemas de software, sistemas y usuarios.'],
-                ['🌐', 'Redes', 'Diseño, instalación y configuración de redes cableadas e inalámbricas para hogares y oficinas.'],
-                ['📷', 'CCTV', 'Instalación y configuración de sistemas de videovigilancia con acceso remoto desde cualquier dispositivo.'],
-            ] as $i => $s)
-            <div class="reveal border border-neutral-100 rounded-xl p-7 hover:border-blue-200 hover:shadow-sm transition-all"
-                 style="transition-delay: {{ $i * 0.1 }}s">
-                <div class="text-3xl mb-5">{{ $s[0] }}</div>
-                <h3 class="text-base font-semibold text-neutral-900 mb-2">{{ $s[1] }}</h3>
-                <p class="text-sm text-neutral-500 leading-relaxed">{{ $s[2] }}</p>
+                [
+                    'https://images.unsplash.com/photo-1531492746076-161ca9bcad58?w=800&q=80&fit=crop',
+                    '🔧',
+                    'Reparación de equipos',
+                    'Diagnóstico, mantenimiento y reparación de computadores, laptops, celulares e impresoras de cualquier marca. Recuperación de datos y cambio de componentes con repuestos de calidad.',
+                    ['Computadores y laptops','Celulares y tablets','Impresoras']
+                ],
+                [
+                    'https://images.unsplash.com/photo-1600267175161-cfaa711b4a81?w=800&q=80&fit=crop',
+                    '🖥️',
+                    'Soporte IT remoto y presencial',
+                    'Asistencia técnica especializada para empresas y hogares. Resolución de problemas de software, configuración de sistemas, gestión de usuarios y mantenimiento preventivo.',
+                    ['Soporte remoto 24/7','Visitas presenciales','Mantenimiento preventivo']
+                ],
+                [
+                    'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80&fit=crop',
+                    '🌐',
+                    'Infraestructura de red',
+                    'Diseño, instalación y configuración de redes cableadas e inalámbricas para hogares, oficinas y empresas. Optimización del rendimiento y seguridad de su red.',
+                    ['Redes cableadas','WiFi empresarial','Seguridad de red']
+                ],
+                [
+                    'https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=800&q=80&fit=crop',
+                    '📷',
+                    'CCTV y videovigilancia',
+                    'Instalación y configuración de sistemas de videovigilancia profesionales con acceso remoto desde cualquier dispositivo. Monitoreo continuo para hogares y empresas.',
+                    ['Cámaras HD y 4K','Acceso remoto','Monitoreo 24/7']
+                ],
+            ] as $i=>$s)
+            <div class="service-card reveal overflow-hidden p-0" style="transition-delay:{{$i*.1}}s; border-radius:20px;">
+                <div class="relative h-40 md:h-52 overflow-hidden">
+                    <img src="{{$s[0]}}" alt="{{$s[2]}}"
+                         class="w-full h-full object-cover transition-transform duration-700 hover:scale-105">
+                    <div class="absolute inset-0" style="background:linear-gradient(to bottom,transparent 40%,rgba(15,23,42,.6) 100%)"></div>
+                    <div class="absolute bottom-3 left-4 flex items-center gap-2">
+                        <span class="text-xl md:text-2xl">{{$s[1]}}</span>
+                        <h3 class="font-serif font-bold text-white text-base md:text-lg">{{$s[2]}}</h3>
+                    </div>
+                </div>
+                <div class="p-4 md:p-6">
+                    <p class="text-xs md:text-sm text-slate-500 font-light leading-relaxed mb-4">{{$s[3]}}</p>
+                    <div class="flex flex-wrap gap-2">
+                        @foreach($s[4] as $tag)
+                        <span class="text-xs font-medium text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full">{{$tag}}</span>
+                        @endforeach
+                    </div>
+                </div>
             </div>
             @endforeach
         </div>
     </div>
 </section>
 
-{{-- POR QUÉ NOSOTROS --}}
-<section id="nosotros" class="py-24 px-6 bg-neutral-50">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-        <div>
-            <p class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3 reveal-left">Por qué Novitec</p>
-            <h2 class="text-4xl font-bold text-neutral-900 mb-6 reveal-left delay-1">Rápido, confiable<br>y con garantía</h2>
-            <div class="space-y-6">
-                @foreach([
-                    ['Diagnóstico sin costo', 'Revisamos tu equipo sin costo antes de comprometerte a cualquier reparación.'],
-                    ['Técnicos certificados', 'Nuestro equipo cuenta con experiencia y certificaciones en las principales marcas del mercado.'],
-                    ['Garantía en todos los servicios', 'Todos nuestros trabajos incluyen garantía — si falla, lo resolvemos sin costo adicional.'],
-                ] as $i => $f)
-                <div class="flex gap-4 reveal-left" style="transition-delay: {{ ($i+2) * 0.1 }}s">
-                    <div class="w-7 h-7 bg-blue-600 rounded flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
-                        </svg>
+{{-- PROCESO --}}
+<section class="py-24 px-6 bg-white">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-xl mx-auto mb-14">
+            <p class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3 reveal">Cómo trabajamos</p>
+            <h2 class="font-serif text-5xl font-bold text-slate-900 mb-4 reveal d1">Simple y transparente</h2>
+            <p class="text-slate-500 font-light reveal d2">Siempre sabrás qué pasa con tu equipo.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            @foreach([
+                ['01','📥','Recepción','Traes tu equipo. Registramos el caso y te damos número de seguimiento.'],
+                ['02','🔍','Diagnóstico','Revisamos tu equipo e informamos el problema y presupuesto exacto.'],
+                ['03','🔧','Reparación','Con tu aprobación usamos repuestos de alta calidad.'],
+                ['04','✅','Entrega','Te entregamos en máximo 5 días hábiles con garantía escrita.'],
+            ] as $i=>$step)
+            <div class="step-card reveal" style="transition-delay:{{$i*.1}}s">
+                <div class="relative inline-flex flex-col items-center mb-4">
+                    <div class="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-2xl shadow-lg shadow-blue-600/20">{{$step[1]}}</div>
+                    <span class="absolute -top-2 -right-2 bg-slate-900 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">{{$step[0]}}</span>
+                </div>
+                <h3 class="font-semibold text-slate-900 text-sm mb-2">{{$step[2]}}</h3>
+                <p class="text-xs text-slate-500 font-light leading-relaxed">{{$step[3]}}</p>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+{{-- 50% OFF --}}
+<section class="py-24 px-6 relative overflow-hidden" style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);">
+    <div class="absolute inset-0 pointer-events-none" style="background-image:linear-gradient(rgba(139,92,246,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,.06) 1px,transparent 1px);background-size:50px 50px"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none" style="background:radial-gradient(circle,rgba(139,92,246,.2),transparent 70%)"></div>
+    <div class="absolute bottom-0 left-0 w-72 h-72 rounded-full blur-3xl pointer-events-none" style="background:radial-gradient(circle,rgba(59,130,246,.15),transparent 70%)"></div>
+    <div class="absolute top-1/2 left-1/2 w-48 h-48 rounded-full blur-2xl pointer-events-none -translate-x-1/2 -translate-y-1/2" style="background:radial-gradient(circle,rgba(16,185,129,.08),transparent 70%)"></div>
+
+    <div class="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <div class="reveal-left">
+            <span class="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-medium tracking-widest uppercase px-4 py-1.5 rounded-full mb-6">
+                <span class="w-1.5 h-1.5 bg-yellow-400 rounded-full animate-pulse"></span>
+                Beneficio exclusivo
+            </span>
+            <h2 class="font-serif text-5xl font-bold text-white leading-tight mb-6">
+                Obtén un <span class="text-yellow-400">50% OFF</span> en tu próximo servicio
+            </h2>
+            <p class="text-slate-400 font-light leading-relaxed mb-8 max-w-md">Regístrate y accede a descuentos exclusivos, seguimiento en tiempo real y soporte prioritario.</p>
+            <ul class="space-y-3 mb-8">
+                @foreach(['50% en tu primer servicio','Seguimiento en tiempo real','Soporte prioritario por WhatsApp','Historial de tus reparaciones'] as $b)
+                <li class="flex items-center gap-3 text-slate-300 text-sm font-light">
+                    <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                    {{$b}}
+                </li>
+                @endforeach
+            </ul>
+            <a href="/register" class="inline-block bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold px-8 py-3.5 rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-violet-600/30">
+                Registrarme y obtener 50% OFF
+            </a>
+        </div>
+
+        {{-- VISUAL ABSTRACTO --}}
+        <div class="reveal-right flex items-center justify-center">
+            <div class="relative w-full max-w-md aspect-square">
+                {{-- Círculos concéntricos animados --}}
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="absolute w-80 h-80 rounded-full border border-violet-500/20 animate-ping" style="animation-duration:3s"></div>
+                    <div class="absolute w-64 h-64 rounded-full border border-blue-500/20 animate-ping" style="animation-duration:4s"></div>
+                    <div class="absolute w-48 h-48 rounded-full border border-violet-400/30"></div>
+                    <div class="absolute w-32 h-32 rounded-full border border-blue-400/40"></div>
+                </div>
+
+                {{-- Centro --}}
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="relative">
+                        <div class="w-24 h-24 rounded-2xl flex items-center justify-center text-5xl shadow-2xl" style="background:linear-gradient(135deg,#7c3aed,#2563eb)">
+                            💎
+                        </div>
+                        <div class="absolute -top-3 -right-3 bg-yellow-400 text-slate-900 text-xs font-bold px-3 py-1 rounded-full">50% OFF</div>
                     </div>
+                </div>
+
+                {{-- Puntos orbitando --}}
+                <div class="absolute inset-0 flex items-center justify-center" style="animation:spin 8s linear infinite">
+                    <div class="relative w-64 h-64">
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-violet-400 rounded-full shadow-lg shadow-violet-400/50"></div>
+                        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-blue-400 rounded-full shadow-lg shadow-blue-400/50"></div>
+                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-emerald-400 rounded-full shadow-lg shadow-emerald-400/50"></div>
+                        <div class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-yellow-400 rounded-full shadow-lg shadow-yellow-400/50"></div>
+                    </div>
+                </div>
+
+                {{-- Tags flotantes --}}
+                <div class="absolute top-4 right-0 bg-white/5 border border-white/10 backdrop-blur rounded-xl px-3 py-2 float-anim">
+                    <p class="text-white text-xs font-medium">🔧 Reparación</p>
+                </div>
+                <div class="absolute bottom-8 left-0 bg-white/5 border border-white/10 backdrop-blur rounded-xl px-3 py-2 float-anim" style="animation-delay:1s">
+                    <p class="text-white text-xs font-medium">🌐 Redes</p>
+                </div>
+                <div class="absolute top-1/2 right-2 bg-white/5 border border-white/10 backdrop-blur rounded-xl px-3 py-2 float-anim" style="animation-delay:2s">
+                    <p class="text-white text-xs font-medium">📷 CCTV</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- POR QUÉ NOSOTROS --}}
+<section id="nosotros" class="py-24 px-6" style="background:linear-gradient(135deg,#faf5ff 0%,#f0f9ff 50%,#fff 100%);">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+
+        {{-- VISUAL ABSTRACTO IZQUIERDA --}}
+        <div class="reveal-left flex items-center justify-center order-2 md:order-1">
+            <div class="relative w-full max-w-md aspect-square">
+
+                {{-- Fondo glow --}}
+                <div class="absolute inset-0 rounded-3xl blur-3xl pointer-events-none" style="background:radial-gradient(circle,rgba(139,92,246,.12),transparent 70%)"></div>
+
+                {{-- Tarjetas flotantes con stats --}}
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 bg-white border border-violet-100 rounded-2xl px-6 py-4 shadow-lg float-anim text-center" style="animation-delay:0s">
+                    <p class="font-serif font-bold text-4xl text-violet-600">500+</p>
+                    <p class="text-xs text-slate-400 font-light mt-1">Equipos reparados</p>
+                </div>
+
+                <div class="absolute bottom-8 left-0 bg-white border border-blue-100 rounded-2xl px-5 py-4 shadow-lg float-anim text-center" style="animation-delay:1s">
+                    <p class="font-serif font-bold text-3xl text-blue-600">10+</p>
+                    <p class="text-xs text-slate-400 font-light mt-1">Años de experiencia</p>
+                </div>
+
+                <div class="absolute bottom-8 right-0 bg-white border border-emerald-100 rounded-2xl px-5 py-4 shadow-lg float-anim text-center" style="animation-delay:2s">
+                    <p class="font-serif font-bold text-3xl text-emerald-600">100%</p>
+                    <p class="text-xs text-slate-400 font-light mt-1">Garantía escrita</p>
+                </div>
+
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white border border-slate-100 rounded-2xl px-5 py-4 shadow-xl float-anim text-center" style="animation-delay:0.5s">
+                    <p class="font-serif font-bold text-3xl text-slate-900">24/7</p>
+                    <p class="text-xs text-slate-400 font-light mt-1">Soporte remoto</p>
+                </div>
+
+                {{-- Líneas conectoras decorativas --}}
+                <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="200" y1="80" x2="200" y2="190" stroke="rgba(139,92,246,.15)" stroke-width="1" stroke-dasharray="4 4"/>
+                    <line x1="200" y1="210" x2="90" y2="300" stroke="rgba(59,130,246,.15)" stroke-width="1" stroke-dasharray="4 4"/>
+                    <line x1="200" y1="210" x2="310" y2="300" stroke="rgba(16,185,129,.15)" stroke-width="1" stroke-dasharray="4 4"/>
+                    <circle cx="200" cy="200" r="6" fill="rgba(139,92,246,.3)"/>
+                    <circle cx="200" cy="200" r="12" fill="none" stroke="rgba(139,92,246,.15)" stroke-width="1"/>
+                </svg>
+            </div>
+        </div>
+
+        {{-- TEXTO DERECHA --}}
+        <div class="order-1 md:order-2">
+            <p class="text-xs font-semibold tracking-widest uppercase text-violet-600 mb-3 reveal-right">Por qué Novitec</p>
+            <h2 class="font-serif text-5xl font-bold text-slate-900 mb-3 reveal-right d1 leading-tight">Rápido, confiable<br>y con garantía</h2>
+            <p class="text-slate-500 font-light mb-10 reveal-right d2">Más de 10 años resolviendo problemas tecnológicos en Quito.</p>
+            <div class="space-y-5">
+                @foreach([
+                    ['🏅','Técnicos certificados','Nuestro equipo cuenta con certificaciones en las principales marcas y tecnologías del mercado.'],
+                    ['🛡️','Garantía en todos los servicios','Todos nuestros trabajos incluyen garantía escrita. Si falla, lo resolvemos sin costo adicional.'],
+                    ['📦','Tiempo de entrega de 5 días','Entregamos tu equipo reparado en un plazo máximo de 5 días hábiles según el diagnóstico.'],
+                    ['🔧','Repuestos de calidad','Trabajamos únicamente con repuestos originales o de alta calidad certificada.'],
+                ] as $i=>$f)
+                <div class="flex gap-4 reveal-right" style="transition-delay:{{($i+3)*.08}}s">
+                    <div class="w-10 h-10 bg-violet-50 border border-violet-100 rounded-xl flex items-center justify-center flex-shrink-0 text-lg">{{$f[0]}}</div>
                     <div>
-                        <p class="font-semibold text-neutral-900 text-sm mb-1">{{ $f[0] }}</p>
-                        <p class="text-sm text-neutral-500 leading-relaxed">{{ $f[1] }}</p>
+                        <p class="font-semibold text-slate-900 text-sm mb-1">{{$f[1]}}</p>
+                        <p class="text-sm text-slate-500 font-light">{{$f[2]}}</p>
                     </div>
                 </div>
                 @endforeach
             </div>
         </div>
-        <div class="reveal-right">
-            <img src="https://images.unsplash.com/photo-1588702547923-7408eb6e9826?w=800&q=80&fit=crop"
-                 alt="Técnico Novitec"
-                 class="rounded-2xl w-full object-cover aspect-4/3">
+
+    </div>
+</section>
+
+{{-- TESTIMONIOS --}}
+<section class="py-24 px-6 bg-slate-900">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-xl mx-auto mb-14">
+            <p class="text-xs font-semibold tracking-widest uppercase text-violet-400 mb-3 reveal">Testimonios</p>
+            <h2 class="font-serif text-5xl font-bold text-white mb-4 reveal d1">Lo que dicen<br>nuestros clientes</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            @foreach([
+                ['Carlos M.','Empresa Constructora','Llevé mi laptop con pantalla rota y en menos de 5 días ya estaba lista. Excelente servicio y precio justo.','⭐⭐⭐⭐⭐'],
+                ['María F.','Diseñadora independiente','Recuperaron todos mis archivos cuando el disco duro falló. Pensé que había perdido 3 años de trabajo.','⭐⭐⭐⭐⭐'],
+                ['Roberto A.','Gerente TI','Contratamos el soporte IT mensual y ha sido excelente. Responden rápido y resuelven todo eficientemente.','⭐⭐⭐⭐⭐'],
+            ] as $i=>$t)
+            <div class="testi-card reveal" style="transition-delay:{{$i*.1}}s">
+                <p class="text-lg mb-3">{{$t[3]}}</p>
+                <p class="text-slate-300 text-sm font-light leading-relaxed mb-6 italic">"{{$t[2]}}"</p>
+                <div class="flex items-center gap-3 pt-4 border-t border-white/10">
+                    <div class="w-9 h-9 bg-violet-600 rounded-full flex items-center justify-center text-white text-sm font-bold">{{substr($t[0],0,1)}}</div>
+                    <div>
+                        <p class="text-white text-sm font-medium">{{$t[0]}}</p>
+                        <p class="text-slate-400 text-xs font-light">{{$t[1]}}</p>
+                    </div>
+                </div>
+            </div>
+            @endforeach
         </div>
     </div>
 </section>
 
-{{-- CTA --}}
-<section id="contacto" class="py-24 px-6 bg-blue-700">
-    <div class="max-w-3xl mx-auto text-center">
-        <h2 class="text-4xl font-bold text-white mb-4 reveal">¿Tu equipo tiene un problema?</h2>
-        <p class="text-blue-200 mb-10 reveal delay-1">Contáctanos hoy — diagnóstico sin costo y atención rápida garantizada.</p>
-        <div class="flex justify-center gap-4 reveal delay-2">
-            <a href="mailto:info@novitec.com" class="bg-white text-blue-700 font-medium text-sm px-8 py-3 rounded hover:bg-blue-50 transition-colors">
-                Escribirnos
+{{-- CONTACTO --}}
+<section id="contacto" class="py-24 px-6" style="background:linear-gradient(135deg,#eff6ff 0%,#f8fafc 100%);">
+    <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-14">
+            <p class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3 reveal">Encuéntranos</p>
+            <h2 class="font-serif text-5xl font-bold text-slate-900 mb-4 reveal d1">¿Tu equipo tiene<br>un problema?</h2>
+            <p class="text-slate-500 font-light reveal d2">Diagnóstico y atención rápida garantizada.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-{{ count($branches) > 1 ? '2' : '1' }} gap-6 mb-10">
+            @foreach($branches as $branch)
+            <div class="branch-card reveal">
+                <h3 class="font-semibold text-slate-900 text-sm mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>{{$branch->name}}
+                </h3>
+                <div class="space-y-2 text-sm text-slate-500 font-light mb-5">
+                    <p>📍 {{$branch->address}}</p>
+                    <p>📞 {{$branch->phone}}</p>
+                    @if($branch->email)<p>✉️ {{$branch->email}}</p>@endif
+                    @if($branch->schedule)<p>🕐 {{$branch->schedule}}</p>@endif
+                </div>
+                @if($branch->whatsapp)
+                <a href="https://wa.me/{{$branch->whatsapp}}" target="_blank"
+                   class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white text-xs font-medium px-5 py-2.5 rounded-xl transition-all hover:-translate-y-0.5">
+                    WhatsApp
+                </a>
+                @endif
+            </div>
+            @endforeach
+        </div>
+        <div class="flex justify-center gap-3 flex-wrap reveal d2">
+            @foreach($socials as $social)
+            <a href="{{$social->url}}" target="_blank"
+               class="border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-slate-500 text-sm px-6 py-2.5 rounded-xl transition-all">
+                {{$social->platform}}
             </a>
-            <a href="https://wa.me/593000000000" target="_blank" class="border border-white/40 text-white text-sm px-8 py-3 rounded hover:border-white transition-colors">
-                WhatsApp
-            </a>
+            @endforeach
         </div>
     </div>
 </section>
@@ -161,16 +488,9 @@
 
 @push('scripts')
 <script>
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, { threshold: 0.15 });
-
-    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
-        observer.observe(el);
-    });
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => observer.observe(el));
 </script>
 @endpush
