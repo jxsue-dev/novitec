@@ -12,7 +12,10 @@ use App\Http\Controllers\Admin\SocialLinkController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
+use App\Http\Controllers\PageController;
 
+Route::get('/servicios', [PageController::class, 'servicios'])->name('servicios');
+Route::get('/conocenos', [PageController::class, 'conocenos'])->name('conocenos');
 Route::get('/', function () {
     $branches = Branch::where('active', true)->orderBy('order')->get();
     $socials = SocialLink::where('active', true)->orderBy('order')->get();

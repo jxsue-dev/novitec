@@ -20,8 +20,8 @@
         {{-- LINKS DESKTOP --}}
         <ul class="hidden md:flex items-center gap-10 text-sm text-slate-400">
             <li><a href="/" class="hover:text-white transition-colors duration-200 tracking-wide">Inicio</a></li>
-            <li><a href="/#nosotros" class="hover:text-white transition-colors duration-200 tracking-wide">Conócenos</a></li>
-            <li><a href="/#servicios" class="hover:text-white transition-colors duration-200 tracking-wide">Servicios</a></li>
+            <a href="{{ route('conocenos') }}" class="hover:text-white transition-colors duration-200 tracking-wide">Conócenos</a>
+            <a href="{{ route('servicios') }}" class="hover:text-white transition-colors duration-200 tracking-wide">Servicios</a>
             <li class="relative group">
                 <button class="hover:text-white transition-colors duration-200 tracking-wide flex items-center gap-1">
                     Garantías
