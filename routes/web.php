@@ -19,7 +19,10 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    if (auth()->user()->is_admin) {
+        return redirect()->route('admin.dashboard');
+    }
+    return redirect('/');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -30,10 +33,23 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+
     Route::get('/usuarios', [UserController::class, 'index'])->name('admin.users');
+    Route::patch('/usuarios/{user}/toggle-admin', [UserController::class, 'toggleAdmin'])->name('admin.users.toggle');
+    Route::delete('/usuarios/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
     Route::get('/sucursales', [BranchController::class, 'index'])->name('admin.branches');
+    Route::post('/sucursales', [BranchController::class, 'store'])->name('admin.branches.store');
+    Route::patch('/sucursales/{branch}', [BranchController::class, 'update'])->name('admin.branches.update');
+    Route::delete('/sucursales/{branch}', [BranchController::class, 'destroy'])->name('admin.branches.destroy');
+
     Route::get('/redes', [SocialLinkController::class, 'index'])->name('admin.socials');
+    Route::post('/redes', [SocialLinkController::class, 'store'])->name('admin.socials.store');
+    Route::patch('/redes/{social}', [SocialLinkController::class, 'update'])->name('admin.socials.update');
+    Route::delete('/redes/{social}', [SocialLinkController::class, 'destroy'])->name('admin.socials.destroy');
+
     Route::get('/configuracion', [SettingController::class, 'index'])->name('admin.settings');
+    Route::post('/configuracion', [SettingController::class, 'update'])->name('admin.settings.update');
 });
 
 require __DIR__.'/auth.php';

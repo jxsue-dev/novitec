@@ -6,7 +6,6 @@
 
 @section('content')
 
-{{-- MÉTRICAS --}}
 <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-8">
     @foreach([
         ['Usuarios registrados', $stats['users'], 'bg-blue-50 text-blue-600', 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'],
@@ -28,7 +27,6 @@
     @endforeach
 </div>
 
-{{-- ÚLTIMOS USUARIOS --}}
 <div class="bg-white border border-slate-100 rounded-2xl overflow-hidden">
     <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
         <h2 class="text-slate-900 text-sm font-semibold">Últimos usuarios registrados</h2>
@@ -56,9 +54,7 @@
             </div>
         </div>
         @empty
-        <div class="px-6 py-8 text-center text-slate-400 text-sm font-light">
-            No hay usuarios registrados aún.
-        </div>
+        <div class="px-6 py-8 text-center text-slate-400 text-sm font-light">No hay usuarios registrados aún.</div>
         @endforelse
     </div>
 </div>
