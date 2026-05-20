@@ -126,7 +126,7 @@ body { font-family: 'Inter', sans-serif; }
                 Tecnología<br>que impulsa<br><span class="text-gradient">tu negocio</span>
             </h1>
             <p class="text-slate-500 text-base max-w-md mb-5 reveal d2 leading-relaxed font-light">
-                Reparamos computadores, celulares e impresoras. Soporte IT remoto y presencial, redes y CCTV para personas y empresas en Quito.
+                Soporte IT corporativo y personal. Resolvemos lo complejo para que tú te enfoques en crecer. Respuesta inmediata y garantizada.
             </p>
             <div class="inline-flex items-center gap-3 bg-white border border-blue-100 rounded-full px-4 py-2 mb-8 reveal d2 shadow-sm">
                 <span class="bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded-full pulse-ring">50% OFF</span>
@@ -452,7 +452,8 @@ body { font-family: 'Inter', sans-serif; }
             <h2 class="font-serif text-5xl font-bold text-slate-900 mb-4 reveal d1">¿Tu equipo tiene<br>un problema?</h2>
             <p class="text-slate-500 font-light reveal d2">Diagnóstico y atención rápida garantizada.</p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-{{ count($branches) > 1 ? '2' : '1' }} gap-6 mb-10">
+        @php $branchCols = count($branches) > 1 ? '2' : '1'; @endphp
+        <div class="grid grid-cols-1 md:grid-cols-{{ $branchCols }} gap-6 mb-10">
             @foreach($branches as $branch)
             <div class="branch-card reveal">
                 <h3 class="font-semibold text-slate-900 text-sm mb-4 flex items-center gap-2">
