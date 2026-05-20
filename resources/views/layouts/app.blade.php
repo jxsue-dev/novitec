@@ -12,13 +12,16 @@
 {{-- NAVBAR --}}
 <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-500">
     <div class="max-w-7xl mx-auto px-6 md:px-8 py-4 md:py-5 flex items-center justify-between">
+
         <a href="/">
             <img src="{{ asset('images/novitec_logo.png') }}" alt="Novitec" class="h-8 md:h-9 brightness-0 invert">
         </a>
+
+        {{-- LINKS DESKTOP --}}
         <ul class="hidden md:flex items-center gap-10 text-sm text-slate-400">
             <li><a href="/" class="hover:text-white transition-colors duration-200 tracking-wide">Inicio</a></li>
-            <li><a href="#nosotros" class="hover:text-white transition-colors duration-200 tracking-wide">Conócenos</a></li>
-            <li><a href="#servicios" class="hover:text-white transition-colors duration-200 tracking-wide">Servicios</a></li>
+            <li><a href="/#nosotros" class="hover:text-white transition-colors duration-200 tracking-wide">Conócenos</a></li>
+            <li><a href="/#servicios" class="hover:text-white transition-colors duration-200 tracking-wide">Servicios</a></li>
             <li class="relative group">
                 <button class="hover:text-white transition-colors duration-200 tracking-wide flex items-center gap-1">
                     Garantías
@@ -29,14 +32,27 @@
                     <a href="#" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors border-t border-white/5">✅ Validar mi garantía</a>
                 </div>
             </li>
-            <li><a href="#contacto" class="hover:text-white transition-colors duration-200 tracking-wide">Contacto</a></li>
+            <li><a href="/#contacto" class="hover:text-white transition-colors duration-200 tracking-wide">Contacto</a></li>
         </ul>
+
+        {{-- BOTONES DESKTOP --}}
         <div class="flex items-center gap-2">
             @auth
                 @if(auth()->user()->is_admin)
                 <a href="{{ route('admin.dashboard') }}" class="hidden md:inline-flex text-sm bg-violet-600 hover:bg-violet-500 text-white px-4 py-2 rounded-xl transition-all">
                     Admin
                 </a>
+                @else
+                <div class="relative group hidden md:block">
+                    <button class="text-sm border border-white/20 hover:border-blue-400 text-slate-300 hover:text-white px-4 py-2 rounded-xl transition-all flex items-center gap-1">
+                        Mi cuenta
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="absolute top-full right-0 mt-2 w-44 rounded-xl border border-white/10 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200" style="background:rgba(9,11,24,.97);backdrop-filter:blur(12px)">
+                        <a href="{{ route('client.orders') }}" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors">📦 Mis órdenes</a>
+                        <a href="{{ route('profile.edit') }}" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors border-t border-white/5">⚙️ Mi perfil</a>
+                    </div>
+                </div>
                 @endif
                 <form method="POST" action="{{ route('logout') }}" class="hidden md:block">
                     @csrf
@@ -52,6 +68,8 @@
                     Registrarse
                 </a>
             @endauth
+
+            {{-- HAMBURGER MÓVIL --}}
             <button id="menu-btn" class="md:hidden flex flex-col gap-1.5 p-2" onclick="toggleMenu()">
                 <span class="w-5 h-0.5 bg-white transition-all duration-300" id="bar1"></span>
                 <span class="w-5 h-0.5 bg-white transition-all duration-300" id="bar2"></span>
@@ -63,17 +81,20 @@
     {{-- MENÚ MÓVIL --}}
     <div id="mobile-menu" class="md:hidden hidden border-t border-white/10 px-6 py-4 space-y-1" style="background:rgba(9,11,24,.97);backdrop-filter:blur(12px)">
         <a href="/" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2.5 transition-colors">Inicio</a>
-        <a href="#nosotros" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2.5 transition-colors">Conócenos</a>
-        <a href="#servicios" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2.5 transition-colors">Servicios</a>
+        <a href="/#nosotros" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2.5 transition-colors">Conócenos</a>
+        <a href="/#servicios" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2.5 transition-colors">Servicios</a>
         <div class="border-t border-white/5 pt-2 mt-1">
             <p class="text-xs text-slate-500 uppercase tracking-widest mb-2 font-medium">Garantías</p>
             <a href="#" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2 pl-2 transition-colors">🔍 Consultar mi garantía</a>
             <a href="#" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2 pl-2 transition-colors">✅ Validar mi garantía</a>
         </div>
-        <div class="pt-2 flex flex-col gap-2">
+        <a href="/#contacto" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2.5 transition-colors">Contacto</a>
+        <div class="pt-2 flex flex-col gap-2 border-t border-white/5 mt-1">
             @auth
                 @if(auth()->user()->is_admin)
-                <a href="{{ route('admin.dashboard') }}" class="block text-sm bg-violet-600 text-white text-center py-2.5 rounded-xl">Admin</a>
+                <a href="{{ route('admin.dashboard') }}" onclick="toggleMenu()" class="block text-sm bg-violet-600 text-white text-center py-2.5 rounded-xl">Admin</a>
+                @else
+                <a href="{{ route('client.orders') }}" onclick="toggleMenu()" class="block text-sm border border-white/20 text-slate-300 text-center py-2.5 rounded-xl">Mi cuenta</a>
                 @endif
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -96,6 +117,7 @@
 <footer style="background:linear-gradient(135deg,#020817 0%,#0c1a35 50%,#020817 100%);">
     <div class="border-b border-white/5 py-16 px-6 md:px-8">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+
             <div class="md:col-span-1">
                 <img src="{{ asset('images/novitec_logo.png') }}" alt="Novitec" class="h-9 brightness-0 invert mb-5">
                 <p class="text-slate-400 text-sm font-light leading-relaxed mb-6">Soluciones tecnológicas profesionales para personas y empresas en Quito. Más de 10 años de experiencia.</p>
@@ -108,22 +130,25 @@
                     @endforeach
                 </div>
             </div>
+
             <div>
                 <p class="text-white text-xs font-semibold tracking-widest uppercase mb-5">Servicios</p>
                 <ul class="space-y-3">
                     @foreach(['Reparación de equipos','Soporte IT remoto','Infraestructura de red','CCTV y videovigilancia'] as $item)
-                    <li><a href="#servicios" class="text-slate-400 hover:text-white text-sm font-light transition-colors">{{ $item }}</a></li>
+                    <li><a href="/#servicios" class="text-slate-400 hover:text-white text-sm font-light transition-colors">{{ $item }}</a></li>
                     @endforeach
                 </ul>
             </div>
+
             <div>
                 <p class="text-white text-xs font-semibold tracking-widest uppercase mb-5">Empresa</p>
                 <ul class="space-y-3">
-                    @foreach([['Inicio','/'],['Conócenos','#nosotros'],['Consultar mi garantía','#'],['Validar mi garantía','#'],['Política de privacidad','#']] as $item)
+                    @foreach([['Inicio','/'],['Conócenos','/#nosotros'],['Consultar mi garantía','#'],['Validar mi garantía','#'],['Política de privacidad','#']] as $item)
                     <li><a href="{{ $item[1] }}" class="text-slate-400 hover:text-white text-sm font-light transition-colors">{{ $item[0] }}</a></li>
                     @endforeach
                 </ul>
             </div>
+
             <div>
                 <p class="text-white text-xs font-semibold tracking-widest uppercase mb-5">Contacto</p>
                 @foreach($branches ?? [] as $branch)
@@ -144,6 +169,7 @@
                 </div>
                 @endforeach
             </div>
+
         </div>
     </div>
     <div class="py-6 px-6 md:px-8">

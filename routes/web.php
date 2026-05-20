@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\BranchController;
 use App\Http\Controllers\Admin\SocialLinkController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Client\OrderController as ClientOrderController;
 
 Route::get('/', function () {
     $branches = Branch::where('active', true)->orderBy('order')->get();
@@ -22,13 +24,18 @@ Route::get('/dashboard', function () {
     if (auth()->user()->is_admin) {
         return redirect()->route('admin.dashboard');
     }
-    return redirect('/');
+    return redirect()->route('client.orders');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::prefix('mi-cuenta')->middleware(['auth'])->group(function () {
+    Route::get('/ordenes', [ClientOrderController::class, 'index'])->name('client.orders');
+    Route::get('/ordenes/{nro_orden}', [ClientOrderController::class, 'show'])->name('client.order.show');
 });
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
@@ -50,6 +57,12 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/configuracion', [SettingController::class, 'index'])->name('admin.settings');
     Route::post('/configuracion', [SettingController::class, 'update'])->name('admin.settings.update');
+
+    Route::get('/ordenes', [AdminOrderController::class, 'index'])->name('admin.orders');
+    Route::get('/ordenes/crear', [AdminOrderController::class, 'create'])->name('admin.orders.create');
+    Route::post('/ordenes', [AdminOrderController::class, 'store'])->name('admin.orders.store');
+    Route::patch('/ordenes/{order}', [AdminOrderController::class, 'update'])->name('admin.orders.update');
+    Route::delete('/ordenes/{order}', [AdminOrderController::class, 'destroy'])->name('admin.orders.destroy');
 });
 
 require __DIR__.'/auth.php';
