@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Conócenos – Novitec')
+@section('title', 'Conócenos – Novitecnología Cia. Ltda.')
 
 @section('content')
 
