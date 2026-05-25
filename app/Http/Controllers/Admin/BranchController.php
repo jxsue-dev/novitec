@@ -17,22 +17,28 @@ class BranchController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'    => 'required|string|max:255',
-            'address' => 'required|string',
-            'phone'   => 'required|string',
+            'name'    => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string'],
+            'phone'   => ['required', 'string'],
         ]);
-        Branch::create($request->all());
+        Branch::create($request->only([
+            'name','address','phone','whatsapp',
+            'email','schedule','maps_url','active','order'
+        ]));
         return back()->with('success', 'Sucursal creada correctamente.');
     }
 
     public function update(Request $request, Branch $branch)
     {
         $request->validate([
-            'name'    => 'required|string|max:255',
-            'address' => 'required|string',
-            'phone'   => 'required|string',
+            'name'    => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string'],
+            'phone'   => ['required', 'string'],
         ]);
-        $branch->update($request->all());
+        $branch->update($request->only([
+            'name','address','phone','whatsapp',
+            'email','schedule','maps_url','active','order'
+        ]));
         return back()->with('success', 'Sucursal actualizada correctamente.');
     }
 

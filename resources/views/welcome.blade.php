@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Novitecnología Cia. Ltda. – Servicios Tecnológicos & Soporte IT')
+@section('title', 'Novitec – Servicio Técnico & Soporte IT')
 
 @section('content')
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
-body { font-family: 'Inter', sans-serif; }
+body { font-family: 'DM Sans', sans-serif; }
 .font-serif { font-family: 'Playfair Display', serif; }
 
 .reveal { opacity:0; transform:translateY(30px); transition:opacity .8s ease,transform .8s ease; }
@@ -37,12 +37,31 @@ body { font-family: 'Inter', sans-serif; }
     animation:shimmer 4s linear infinite;
 }
 
-@keyframes pulse-ring {
-    0%{box-shadow:0 0 0 0 rgba(59,130,246,.3)}
-    70%{box-shadow:0 0 0 10px rgba(59,130,246,0)}
-    100%{box-shadow:0 0 0 0 rgba(59,130,246,0)}
+@keyframes shimmer-gold {
+    0%{background-position:-200% center}
+    100%{background-position:200% center}
 }
-.pulse-ring { animation:pulse-ring 2s ease-in-out infinite; }
+.text-gold {
+    background:linear-gradient(90deg,#fbbf24,#f59e0b,#fcd34d,#f59e0b,#fbbf24);
+    background-size:200% auto;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    animation:shimmer-gold 3s linear infinite;
+}
+
+@keyframes pulse-ring {
+    0%{box-shadow:0 0 0 0 rgba(251,191,36,.6)}
+    70%{box-shadow:0 0 0 15px rgba(251,191,36,0)}
+    100%{box-shadow:0 0 0 0 rgba(251,191,36,0)}
+}
+.pulse-gold { animation:pulse-ring 2s ease-in-out infinite; }
+
+@keyframes badge-bounce {
+    0%,100%{transform:translateY(0) rotate(-3deg)}
+    50%{transform:translateY(-8px) rotate(-3deg)}
+}
+.badge-bounce { animation:badge-bounce 2s ease-in-out infinite; }
 
 .service-card {
     background:#fff;
@@ -122,27 +141,40 @@ body { font-family: 'Inter', sans-serif; }
                 <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
                 <span class="text-blue-700 text-xs font-medium tracking-widest uppercase">Novitecnología Cia. Ldta.</span>
             </div>
+
             <h1 class="font-serif text-6xl md:text-7xl font-bold mb-6 reveal d1 leading-tight text-slate-900">
                 Tecnología<br>que impulsa<br><span class="text-gradient">tu negocio</span>
             </h1>
-            <p class="text-slate-500 text-base max-w-md mb-5 reveal d2 leading-relaxed font-light">
-                Soporte IT corporativo y personal. Resolvemos lo complejo para que tú te enfoques en crecer. Respuesta inmediata y garantizada.
+
+            <p class="text-slate-500 text-base max-w-md mb-8 reveal d2 leading-relaxed font-light">
+                Reparamos computadores, celulares e impresoras. Soporte IT remoto y presencial, redes y CCTV para personas y empresas.
             </p>
-            <div class="inline-flex items-center gap-3 bg-white border border-blue-100 rounded-full px-4 py-2 mb-8 reveal d2 shadow-sm">
-                <span class="bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded-full pulse-ring">50% OFF</span>
-                <span class="text-slate-500 text-xs font-light">clientes registrados —
-                    <a href="/register" class="text-blue-600 hover:text-blue-800 transition-colors font-medium">Regístrate aquí</a>
-                </span>
+
+            {{-- 50% OFF DESTACADO --}}
+            <div class="reveal d2 mb-8 flex">
+                <div class="relative">
+                    <div class="absolute -inset-1.5 rounded-2xl blur-md opacity-75" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)"></div>
+                    <div class="relative rounded-2xl p-0.5" style="background:linear-gradient(135deg,#d97706,#fbbf24,#d97706)">
+                        <div class="relative rounded-2xl px-4 py-3 flex items-center gap-3" style="background:linear-gradient(135deg,#1e1b4b,#1e3a5f)">
+                            <span class="text-2xl">🎁</span>
+                            <div>
+                                <span class="text-gold font-black block" style="font-size:1.8rem; line-height:1; font-family:'Playfair Display',serif;">50% OFF</span>
+                                <span class="text-yellow-200 text-xs font-light">al registrarte</span>
+                            </div>
+                            <div class="w-px h-8 bg-white/20"></div>
+                            <a href="{{ route('register') }}"
+                               class="pulse-gold bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-bold text-xs px-3 py-2 rounded-lg transition-all hover:-translate-y-0.5 whitespace-nowrap text-center">
+                                Quiero mi<br>descuento →
+                            </a>
+                        </div>
+                    </div>
+                    <div class="badge-bounce absolute -top-3 -right-3 bg-red-500 text-white text-xs font-black px-2.5 py-1 rounded-full shadow-lg border-2 border-white">
+                        ¡NUEVO!
+                    </div>
+                </div>
             </div>
-            <div class="flex items-center gap-4 reveal d3">
-                <a href="#servicios" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-8 py-3.5 rounded-xl transition-all hover:shadow-lg hover:shadow-blue-600/25 hover:-translate-y-0.5">
-                    Ver servicios
-                </a>
-                <a href="#contacto" class="border border-slate-300 hover:border-blue-400 text-slate-600 hover:text-blue-600 text-sm px-8 py-3.5 rounded-xl transition-all">
-                    Contáctenos
-                </a>
-            </div>
-            <div class="flex items-center gap-8 mt-12 reveal d4">
+
+            <div class="flex items-center gap-8 mt-10 reveal d4">
                 @foreach([['10+','años'],['500+','equipos'],['100%','garantía']] as $s)
                 <div>
                     <p class="text-2xl font-bold text-slate-900 font-serif">{{$s[0]}}</p>
@@ -151,6 +183,7 @@ body { font-family: 'Inter', sans-serif; }
                 @endforeach
             </div>
         </div>
+
         <div class="reveal-right flex items-center justify-center">
             <div class="relative group">
                 <div class="absolute -inset-6 bg-blue-100 rounded-3xl blur-2xl group-hover:bg-violet-100 transition-all duration-700"></div>
@@ -160,6 +193,7 @@ body { font-family: 'Inter', sans-serif; }
             </div>
         </div>
     </div>
+
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-300 reveal d5">
         <span class="text-xs tracking-widest uppercase">scroll</span>
         <div class="w-px h-8 bg-gradient-to-b from-slate-300 to-transparent"></div>
@@ -180,48 +214,23 @@ body { font-family: 'Inter', sans-serif; }
 </div>
 
 {{-- SERVICIOS --}}
-<section id="servicios" class="py-16 md:py-24 px-4 md:px-6" style="background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);">
+<section id="servicios" class="py-24 px-6" style="background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);">
     <div class="max-w-7xl mx-auto">
-        <div class="max-w-xl mb-10 md:mb-14">
+        <div class="max-w-xl mb-14">
             <p class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3 reveal">Lo que hacemos</p>
-            <h2 class="font-serif text-4xl md:text-5xl font-bold text-slate-900 mb-4 reveal d1">Nuestros servicios</h2>
-            <p class="text-slate-500 font-light reveal d2 leading-relaxed text-sm md:text-base">Soluciones tecnológicas completas para personas y empresas — con garantía en cada trabajo.</p>
+            <h2 class="font-serif text-5xl font-bold text-slate-900 mb-4 reveal d1">Nuestros servicios</h2>
+            <p class="text-slate-500 font-light reveal d2 leading-relaxed">Soluciones tecnológicas completas para personas y empresas — con garantía en cada trabajo.</p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             @foreach([
-                [
-                    'https://images.unsplash.com/photo-1531492746076-161ca9bcad58?w=800&q=80&fit=crop',
-                    '🔧',
-                    'Reparación de equipos',
-                    'Diagnóstico, mantenimiento y reparación de computadores, laptops, celulares e impresoras de cualquier marca. Recuperación de datos y cambio de componentes con repuestos de calidad.',
-                    ['Computadores y laptops','Celulares y tablets','Impresoras']
-                ],
-                [
-                    'https://images.unsplash.com/photo-1600267175161-cfaa711b4a81?w=800&q=80&fit=crop',
-                    '🖥️',
-                    'Soporte IT remoto y presencial',
-                    'Asistencia técnica especializada para empresas y hogares. Resolución de problemas de software, configuración de sistemas, gestión de usuarios y mantenimiento preventivo.',
-                    ['Soporte remoto 24/7','Visitas presenciales','Mantenimiento preventivo']
-                ],
-                [
-                    'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80&fit=crop',
-                    '🌐',
-                    'Infraestructura de red',
-                    'Diseño, instalación y configuración de redes cableadas e inalámbricas para hogares, oficinas y empresas. Optimización del rendimiento y seguridad de su red.',
-                    ['Redes cableadas','WiFi empresarial','Seguridad de red']
-                ],
-                [
-                    'https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=800&q=80&fit=crop',
-                    '📷',
-                    'CCTV y videovigilancia',
-                    'Instalación y configuración de sistemas de videovigilancia profesionales con acceso remoto desde cualquier dispositivo. Monitoreo continuo para hogares y empresas.',
-                    ['Cámaras HD y 4K','Acceso remoto','Monitoreo 24/7']
-                ],
+                ['https://images.unsplash.com/photo-1531492746076-161ca9bcad58?w=800&q=80&fit=crop','🔧','Reparación de equipos','Diagnóstico, mantenimiento y reparación de computadores, laptops, celulares e impresoras de cualquier marca.',['Computadores y laptops','Celulares y tablets','Impresoras']],
+                ['https://images.unsplash.com/photo-1600267175161-cfaa711b4a81?w=800&q=80&fit=crop','🖥️','Soporte IT remoto y presencial','Asistencia técnica especializada para empresas y hogares. Resolución de problemas de software y sistemas.',['Soporte remoto 24/7','Visitas presenciales','Mantenimiento preventivo']],
+                ['https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80&fit=crop','🌐','Infraestructura de red','Diseño, instalación y configuración de redes cableadas e inalámbricas para hogares y empresas.',['Redes cableadas','WiFi empresarial','Seguridad de red']],
+                ['https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=800&q=80&fit=crop','📷','CCTV y videovigilancia','Instalación y configuración de sistemas de videovigilancia con acceso remoto desde cualquier dispositivo.',['Cámaras HD y 4K','Acceso remoto','Monitoreo 24/7']],
             ] as $i=>$s)
             <div class="service-card reveal overflow-hidden p-0" style="transition-delay:{{$i*.1}}s; border-radius:20px;">
                 <div class="relative h-40 md:h-52 overflow-hidden">
-                    <img src="{{$s[0]}}" alt="{{$s[2]}}"
-                         class="w-full h-full object-cover transition-transform duration-700 hover:scale-105">
+                    <img src="{{$s[0]}}" alt="{{$s[2]}}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105">
                     <div class="absolute inset-0" style="background:linear-gradient(to bottom,transparent 40%,rgba(15,23,42,.6) 100%)"></div>
                     <div class="absolute bottom-3 left-4 flex items-center gap-2">
                         <span class="text-xl md:text-2xl">{{$s[1]}}</span>
@@ -238,6 +247,11 @@ body { font-family: 'Inter', sans-serif; }
                 </div>
             </div>
             @endforeach
+        </div>
+        <div class="text-center mt-8 reveal">
+            <a href="{{ route('servicios') }}" class="inline-flex items-center gap-2 border border-blue-200 hover:border-blue-500 text-blue-600 hover:text-blue-700 text-sm font-medium px-8 py-3 rounded-xl transition-all">
+                Ver todos los servicios →
+            </a>
         </div>
     </div>
 </section>
@@ -350,36 +364,26 @@ body { font-family: 'Inter', sans-serif; }
 <section id="nosotros" class="py-24 px-6" style="background:linear-gradient(135deg,#faf5ff 0%,#f0f9ff 50%,#fff 100%);">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
 
-        {{-- VISUAL ABSTRACTO IZQUIERDA --}}
         <div class="reveal-left flex items-center justify-center order-2 md:order-1">
             <div class="relative w-full max-w-md aspect-square">
-
-                {{-- Fondo glow --}}
                 <div class="absolute inset-0 rounded-3xl blur-3xl pointer-events-none" style="background:radial-gradient(circle,rgba(139,92,246,.12),transparent 70%)"></div>
-
-                {{-- Tarjetas flotantes con stats --}}
                 <div class="absolute top-0 left-1/2 -translate-x-1/2 bg-white border border-violet-100 rounded-2xl px-6 py-4 shadow-lg float-anim text-center" style="animation-delay:0s">
                     <p class="font-serif font-bold text-4xl text-violet-600">500+</p>
                     <p class="text-xs text-slate-400 font-light mt-1">Equipos reparados</p>
                 </div>
-
                 <div class="absolute bottom-8 left-0 bg-white border border-blue-100 rounded-2xl px-5 py-4 shadow-lg float-anim text-center" style="animation-delay:1s">
                     <p class="font-serif font-bold text-3xl text-blue-600">10+</p>
                     <p class="text-xs text-slate-400 font-light mt-1">Años de experiencia</p>
                 </div>
-
                 <div class="absolute bottom-8 right-0 bg-white border border-emerald-100 rounded-2xl px-5 py-4 shadow-lg float-anim text-center" style="animation-delay:2s">
                     <p class="font-serif font-bold text-3xl text-emerald-600">100%</p>
                     <p class="text-xs text-slate-400 font-light mt-1">Garantía escrita</p>
                 </div>
-
                 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white border border-slate-100 rounded-2xl px-5 py-4 shadow-xl float-anim text-center" style="animation-delay:0.5s">
                     <p class="font-serif font-bold text-3xl text-slate-900">24/7</p>
                     <p class="text-xs text-slate-400 font-light mt-1">Soporte remoto</p>
                 </div>
-
-                {{-- Líneas conectoras decorativas --}}
-                <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 400" fill="none">
                     <line x1="200" y1="80" x2="200" y2="190" stroke="rgba(139,92,246,.15)" stroke-width="1" stroke-dasharray="4 4"/>
                     <line x1="200" y1="210" x2="90" y2="300" stroke="rgba(59,130,246,.15)" stroke-width="1" stroke-dasharray="4 4"/>
                     <line x1="200" y1="210" x2="310" y2="300" stroke="rgba(16,185,129,.15)" stroke-width="1" stroke-dasharray="4 4"/>
@@ -389,7 +393,6 @@ body { font-family: 'Inter', sans-serif; }
             </div>
         </div>
 
-        {{-- TEXTO DERECHA --}}
         <div class="order-1 md:order-2">
             <p class="text-xs font-semibold tracking-widest uppercase text-violet-600 mb-3 reveal-right">Por qué Novitec</p>
             <h2 class="font-serif text-5xl font-bold text-slate-900 mb-3 reveal-right d1 leading-tight">Rápido, confiable<br>y con garantía</h2>
@@ -411,7 +414,6 @@ body { font-family: 'Inter', sans-serif; }
                 @endforeach
             </div>
         </div>
-
     </div>
 </section>
 
@@ -429,7 +431,7 @@ body { font-family: 'Inter', sans-serif; }
                 ['Roberto A.','Gerente TI','Contratamos el soporte IT mensual y ha sido excelente. Responden rápido y resuelven todo eficientemente.','⭐⭐⭐⭐⭐'],
             ] as $i=>$t)
             <div class="testi-card reveal" style="transition-delay:{{$i*.1}}s">
-                <p class="text-lg mb-3">{{$t[3]}}</p>
+                <p class="text-xl mb-4">{{$t[3]}}</p>
                 <p class="text-slate-300 text-sm font-light leading-relaxed mb-6 italic">"{{$t[2]}}"</p>
                 <div class="flex items-center gap-3 pt-4 border-t border-white/10">
                     <div class="w-9 h-9 bg-violet-600 rounded-full flex items-center justify-center text-white text-sm font-bold">{{substr($t[0],0,1)}}</div>

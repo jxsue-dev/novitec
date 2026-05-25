@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Branch;
 use App\Models\SocialLink;
 use App\Models\Setting;
+use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
@@ -41,8 +42,13 @@ class PageController extends Controller
             'message' => ['required', 'string'],
         ]);
 
-        // Por ahora guardamos en log, luego se puede conectar a email
-        \Log::info('Contacto: ', $request->only('name','email','subject','message','phone'));
+        \Mail::to('soporte@novitec.com.ec')->send(new \App\Mail\ContactoMail(
+            nombre:   $request->name,
+            email:    $request->email,
+            telefono: $request->phone ?? '',
+            asunto:   $request->subject,
+            mensaje:  $request->message,
+        ));
 
         return back()->with('success', '¡Mensaje enviado! Nos pondremos en contacto contigo pronto.');
     }
