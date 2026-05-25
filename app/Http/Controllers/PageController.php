@@ -52,4 +52,62 @@ class PageController extends Controller
 
         return back()->with('success', '¡Mensaje enviado! Nos pondremos en contacto contigo pronto.');
     }
+
+    public function garantias()
+    {
+        $branches = Branch::where('active', true)->orderBy('order')->get();
+        $socials = SocialLink::where('active', true)->orderBy('order')->get();
+        $settings = Setting::pluck('value', 'key');
+        return view('pages.garantias', compact('branches', 'socials', 'settings'));
+    }
+
+    public function consultaGarantia(Request $request)
+{
+    $request->validate([
+        'q'    => ['required', 'string'],
+        'tipo' => ['required', 'in:nro_orden,identificacion'],
+    ]);
+
+    $q    = trim($request->q);
+    $tipo = $request->tipo;
+
+    try {
+        $query = DB::connection('novitecdb')->table('vista_ordenes');
+
+        if ($tipo === 'nro_orden') {
+            $query->where('nro_orden', 'like', '%' . $q . '%');
+        } else {
+            $query->where('identificacion', $q);
+        }
+
+        $resultados = $query->orderByDesc('fecha_de_ingreso')
+            ->limit(20)
+            ->get()
+            ->map(fn($r) => [
+                'nro_orden'     => $r->nro_orden,
+                'estado_orden'  => $r->estado_orden,
+                'motivo_ingreso'=> $r->motivo_ingreso,
+                'fecha_ingreso' => $r->fecha_de_ingreso_fmt,
+                'tecnico'       => $r->tecnico,
+                'sucursal'      => $r->sucursal,
+                'tipo_equipo'   => $r->tipo,
+                'marca_equipo'  => $r->marca,
+                'modelo_equipo' => $r->modelo,
+                'falla'         => $r->falla,
+                'observacion'   => $r->observacion,
+                'nombres'       => $r->nombres,
+                'apellidos'     => $r->apellidos,
+                'cliente'       => $r->cliente,
+            ])->toArray();
+
+        if (empty($resultados)) {
+            return back()->with('consulta_error', 'No encontramos órdenes con ese criterio. Verifica el dato ingresado.');
+        }
+
+        return back()->with('consulta_resultados', $resultados);
+
+    } catch (\Exception $e) {
+        return back()->with('consulta_error', 'Error al procesar la consulta. Intenta nuevamente.');
+    }
+}
 }

@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\PageController;
 
+Route::post('/garantias/consulta', [PageController::class, 'consultaGarantia'])->name('garantias.consulta');
+Route::get('/garantias', [PageController::class, 'garantias'])->name('garantias');
 Route::post('/contacto', [PageController::class, 'sendContacto'])->name('contacto.send');
 Route::get('/contacto', [PageController::class, 'contacto'])->name('contacto');
 Route::get('/servicios', [PageController::class, 'servicios'])->name('servicios');
