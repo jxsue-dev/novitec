@@ -143,7 +143,7 @@ body { font-family: 'DM Sans', sans-serif; }
             </div>
 
             <h1 class="font-serif text-6xl md:text-7xl font-bold mb-6 reveal d1 leading-tight text-slate-900">
-                Tecnología<br>que impulsa<br><span class="text-gradient">tu negocio</span>
+                Servicios<br>que impulsan<br><span class="text-gradient">tu negocio</span>
             </h1>
 
             <p class="text-slate-500 text-base max-w-md mb-8 reveal d2 leading-relaxed font-light">
@@ -175,7 +175,7 @@ body { font-family: 'DM Sans', sans-serif; }
             </div>
 
             <div class="flex items-center gap-8 mt-10 reveal d4">
-                @foreach([['10+','años'],['500+','equipos'],['100%','garantía']] as $s)
+                @foreach([['12+','años de experiencia'],['80K+','equipos habilitados'],['100%','garantía en servicios']] as $s)
                 <div>
                     <p class="text-2xl font-bold text-slate-900 font-serif">{{$s[0]}}</p>
                     <p class="text-xs text-slate-400 font-light">{{$s[1]}}</p>
@@ -203,7 +203,7 @@ body { font-family: 'DM Sans', sans-serif; }
 {{-- STATS --}}
 <div class="bg-slate-900 border-y border-slate-800">
     <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-800">
-        @foreach([['10+','Años de experiencia','🏆'],['500+','Equipos reparados','🔧'],['24/7','Soporte remoto','💻'],['100%','Garantía','✅']] as $i=>$s)
+        @foreach([['12+','Años de experiencia','🏆'],['80K+','Equipos habilitados','🔧'],['50K+','Cientes satisfechos','💻'],['100%','De garantia en servicios','✅']] as $i=>$s)
         <div class="reveal py-10 px-8 hover:bg-slate-800/50 transition-colors" style="transition-delay:{{$i*.1}}s">
             <div class="text-xl mb-2">{{$s[2]}}</div>
             <p class="font-serif text-3xl font-bold text-white mb-1">{{$s[0]}}</p>
@@ -368,20 +368,20 @@ body { font-family: 'DM Sans', sans-serif; }
             <div class="relative w-full max-w-md aspect-square">
                 <div class="absolute inset-0 rounded-3xl blur-3xl pointer-events-none" style="background:radial-gradient(circle,rgba(139,92,246,.12),transparent 70%)"></div>
                 <div class="absolute top-0 left-1/2 -translate-x-1/2 bg-white border border-violet-100 rounded-2xl px-6 py-4 shadow-lg float-anim text-center" style="animation-delay:0s">
-                    <p class="font-serif font-bold text-4xl text-violet-600">500+</p>
-                    <p class="text-xs text-slate-400 font-light mt-1">Equipos reparados</p>
+                    <p class="font-serif font-bold text-4xl text-violet-600">80K+</p>
+                    <p class="text-xs text-slate-400 font-light mt-1">Equipos habilitados</p>
                 </div>
                 <div class="absolute bottom-8 left-0 bg-white border border-blue-100 rounded-2xl px-5 py-4 shadow-lg float-anim text-center" style="animation-delay:1s">
-                    <p class="font-serif font-bold text-3xl text-blue-600">10+</p>
+                    <p class="font-serif font-bold text-3xl text-blue-600">12+</p>
                     <p class="text-xs text-slate-400 font-light mt-1">Años de experiencia</p>
                 </div>
                 <div class="absolute bottom-8 right-0 bg-white border border-emerald-100 rounded-2xl px-5 py-4 shadow-lg float-anim text-center" style="animation-delay:2s">
                     <p class="font-serif font-bold text-3xl text-emerald-600">100%</p>
-                    <p class="text-xs text-slate-400 font-light mt-1">Garantía escrita</p>
+                    <p class="text-xs text-slate-400 font-light mt-1">De garantia en servicios</p>
                 </div>
                 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white border border-slate-100 rounded-2xl px-5 py-4 shadow-xl float-anim text-center" style="animation-delay:0.5s">
-                    <p class="font-serif font-bold text-3xl text-slate-900">24/7</p>
-                    <p class="text-xs text-slate-400 font-light mt-1">Soporte remoto</p>
+                    <p class="font-serif font-bold text-3xl text-slate-900">50K+</p>
+                    <p class="text-xs text-slate-400 font-light mt-1">Clientes Satisfechos</p>
                 </div>
                 <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 400" fill="none">
                     <line x1="200" y1="80" x2="200" y2="190" stroke="rgba(139,92,246,.15)" stroke-width="1" stroke-dasharray="4 4"/>
