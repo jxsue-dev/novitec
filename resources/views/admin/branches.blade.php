@@ -11,7 +11,7 @@
     {{-- FORMULARIO NUEVA SUCURSAL --}}
     <div class="bg-white border border-slate-100 rounded-2xl p-6">
         <h3 class="text-slate-900 text-sm font-semibold mb-5">Nueva sucursal</h3>
-        <form method="POST" action="{{ route('admin.branches.update', $branch) }}"
+        <form method="POST" action="{{ route('admin.branches.store') }}"
               onsubmit="return syncFields({{ $branch->id }}, this)">
             @csrf @method('PATCH')
             <input type="hidden" name="name" id="name-{{$branch->id}}">
