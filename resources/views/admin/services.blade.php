@@ -6,12 +6,6 @@
 
 @section('content')
 
-@if(session('success'))
-<div class="mb-4 px-4 py-3 bg-emerald-50 border border-emerald-100 text-emerald-700 text-sm rounded-xl">
-    {{ session('success') }}
-</div>
-@endif
-
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
     {{-- FORMULARIO NUEVO SERVICIO --}}
@@ -26,14 +20,33 @@
                            class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
                 </div>
                 <div>
+                    <label class="block text-xs text-slate-400 mb-1">Categoría</label>
+                    <select name="category" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                        <option value="reparaciones">Reparaciones</option>
+                        <option value="redes">Redes</option>
+                        <option value="servicios-it-presenciales">Servicios IT Presenciales</option>
+                        <option value="servicios-it-remotos">Servicios IT Remotos</option>
+                    </select>
+                </div>
+                <div>
                     <label class="block text-xs text-slate-400 mb-1">Descripción</label>
                     <textarea name="description" rows="3"
                               class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400"></textarea>
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Imagen</label>
+                    <label class="block text-xs text-slate-400 mb-1">Precio (ej: Desde $15)</label>
+                    <input type="text" name="price" placeholder="Desde $15"
+                           class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Imagen (subir archivo)</label>
                     <input type="file" name="image" accept="image/*"
                            class="w-full text-sm text-slate-500 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border file:border-slate-200 file:text-xs file:bg-slate-50">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">O pegar URL de imagen</label>
+                    <input type="url" name="image_url" placeholder="https://..."
+                           class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
                 </div>
                 <div>
                     <label class="block text-xs text-slate-400 mb-1">Orden</label>
@@ -60,8 +73,9 @@
         @forelse($services as $service)
         <div class="bg-white border border-slate-100 rounded-2xl p-6">
             <div class="flex gap-4">
-                @if($service->image)
-                <img src="{{ Storage::url($service->image) }}" alt="{{ $service->name }}"
+                {{-- IMAGEN --}}
+                @if($service->image_src)
+                <img src="{{ $service->image_src }}" alt="{{ $service->name }}"
                      class="w-24 h-24 object-cover rounded-xl flex-shrink-0">
                 @else
                 <div class="w-24 h-24 bg-slate-100 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -73,7 +87,7 @@
                     <form method="POST" action="{{ route('admin.services.update', $service) }}" enctype="multipart/form-data">
                         @csrf @method('PATCH')
                         <div class="grid grid-cols-2 gap-3">
-                            <div class="col-span-2 flex items-center justify-between">
+                            <div class="col-span-2 flex items-center justify-between mb-1">
                                 <div class="flex items-center gap-2">
                                     <span class="w-2 h-2 bg-{{ $service->active ? 'emerald' : 'slate' }}-400 rounded-full"></span>
                                     <span class="text-sm font-semibold text-slate-900">{{ $service->name }}</span>
@@ -89,9 +103,28 @@
                                        class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
                             </div>
                             <div class="col-span-2">
+                                <label class="block text-xs text-slate-400 mb-1">Categoría</label>
+                                <select name="category" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                                    <option value="reparaciones" {{ $service->category === 'reparaciones' ? 'selected' : '' }}>Reparaciones</option>
+                                    <option value="redes" {{ $service->category === 'redes' ? 'selected' : '' }}>Redes</option>
+                                    <option value="servicios-it-presenciales" {{ $service->category === 'servicios-it-presenciales' ? 'selected' : '' }}>Servicios IT Presenciales</option>
+                                    <option value="servicios-it-remotos" {{ $service->category === 'servicios-it-remotos' ? 'selected' : '' }}>Servicios IT Remotos</option>
+                                </select>
+                            </div>
+                            <div class="col-span-2">
                                 <label class="block text-xs text-slate-400 mb-1">Descripción</label>
                                 <textarea name="description" rows="2"
                                           class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">{{ $service->description }}</textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">Precio</label>
+                                <input type="text" name="price" value="{{ $service->price }}"
+                                       class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">Orden</label>
+                                <input type="number" name="order" value="{{ $service->order }}"
+                                       class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
                             </div>
                             <div>
                                 <label class="block text-xs text-slate-400 mb-1">Nueva imagen</label>
@@ -99,8 +132,8 @@
                                        class="w-full text-sm text-slate-500 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border file:border-slate-200 file:text-xs file:bg-slate-50">
                             </div>
                             <div>
-                                <label class="block text-xs text-slate-400 mb-1">Orden</label>
-                                <input type="number" name="order" value="{{ $service->order }}"
+                                <label class="block text-xs text-slate-400 mb-1">O URL de imagen</label>
+                                <input type="url" name="image_url" value="{{ $service->image_url }}"
                                        class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
                             </div>
                             <div>

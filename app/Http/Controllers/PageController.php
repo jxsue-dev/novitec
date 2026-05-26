@@ -17,12 +17,25 @@ class PageController extends Controller
         return view('pages.conocenos', compact('branches', 'socials', 'settings'));
     }
 
-    public function servicios()
+    public function servicios(Request $request)
     {
         $branches = Branch::where('active', true)->orderBy('order')->get();
         $socials = SocialLink::where('active', true)->orderBy('order')->get();
         $settings = Setting::pluck('value', 'key');
-        $services = \App\Models\Service::where('active', true)->orderBy('order')->get();
+
+        $query = \App\Models\Service::where('active', true);
+
+        if ($request->filled('q')) {
+            $query->where('name', 'like', '%' . $request->q . '%')
+                  ->orWhere('description', 'like', '%' . $request->q . '%');
+        }
+
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
+        $services = $query->orderBy('order')->get();
+
         return view('pages.servicios', compact('branches', 'socials', 'settings', 'services'));
     }
 
