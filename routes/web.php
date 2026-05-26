@@ -20,6 +20,7 @@ Route::get('/garantias', [PageController::class, 'garantias'])->name('garantias'
 Route::post('/contacto', [PageController::class, 'sendContacto'])->name('contacto.send');
 Route::get('/contacto', [PageController::class, 'contacto'])->name('contacto');
 Route::get('/servicios', [PageController::class, 'servicios'])->name('servicios');
+Route::get('/servicios/{service:slug}', [ServiceController::class, 'show'])->name('servicios.show');
 Route::get('/conocenos', [PageController::class, 'conocenos'])->name('conocenos');
 Route::get('/', function () {
     $branches = Branch::where('active', true)->orderBy('order')->get();
