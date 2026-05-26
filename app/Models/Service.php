@@ -31,4 +31,12 @@ class Service extends Model
         }
         return null;
     }
+
+    public function getPriceFormattedAttribute()
+    {
+        if ($this->price) {
+            return 'Desde $' . $this->price;
+        }
+        return null;
+    }
 }

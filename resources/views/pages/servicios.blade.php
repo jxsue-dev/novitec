@@ -129,7 +129,7 @@ body { font-family: 'Inter', sans-serif; }
                     </p>
                     @endif
                     <div class="flex items-center justify-between">
-                        @if($service->price)
+                        @if($service->price_formatted)
                         <span class="text-sm font-semibold text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full">
                             {{ $service->price }}
                         </span>
