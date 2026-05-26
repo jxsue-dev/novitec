@@ -24,7 +24,7 @@ class Service extends Model
     public function getImageSrcAttribute()
     {
         if ($this->image) {
-            return asset('storage/' . $this->image);
+            return asset($this->image);
         }
         if ($this->image_url) {
             return $this->image_url;

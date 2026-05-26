@@ -19,13 +19,13 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'      => ['required', 'string', 'max:255'],
+            'name'        => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'image'     => ['nullable', 'image', 'max:4096'],
-            'image_url' => ['nullable', 'url'],
-            'category'  => ['required', 'string'],
-            'price'     => ['nullable', 'string', 'max:100'],
-            'order'     => ['nullable', 'integer'],
+            'image'       => ['nullable', 'image', 'max:4096'],
+            'image_url'   => ['nullable', 'url'],
+            'category'    => ['required', 'string'],
+            'price'       => ['nullable', 'string', 'max:100'],
+            'order'       => ['nullable', 'integer'],
         ]);
 
         $data = $request->only(['name', 'description', 'image_url', 'category', 'price', 'order']);
@@ -33,7 +33,10 @@ class ServiceController extends Controller
         $data['slug'] = Str::slug($request->name);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('services', 'public');
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('images/services'), $filename);
+            $data['image'] = 'images/services/' . $filename;
         }
 
         Service::create($data);
@@ -43,13 +46,13 @@ class ServiceController extends Controller
     public function update(Request $request, Service $service)
     {
         $request->validate([
-            'name'      => ['required', 'string', 'max:255'],
+            'name'        => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'image'     => ['nullable', 'image', 'max:4096'],
-            'image_url' => ['nullable', 'url'],
-            'category'  => ['required', 'string'],
-            'price'     => ['nullable', 'string', 'max:100'],
-            'order'     => ['nullable', 'integer'],
+            'image'       => ['nullable', 'image', 'max:4096'],
+            'image_url'   => ['nullable', 'url'],
+            'category'    => ['required', 'string'],
+            'price'       => ['nullable', 'string', 'max:100'],
+            'order'       => ['nullable', 'integer'],
         ]);
 
         $data = $request->only(['name', 'description', 'image_url', 'category', 'price', 'order']);
@@ -57,8 +60,13 @@ class ServiceController extends Controller
         $data['slug'] = Str::slug($request->name);
 
         if ($request->hasFile('image')) {
-            if ($service->image) Storage::disk('public')->delete($service->image);
-            $data['image'] = $request->file('image')->store('services', 'public');
+            if ($service->image && file_exists(public_path($service->image))) {
+                unlink(public_path($service->image));
+            }
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('images/services'), $filename);
+            $data['image'] = 'images/services/' . $filename;
         }
 
         $service->update($data);
@@ -67,13 +75,18 @@ class ServiceController extends Controller
 
     public function destroy(Service $service)
     {
-        if ($service->image) Storage::disk('public')->delete($service->image);
+        if ($service->image && file_exists(public_path($service->image))) {
+            unlink(public_path($service->image));
+        }
         $service->delete();
         return back()->with('success', 'Servicio eliminado correctamente.');
     }
 
     public function show(Service $service)
     {
-        return view('pages.servicio', compact('service'));
+        $branches = \App\Models\Branch::where('active', true)->orderBy('order')->get();
+        $socials = \App\Models\SocialLink::where('active', true)->orderBy('order')->get();
+        $settings = \App\Models\Setting::pluck('value', 'key');
+        return view('pages.servicio', compact('service', 'branches', 'socials', 'settings'));
     }
 }
