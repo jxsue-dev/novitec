@@ -22,7 +22,8 @@ class PageController extends Controller
         $branches = Branch::where('active', true)->orderBy('order')->get();
         $socials = SocialLink::where('active', true)->orderBy('order')->get();
         $settings = Setting::pluck('value', 'key');
-        return view('pages.servicios', compact('branches', 'socials', 'settings'));
+        $services = \App\Models\Service::where('active', true)->orderBy('order')->get();
+        return view('pages.servicios', compact('branches', 'socials', 'settings', 'services'));
     }
 
     public function contacto()

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ServiceController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Setting;
 use App\Models\Branch;
@@ -70,6 +71,11 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::post('/ordenes', [AdminOrderController::class, 'store'])->name('admin.orders.store');
     Route::patch('/ordenes/{order}', [AdminOrderController::class, 'update'])->name('admin.orders.update');
     Route::delete('/ordenes/{order}', [AdminOrderController::class, 'destroy'])->name('admin.orders.destroy');
+
+    Route::get('/servicios', [ServiceController::class, 'index'])->name('admin.services');
+    Route::post('/servicios', [ServiceController::class, 'store'])->name('admin.services.store');
+    Route::patch('/servicios/{service}', [ServiceController::class, 'update'])->name('admin.services.update');
+    Route::delete('/servicios/{service}', [ServiceController::class, 'destroy'])->name('admin.services.destroy');
 });
 
 require __DIR__.'/auth.php';

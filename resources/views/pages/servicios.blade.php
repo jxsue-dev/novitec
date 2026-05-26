@@ -11,11 +11,7 @@ body { font-family: 'Inter', sans-serif; }
 
 .reveal { opacity:0; transform:translateY(30px); transition:opacity .8s ease,transform .8s ease; }
 .reveal.visible { opacity:1; transform:translateY(0); }
-.reveal-left { opacity:0; transform:translateX(-40px); transition:opacity .8s ease,transform .8s ease; }
-.reveal-left.visible { opacity:1; transform:translateX(0); }
-.reveal-right { opacity:0; transform:translateX(40px); transition:opacity .8s ease,transform .8s ease; }
-.reveal-right.visible { opacity:1; transform:translateX(0); }
-.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
 
 .service-card {
     background:#fff;
@@ -49,7 +45,8 @@ body { font-family: 'Inter', sans-serif; }
     <div class="relative max-w-4xl mx-auto text-center">
         <p class="text-xs font-semibold tracking-widest uppercase text-blue-400 mb-4 reveal">Lo que hacemos</p>
         <h1 class="font-serif text-5xl md:text-6xl font-bold text-white mb-6 reveal d1 leading-tight">
-            Soluciones tecnológicas<br><span style="background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">para cada necesidad</span>
+            Soluciones tecnológicas<br>
+            <span style="background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">para cada necesidad</span>
         </h1>
         <p class="text-slate-400 text-base font-light max-w-2xl mx-auto reveal d2 leading-relaxed">
             Desde la reparación de un equipo hasta la infraestructura IT completa de tu empresa — con garantía en cada servicio.
@@ -57,119 +54,52 @@ body { font-family: 'Inter', sans-serif; }
     </div>
 </section>
 
-{{-- SERVICIO 1: REPARACIÓN --}}
+{{-- CATÁLOGO DE SERVICIOS --}}
 <section class="py-24 px-6 bg-white">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-        <div class="reveal-left">
-            <div class="w-12 h-12 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-center text-2xl mb-6">🔧</div>
-            <p class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3">Servicio 01</p>
-            <h2 class="font-serif text-4xl font-bold text-slate-900 mb-4 leading-tight">Reparación de equipos</h2>
-            <p class="text-slate-500 font-light leading-relaxed mb-6">Diagnóstico, mantenimiento y reparación de computadores, laptops, celulares e impresoras de cualquier marca. Recuperación de datos y cambio de componentes con repuestos de calidad.</p>
-            <ul class="space-y-3 mb-8">
-                @foreach(['Computadores y laptops de cualquier marca','Celulares y tablets','Impresoras y periféricos','Recuperación de datos','Mantenimiento preventivo y correctivo'] as $item)
-                <li class="flex items-center gap-3 text-sm text-slate-600">
-                    <svg class="w-4 h-4 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                    {{ $item }}
-                </li>
-                @endforeach
-            </ul>
-            <div class="flex items-center gap-3">
-                <span class="text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full">Desde $15</span>
-                <span class="text-xs text-slate-400 font-light">Diagnóstico incluido</span>
-            </div>
-        </div>
-        <div class="reveal-right">
-            <img src="https://images.unsplash.com/photo-1531492746076-161ca9bcad58?w=800&q=80&fit=crop"
-                 alt="Reparación de equipos"
-                 class="rounded-2xl w-full object-cover aspect-4/3 shadow-xl">
-        </div>
-    </div>
-</section>
+    <div class="max-w-7xl mx-auto">
 
-{{-- SERVICIO 2: SOPORTE IT --}}
-<section class="py-24 px-6" style="background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-        <div class="reveal-left order-2 md:order-1">
-            <img src="https://images.unsplash.com/photo-1600267175161-cfaa711b4a81?w=800&q=80&fit=crop"
-                 alt="Soporte IT"
-                 class="rounded-2xl w-full object-cover aspect-4/3 shadow-xl">
+        @if($services->isEmpty())
+        <div class="text-center text-slate-400 py-20">
+            <p class="text-lg font-light">No hay servicios disponibles por el momento.</p>
         </div>
-        <div class="reveal-right order-1 md:order-2">
-            <div class="w-12 h-12 bg-violet-50 border border-violet-100 rounded-2xl flex items-center justify-center text-2xl mb-6">🖥️</div>
-            <p class="text-xs font-semibold tracking-widest uppercase text-violet-600 mb-3">Servicio 02</p>
-            <h2 class="font-serif text-4xl font-bold text-slate-900 mb-4 leading-tight">Soporte IT remoto y presencial</h2>
-            <p class="text-slate-500 font-light leading-relaxed mb-6">Asistencia técnica especializada para empresas y hogares. Resolución de problemas de software, configuración de sistemas, gestión de usuarios y mantenimiento preventivo.</p>
-            <ul class="space-y-3 mb-8">
-                @foreach(['Soporte remoto inmediato','Visitas técnicas presenciales','Gestión de usuarios y permisos','Configuración de software y sistemas','Mantenimiento preventivo mensual'] as $item)
-                <li class="flex items-center gap-3 text-sm text-slate-600">
-                    <svg class="w-4 h-4 text-violet-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                    {{ $item }}
-                </li>
-                @endforeach
-            </ul>
-            <div class="flex items-center gap-3">
-                <span class="text-xs font-semibold text-violet-600 bg-violet-50 border border-violet-100 px-3 py-1.5 rounded-full">Desde $30/hora</span>
-                <span class="text-xs text-slate-400 font-light">Planes mensuales disponibles</span>
-            </div>
-        </div>
-    </div>
-</section>
+        @else
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            @foreach($services as $i => $service)
+            <div class="service-card reveal" style="transition-delay:{{ ($i % 3) * 0.1 }}s">
+                {{-- IMAGEN --}}
+                <div class="aspect-video overflow-hidden bg-slate-100">
+                    @if($service->image)
+                        <img src="{{ Storage::url($service->image) }}"
+                             alt="{{ $service->name }}"
+                             class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+                    @else
+                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-slate-100">
+                            <svg class="w-12 h-12 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/>
+                            </svg>
+                        </div>
+                    @endif
+                </div>
 
-{{-- SERVICIO 3: REDES --}}
-<section class="py-24 px-6 bg-white">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-        <div class="reveal-left">
-            <div class="w-12 h-12 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center justify-center text-2xl mb-6">🌐</div>
-            <p class="text-xs font-semibold tracking-widest uppercase text-emerald-600 mb-3">Servicio 03</p>
-            <h2 class="font-serif text-4xl font-bold text-slate-900 mb-4 leading-tight">Infraestructura de red</h2>
-            <p class="text-slate-500 font-light leading-relaxed mb-6">Diseño, instalación y configuración de redes cableadas e inalámbricas para hogares, oficinas y empresas. Optimización del rendimiento y seguridad de su red.</p>
-            <ul class="space-y-3 mb-8">
-                @foreach(['Redes cableadas estructuradas','WiFi empresarial y residencial','Configuración de routers y switches','Seguridad perimetral de red','Monitoreo y optimización'] as $item)
-                <li class="flex items-center gap-3 text-sm text-slate-600">
-                    <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                    {{ $item }}
-                </li>
-                @endforeach
-            </ul>
-            <div class="flex items-center gap-3">
-                <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-full">Desde $50</span>
-                <span class="text-xs text-slate-400 font-light">Incluye materiales básicos</span>
+                {{-- CONTENIDO --}}
+                <div class="p-6">
+                    <p class="text-xs font-semibold tracking-widest uppercase text-blue-500 mb-2">
+                        Servicio {{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}
+                    </p>
+                    <h3 class="font-serif text-xl font-bold text-slate-900 mb-3 leading-tight">
+                        {{ $service->name }}
+                    </h3>
+                    @if($service->description)
+                    <p class="text-slate-500 text-sm font-light leading-relaxed">
+                        {{ $service->description }}
+                    </p>
+                    @endif
+                </div>
             </div>
+            @endforeach
         </div>
-        <div class="reveal-right">
-            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80&fit=crop"
-                 alt="Infraestructura de red"
-                 class="rounded-2xl w-full object-cover aspect-4/3 shadow-xl">
-        </div>
-    </div>
-</section>
+        @endif
 
-{{-- SERVICIO 4: CCTV --}}
-<section class="py-24 px-6" style="background:linear-gradient(135deg,#f8fafc 0%,#faf5ff 100%);">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-        <div class="reveal-left order-2 md:order-1">
-            <img src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=800&q=80&fit=crop"
-                 alt="CCTV"
-                 class="rounded-2xl w-full object-cover aspect-4/3 shadow-xl">
-        </div>
-        <div class="reveal-right order-1 md:order-2">
-            <div class="w-12 h-12 bg-amber-50 border border-amber-100 rounded-2xl flex items-center justify-center text-2xl mb-6">📷</div>
-            <p class="text-xs font-semibold tracking-widest uppercase text-amber-600 mb-3">Servicio 04</p>
-            <h2 class="font-serif text-4xl font-bold text-slate-900 mb-4 leading-tight">CCTV y videovigilancia</h2>
-            <p class="text-slate-500 font-light leading-relaxed mb-6">Instalación y configuración de sistemas de videovigilancia profesionales con acceso remoto desde cualquier dispositivo. Monitoreo continuo para hogares y empresas.</p>
-            <ul class="space-y-3 mb-8">
-                @foreach(['Cámaras HD y 4K','Acceso remoto desde tu celular','Grabación local y en la nube','Alertas de movimiento','Mantenimiento y soporte'] as $item)
-                <li class="flex items-center gap-3 text-sm text-slate-600">
-                    <svg class="w-4 h-4 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                    {{ $item }}
-                </li>
-                @endforeach
-            </ul>
-            <div class="flex items-center gap-3">
-                <span class="text-xs font-semibold text-amber-600 bg-amber-50 border border-amber-100 px-3 py-1.5 rounded-full">Desde $80</span>
-                <span class="text-xs text-slate-400 font-light">Instalación incluida</span>
-            </div>
-        </div>
     </div>
 </section>
 
@@ -198,7 +128,7 @@ body { font-family: 'Inter', sans-serif; }
         <h2 class="font-serif text-4xl font-bold text-white mb-4 reveal">¿Necesitas alguno de estos servicios?</h2>
         <p class="text-blue-100 font-light mb-10 reveal d1">Contáctanos hoy — atención rápida y garantizada.</p>
         <div class="flex flex-col sm:flex-row justify-center gap-4 reveal d2">
-            <a href="/#contacto" class="bg-white text-blue-700 hover:bg-yellow-300 hover:text-blue-900 text-sm font-semibold px-8 py-3.5 rounded-xl transition-all">
+            <a href="/contacto" class="bg-white text-blue-700 hover:bg-yellow-300 hover:text-blue-900 text-sm font-semibold px-8 py-3.5 rounded-xl transition-all">
                 Contáctenos
             </a>
             <a href="{{ route('register') }}" class="border border-white/30 hover:border-white text-white text-sm px-8 py-3.5 rounded-xl transition-all">
@@ -215,6 +145,6 @@ body { font-family: 'Inter', sans-serif; }
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.1 });
-document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => observer.observe(el));
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 @endpush
