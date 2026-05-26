@@ -11,19 +11,54 @@
     {{-- FORMULARIO NUEVA SUCURSAL --}}
     <div class="bg-white border border-slate-100 rounded-2xl p-6">
         <h3 class="text-slate-900 text-sm font-semibold mb-5">Nueva sucursal</h3>
-        <form method="POST" action="{{ route('admin.branches.store') }}"
-              onsubmit="return syncFields({{ $branch->id }}, this)">
-            @csrf @method('PATCH')
-            <input type="hidden" name="name" id="name-{{$branch->id}}">
-            <input type="hidden" name="phone" id="phone-{{$branch->id}}">
-            <input type="hidden" name="address" id="address-{{$branch->id}}">
-            <input type="hidden" name="whatsapp" id="whatsapp-{{$branch->id}}">
-            <input type="hidden" name="email" id="email-{{$branch->id}}">
-            <input type="hidden" name="schedule" id="schedule-{{$branch->id}}">
-            <input type="hidden" name="maps_url" id="maps_url-{{$branch->id}}">
-            <input type="hidden" name="active" id="active-{{$branch->id}}">
+        <form method="POST" action="{{ route('admin.branches.store') }}">
+            @csrf
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Nombre</label>
+                    <input type="text" name="name" required
+                           class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Teléfono</label>
+                    <input type="text" name="phone" required
+                           class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Dirección</label>
+                    <input type="text" name="address" required
+                           class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">WhatsApp</label>
+                    <input type="text" name="whatsapp"
+                           class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Email</label>
+                    <input type="email" name="email"
+                           class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Horario</label>
+                    <input type="text" name="schedule"
+                           class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Link Google Maps</label>
+                    <input type="text" name="maps_url"
+                           class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Activa</label>
+                    <select name="active" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                        <option value="1">Sí</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+            </div>
             <button type="submit"
-                    class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-100 px-3 py-1.5 rounded-lg transition-colors">
+                    class="mt-4 text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-100 px-3 py-1.5 rounded-lg transition-colors">
                 Guardar
             </button>
         </form>
