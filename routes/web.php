@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Setting;
 use App\Models\Branch;
@@ -22,6 +24,9 @@ Route::get('/contacto', [PageController::class, 'contacto'])->name('contacto');
 Route::get('/servicios', [PageController::class, 'servicios'])->name('servicios');
 Route::get('/servicios/{service:slug}', [ServiceController::class, 'show'])->name('servicios.show');
 Route::get('/conocenos', [PageController::class, 'conocenos'])->name('conocenos');
+Route::get('/resenas', [PageController::class, 'resenas'])->name('resenas');
+Route::post('/resenas', [ReviewController::class, 'store'])->name('reviews.store');
+
 Route::get('/', function () {
     $branches = Branch::where('active', true)->orderBy('order')->get();
     $socials = SocialLink::where('active', true)->orderBy('order')->get();
@@ -77,6 +82,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::post('/servicios', [ServiceController::class, 'store'])->name('admin.services.store');
     Route::patch('/servicios/{service}', [ServiceController::class, 'update'])->name('admin.services.update');
     Route::delete('/servicios/{service}', [ServiceController::class, 'destroy'])->name('admin.services.destroy');
+
+    Route::get('/resenas', [AdminReviewController::class, 'index'])->name('admin.reviews');
+    Route::patch('/resenas/{review}/toggle', [AdminReviewController::class, 'toggleFeatured'])->name('admin.reviews.toggle');
+    Route::delete('/resenas/{review}', [AdminReviewController::class, 'destroy'])->name('admin.reviews.destroy');
 });
 
 require __DIR__.'/auth.php';
