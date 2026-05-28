@@ -37,6 +37,18 @@
 
         {{-- BOTONES DESKTOP --}}
         <div class="flex items-center gap-2">
+
+            {{-- RATE US --}}
+            <a href="{{ route('resenas') }}"
+               style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;font-size:12px;font-weight:700;padding:7px 14px;border-radius:20px;text-decoration:none;letter-spacing:.03em;box-shadow:0 4px 12px rgba(245,158,11,.4);transition:all .2s ease;"
+               onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 16px rgba(245,158,11,.5)'"
+               onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 12px rgba(245,158,11,.4)'">
+                <svg style="width:13px;height:13px;" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                Rate Us
+            </a>
+
             @auth
                 @if(auth()->user()->is_admin)
                 <a href="{{ route('admin.dashboard') }}" class="hidden md:inline-flex text-sm bg-violet-600 hover:bg-violet-500 text-white px-4 py-2 rounded-xl transition-all">
@@ -89,6 +101,13 @@
             <a href="{{ route('garantias') }}#consulta" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2 pl-2 transition-colors">✅ Validar mi garantía</a>
         </div>
         <a href="{{ route('contacto') }}" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2.5 transition-colors">Contacto</a>
+
+        {{-- RATE US MÓVIL --}}
+        <a href="{{ route('resenas') }}" onclick="toggleMenu()"
+           style="display:flex;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;font-size:13px;font-weight:700;padding:10px;border-radius:12px;text-decoration:none;margin-top:8px;">
+            ⭐ Rate Us
+        </a>
+
         <div class="pt-2 flex flex-col gap-2 border-t border-white/5 mt-1">
             @auth
                 @if(auth()->user()->is_admin)
@@ -151,8 +170,8 @@
                 <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.75rem;">
                     <li><a href="/" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">Inicio</a></li>
                     <li><a href="{{ route('conocenos') }}" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">Conócenos</a></li>
-                    <li><a href="#" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">Consultar mi garantía</a></li>
-                    <li><a href="#" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">Validar mi garantía</a></li>
+                    <li><a href="{{ route('garantias') }}" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">Consultar mi garantía</a></li>
+                    <li><a href="{{ route('resenas') }}" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">⭐ Reseñas</a></li>
                     <li><a href="#" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">Política de privacidad</a></li>
                 </ul>
             </div>
