@@ -116,7 +116,7 @@ class WarrantyController extends Controller
 
         // Subir fotos
         $fotos = [];
-        $uploadDir = public_path('images/warranties');
+        $uploadDir = base_path('../public_html/images/warranties');
         if (!file_exists($uploadDir)) mkdir($uploadDir, 0755, true);
 
         for ($i = 1; $i <= 4; $i++) {
