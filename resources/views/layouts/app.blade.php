@@ -28,8 +28,8 @@
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </button>
                 <div class="absolute top-full left-0 mt-2 w-52 rounded-xl border border-white/10 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200" style="background:rgba(9,11,24,.97);backdrop-filter:blur(12px)">
-                    <a href="{{ route('gara<a href="{{ route('warranties') }}" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors border-t border-white/5">✅ Validar mi garantía</a>ntias') }}" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors">🔍 Consultar mi garantía</a>
-
+                    <a href="{{ route('garantias') }}" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors">🔍 Consultar mi garantía</a>
+                    <a href="{{ route('warranties') }}" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors border-t border-white/5">✅ Validar mi garantía</a>
                 </div>
             </li>
             <li><a href="{{ route('contacto') }}" class="hover:text-white transition-colors duration-200 tracking-wide">Contacto</a></li>
