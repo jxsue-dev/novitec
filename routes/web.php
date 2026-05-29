@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
+use App\Http\Controllers\WarrantyController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Setting;
 use App\Models\Branch;
@@ -26,6 +27,12 @@ Route::get('/servicios/{service:slug}', [ServiceController::class, 'show'])->nam
 Route::get('/conocenos', [PageController::class, 'conocenos'])->name('conocenos');
 Route::get('/resenas', [PageController::class, 'resenas'])->name('resenas');
 Route::post('/resenas', [ReviewController::class, 'store'])->name('reviews.store');
+
+Route::get('/warranties', [WarrantyController::class, 'index'])->name('warranties');
+Route::get('/warranties/validar-factura', [WarrantyController::class, 'validarFactura'])->name('warranties.validar');
+Route::get('/warranties/buscar-producto', [WarrantyController::class, 'buscarProducto'])->name('warranties.producto');
+Route::post('/warranties/guardar', [WarrantyController::class, 'guardar'])->name('warranties.guardar');
+Route::post('/warranties/sugerencia', [WarrantyController::class, 'guardarSugerencia'])->name('warranties.sugerencia');
 
 Route::get('/', function () {
     $branches = Branch::where('active', true)->orderBy('order')->get();
