@@ -200,10 +200,10 @@ class WarrantyController extends Controller
         for ($intentos = 0; $intentos < 20; $intentos++) {
             $n1 = DB::connection('novitecdb')->table('Ordenes')
                 ->where('nro_orden', 'like', "$secuencial-%")
-                ->max(DB::raw('CAST(SUBSTRING_INDEX(nro_orden,\'-\',-1) AS UNSIGNED))'));
+                ->max(DB::raw('CAST(SUBSTRING_INDEX(nro_orden,\'-\',-1) AS UNSIGNED)'));
             $n2 = DB::connection('novitecdb')->table('PreOrdenes')
                 ->where('nro_preorden', 'like', "PRE-$secuencial-%")
-                ->max(DB::raw('CAST(SUBSTRING_INDEX(nro_preorden,\'-\',-1) AS UNSIGNED))'));
+                ->max(DB::raw('CAST(SUBSTRING_INDEX(nro_preorden,\'-\',-1) AS UNSIGNED)'));
             $num = max((int)$n1, (int)$n2) + 1 + $intentos;
             $candidate = 'PRE-' . $secuencial . '-' . str_pad($num, 6, '0', STR_PAD_LEFT);
             $exists = DB::connection('novitecdb')->table('PreOrdenes')
