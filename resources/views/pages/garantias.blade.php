@@ -694,6 +694,8 @@ body { font-family:var(--fb); }
 
 @push('scripts')
 <script>
+(function(){
+
 @if(session('consulta_resultados') || session('consulta_error'))
 window.addEventListener('load', function(){
     setTimeout(function(){
@@ -701,6 +703,11 @@ window.addEventListener('load', function(){
     }, 100);
 });
 @endif
+
+const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } });
+},{threshold:.1});
+document.querySelectorAll('.rv,.rvl,.rvr').forEach(el => io.observe(el));
 
 const rules = document.querySelectorAll('.g-rule');
 const rObs = new IntersectionObserver(entries => {
