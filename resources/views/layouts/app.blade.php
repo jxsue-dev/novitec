@@ -55,9 +55,7 @@
         <div class="flex items-center gap-2">
             @auth
                 @if(auth()->user()->is_admin)
-                <a href="{{ route('admin.dashboard') }}" class="hidden md:inline-flex text-sm bg-violet-600 hover:bg-violet-500 text-white px-4 py-2 rounded-xl transition-all">
-                    Admin
-                </a>
+                {{-- Sin botón admin en el header --}}
                 @else
                 <div class="relative group hidden md:block">
                     <button class="text-sm border border-white/20 hover:border-blue-400 text-slate-300 hover:text-white px-4 py-2 rounded-xl transition-all flex items-center gap-1">
@@ -109,7 +107,7 @@
         <div class="pt-2 flex flex-col gap-2 border-t border-white/5 mt-1">
             @auth
                 @if(auth()->user()->is_admin)
-                <a href="{{ route('admin.dashboard') }}" onclick="toggleMenu()" class="block text-sm bg-violet-600 text-white text-center py-2.5 rounded-xl">Admin</a>
+                {{-- Sin botón admin en el header --}}
                 @else
                 <a href="{{ route('client.orders') }}" onclick="toggleMenu()" class="block text-sm border border-white/20 text-slate-300 text-center py-2.5 rounded-xl">📦 Mis órdenes</a>
                 <a href="{{ route('profile.edit') }}" onclick="toggleMenu()" class="block text-sm border border-white/20 text-slate-300 text-center py-2.5 rounded-xl">⚙️ Mi perfil</a>
