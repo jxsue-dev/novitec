@@ -38,16 +38,24 @@ body { font-family: 'Inter', sans-serif; }
 <section class="py-16 px-6 bg-white">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
         @foreach([
-            ['📞', 'Llámanos', 'Atención telefónica en horario de oficina.', $branches->first()->phone ?? ''],
-            ['✉️', 'Escríbenos', 'Respondemos en menos de 24 horas.', $branches->first()->email ?? ''],
-            ['💬', 'WhatsApp', 'La forma más rápida de contactarnos.', 'Escribir ahora'],
+            ['📞', 'Llámanos', 'Atención telefónica en horario de oficina.', $branches->first()->phone ?? '', 'tel:' . ($branches->first()->phone ?? '')],
+            ['✉️', 'Escríbenos', 'Respondemos en menos de 24 horas.', $branches->first()->email ?? '', 'mailto:' . ($branches->first()->email ?? '')],
+            ['💬', 'WhatsApp', 'La forma más rápida de contactarnos.', 'Escribir ahora', 'https://wa.me/593960500156'],
         ] as $i => $c)
+        @if(!empty($c[4]))
+        <a href="{{ $c[4] }}" target="_blank" class="block bg-slate-50 border border-slate-100 rounded-2xl p-6 text-center hover:border-blue-200 hover:shadow-md transition-all reveal hover:-translate-y-1" style="transition-delay:{{ $i * 0.1 }}s; text-decoration:none;">
+        @else
         <div class="bg-slate-50 border border-slate-100 rounded-2xl p-6 text-center hover:border-blue-200 hover:shadow-md transition-all reveal" style="transition-delay:{{ $i * 0.1 }}s">
+        @endif
             <div class="text-4xl mb-4">{{ $c[0] }}</div>
             <h3 class="font-semibold text-slate-900 text-sm mb-2">{{ $c[1] }}</h3>
             <p class="text-slate-500 text-xs font-light mb-3">{{ $c[2] }}</p>
             <p class="text-blue-600 text-sm font-medium">{{ $c[3] }}</p>
+        @if(!empty($c[4]))
+        </a>
+        @else
         </div>
+        @endif
         @endforeach
     </div>
 </section>
@@ -186,12 +194,10 @@ body { font-family: 'Inter', sans-serif; }
         <p class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3 reveal">Síguenos</p>
         <h2 class="font-serif text-3xl font-bold text-slate-900 mb-8 reveal d1">Encuéntranos en redes</h2>
         <div class="flex justify-center gap-4 flex-wrap reveal d2">
-            @foreach($socials as $social)
-            <a href="{{ $social->url }}" target="_blank"
-               class="border border-slate-200 hover:border-blue-400 hover:text-blue-600 text-slate-500 text-sm px-6 py-3 rounded-xl transition-all hover:shadow-sm">
-                {{ $social->platform }}
+            <a href="https://wa.me/593960500156" target="_blank"
+               class="border border-green-200 hover:border-green-400 hover:text-green-600 text-slate-500 text-sm px-6 py-3 rounded-xl transition-all hover:shadow-sm flex items-center gap-2">
+                <i class="fa-brands fa-whatsapp text-lg text-green-500"></i> WhatsApp
             </a>
-            @endforeach
         </div>
     </div>
 </section>

@@ -21,6 +21,7 @@
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="antialiased">
@@ -141,12 +142,10 @@
                     Soluciones tecnológicas profesionales para personas y empresas. Más de 10 años de experiencia.
                 </p>
                 <div style="display:flex; gap:0.75rem;">
-                    @foreach($socials ?? [] as $social)
-                    <a href="{{ $social->url }}" target="_blank"
-                       style="width:36px; height:36px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:0.75rem; font-weight:500; text-decoration:none; transition:all 0.2s;">
-                        {{ substr($social->platform, 0, 2) }}
+                    <a href="https://wa.me/593960500156" target="_blank"
+                       style="width:36px; height:36px; border-radius:10px; border:1px solid rgba(34,197,94,0.3); background:rgba(34,197,94,0.15); display:flex; align-items:center; justify-content:center; color:#4ade80; font-size:1.1rem; text-decoration:none; transition:all 0.2s;" title="WhatsApp">
+                        <i class="fa-brands fa-whatsapp"></i>
                     </a>
-                    @endforeach
                 </div>
             </div>
 

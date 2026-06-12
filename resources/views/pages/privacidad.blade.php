@@ -76,7 +76,7 @@ html {
 {{-- CONTENT SECTION --}}
 <section class="py-16 px-6 bg-slate-50/50">
     <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12">
-        
+
         {{-- TABLE OF CONTENTS (SIDEBAR) --}}
         <aside class="w-full lg:w-1/4 lg:sticky lg:top-28 h-fit self-start order-last lg:order-first">
             <div class="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
@@ -98,7 +98,7 @@ html {
 
         {{-- MAIN DOCUMENT CONTENT --}}
         <div class="w-full lg:w-3/4 flex flex-col gap-10">
-            
+
             {{-- INTRODUCCIÓN --}}
             <div id="introduccion" class="policy-card bg-white">
                 <h2 class="font-serif text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
@@ -107,7 +107,7 @@ html {
                 </h2>
                 <div class="text-slate-600 font-light leading-relaxed text-sm space-y-4">
                     <p>
-                        El presente documento detalla el marco legal vigente en Ecuador en materia de protección de datos personales y delitos informáticos, aplicable a las operaciones de <strong>NOVISOLUTIONS CIA LTDA</strong>, bajo su nombre comercial <strong>Novicompu</strong>.
+                        El presente documento detalla el marco legal vigente en Ecuador en materia de protección de datos personales y delitos informáticos, aplicable a las operaciones de <strong>NOVITECNOLOGÍA CIA. LTDA.</strong>, bajo su nombre comercial <strong>Novitec</strong>.
                     </p>
                     <p>
                         Se abordan las disposiciones de la Ley Orgánica de Protección de Datos Personales (LOPDP) y las secciones pertinentes del Código Orgánico Integral Penal (COIP), con el fin de establecer las directrices de cumplimiento y mitigar riesgos legales asociados al giro de negocio de la empresa.
@@ -126,7 +126,7 @@ html {
                         La Ley Orgánica de Protección de Datos Personales fue publicada en el Registro Oficial Suplemento N° 459 el 26 de mayo de 2021, y se encuentra vigente en el Ecuador. Su objetivo primordial es garantizar el ejercicio del derecho a la protección de datos personales, que incluye el acceso y la decisión sobre dicha información.
                     </p>
                 </div>
-                
+
                 <h3 class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-4">Claves de la LOPDP</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
@@ -144,7 +144,7 @@ html {
                     <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
                         <h4 class="font-semibold text-slate-800 text-sm mb-2">Rol como Responsable</h4>
                         <p class="text-xs text-slate-500 leading-relaxed font-light">
-                            Novicompu determina los fines y medios del tratamiento, asumiendo la responsabilidad de cumplir los principios de licitud, lealtad, transparencia, minimización y confidencialidad.
+                            Novitec determina los fines y medios del tratamiento, asumiendo la responsabilidad de cumplir los principios de licitud, lealtad, transparencia, minimización y confidencialidad.
                         </p>
                     </div>
                     <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
@@ -160,11 +160,11 @@ html {
             <div id="aplicacion-lopdp" class="policy-card bg-white">
                 <h2 class="font-serif text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
                     <span class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-sm font-bold">3</span>
-                    Detalles de Aplicación a NOVISOLUTIONS CIA LTDA
+                    Detalles de Aplicación a NOVITECNOLOGÍA CIA. LTDA.
                 </h2>
                 <div class="text-slate-600 font-light leading-relaxed text-sm space-y-4 mb-6">
                     <p>
-                        Como empresa que opera un comercio electrónico y maneja información de clientes y transacciones, Novicompu recopila y procesa datos personales (nombres, direcciones, números de identificación, datos de contacto y, potencialmente, información de pago).
+                        Como empresa que opera un comercio electrónico y maneja información de clientes y transacciones, Novitec recopila y procesa datos personales (nombres, direcciones, números de identificación, datos de contacto y, potencialmente, información de pago).
                     </p>
                 </div>
                 <h3 class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-4">Acciones de Cumplimiento Requeridas:</h3>
@@ -306,10 +306,10 @@ html {
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm font-light text-slate-600 border-collapse">
                         <tbody>
-                            <tr class="border-b border-slate-100"><td class="py-3 font-medium text-slate-900 w-1/3">Razón Social</td><td class="py-3">NOVISOLUTIONS CIA LTDA</td></tr>
-                            <tr class="border-b border-slate-100"><td class="py-3 font-medium text-slate-900">Nombre Comercial</td><td class="py-3">Novicompu</td></tr>
-                            <tr class="border-b border-slate-100"><td class="py-3 font-medium text-slate-900">RUC</td><td class="py-3">1792291666001</td></tr>
-                            <tr class="border-b border-slate-100"><td class="py-3 font-medium text-slate-900">Sitio Web Oficial</td><td class="py-3"><a href="http://www.novicompu.com" target="_blank" class="text-blue-600 hover:underline">www.novicompu.com</a></td></tr>
+                            <tr class="border-b border-slate-100"><td class="py-3 font-medium text-slate-900 w-1/3">Razón Social</td><td class="py-3">NOVITECNOLOGÍA CIA LTDA</td></tr>
+                            <tr class="border-b border-slate-100"><td class="py-3 font-medium text-slate-900">Nombre Comercial</td><td class="py-3">Novitec</td></tr>
+                            <tr class="border-b border-slate-100"><td class="py-3 font-medium text-slate-900">RUC</td><td class="py-3">1792487811001</td></tr>
+                            <tr class="border-b border-slate-100"><td class="py-3 font-medium text-slate-900">Sitio Web Oficial</td><td class="py-3"><a href="http://www.novitec.com.ec" target="_blank" class="text-blue-600 hover:underline">www.novitec.com.ec</a></td></tr>
                             <tr><td class="py-3 font-medium text-slate-900">Actividad Principal</td><td class="py-3">Comercialización de productos tecnológicos, electrónica de consumo y servicios relacionados a través de canales físicos y plataformas de comercio electrónico (E-commerce).</td></tr>
                         </tbody>
                     </table>
@@ -406,12 +406,12 @@ html {
                         </tbody>
                     </table>
                 </div>
-                
+
                 <div class="mt-8 pt-6 border-t border-slate-100 text-center text-xs text-slate-400 font-light">
                     <p class="font-medium text-slate-600 mb-1">FIRMADO ELECTRÓNICAMENTE POR:</p>
                     <p class="text-slate-800 font-semibold">Abg. Stalin Rene Sacoto Zambrano M. Sc.</p>
-                    <p>GERENTE GENERAL — NOVISOLUTIONS CIA LTDA</p>
-                    <p class="text-blue-500">gerencia@novicompu.com</p>
+                    <p>GERENTE GENERAL — NOVITECNOLOGÍA CIA. LTDA.</p>
+                    <p class="text-blue-500">gerencia@novitec.com.ec</p>
                 </div>
             </div>
 

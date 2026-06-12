@@ -91,7 +91,7 @@ html {
                     <a href="#st-documentacion" class="hover:text-blue-600">Documentación</a>
                     <a href="#st-resolucion" class="hover:text-blue-600">Resolución de Controversias</a>
                     
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-4">2. Garantía Novicompu</p>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-4">2. Garantía Novitecnología</p>
                     <a href="#nc-cobertura" class="hover:text-blue-600">Cobertura de Hardware</a>
                     <a href="#nc-exclusiones" class="hover:text-blue-600">Exclusiones</a>
                     <a href="#nc-recomendaciones" class="hover:text-blue-600">Recomendaciones</a>
@@ -184,23 +184,22 @@ html {
                     <strong>Aceptación de Términos:</strong> Con la suscripción del documento de ingreso técnico, el cliente declara haber leído, comprendido y aceptado las cláusulas descritas en todos sus aspectos, lo cual significa que conoce todas las condiciones de la reparación de su dispositivo. En tal sentido, una vez que el cliente ha estampado su firma, no podrá alegar desconocimiento de las condiciones aquí señaladas.
                 </p>
                 <div class="mt-4 text-xs text-slate-500 font-light">
-                    • <strong>Contacto para baja de datos:</strong> informacion@novicompu.com. <br>
+                    • <strong>Contacto para baja de datos:</strong> informacion@novitec.com.ec. <br>
                     • <strong>Contacto para consultar estado de órdenes:</strong> 026001635 / 026001797 / 0960500156 (Quito) - 0960500158 (WhatsApp - Guayaquil) o mediante los correos soporte@novitec.com.ec / servicios@novitec.com.ec.
                 </div>
             </div>
 
-            {{-- SECCION 2: GARANTIA LIMITADA NOVICOMPU --}}
-            <div class="border-b border-slate-200 pb-2 mt-8">
-                <h2 class="text-xs font-bold tracking-widest uppercase text-blue-600">Sección 2</h2>
-                <h3 class="font-serif text-3xl font-bold text-slate-900">Garantía Limitada de Hardware Novicompu</h3>
-                <p class="text-slate-500 font-light text-sm mt-1">Garantía limitada concedida por NOVISOLUTIONS CIA. LTDA. sobre productos comercializados.</p>
+            {{-- SECCION 2: GARANTIA LIMITADA NOVITEC --}}
+            <div class="mb-10 reveal">
+                <h3 class="font-serif text-3xl font-bold text-slate-900">Garantía Limitada de Hardware Novitecnología</h3>
+                <p class="text-slate-500 font-light text-sm mt-1">Garantía limitada concedida por NOVITECNOLOGIA CIA. LTDA. sobre productos comercializados.</p>
             </div>
 
             <div id="nc-cobertura" class="policy-card bg-white">
                 <h4 class="text-base font-bold text-slate-900 mb-3">Cobertura y Territorio</h4>
                 <div class="text-slate-600 font-light leading-relaxed text-sm space-y-4">
                     <p>
-                        Esta garantía limitada de hardware comercializado por <strong>NOVISOLUTIONS CIA. LTDA.</strong> le concede a usted, el cliente, los derechos otorgados expresamente por la compañía como comercializador de productos. No se ofrece ninguna otra condición o garantía expresa, oral o escrita, limitando la responsabilidad a los términos indicados.
+                        Esta garantía limitada de hardware comercializado por <strong>NOVITECNOLOGIA CIA. LTDA.</strong> le concede a usted, el cliente, los derechos otorgados expresamente por la compañía como comercializador de productos. No se ofrece ninguna otra condición o garantía expresa, oral o escrita, limitando la responsabilidad a los términos indicados.
                     </p>
                     <p>
                         <strong>Ámbito Geográfico:</strong> Tiene efecto en todas las provincias del Ecuador y se solicitará su cumplimiento en las ciudades de Quito y Guayaquil. Los productos adquiridos en una provincia pueden transferirse a otras sin que se anule la garantía.
@@ -209,7 +208,7 @@ html {
                         <strong>Tiempos de Respuesta:</strong> El tiempo estándar de respuesta del servicio de garantía está sujeto a la disponibilidad de piezas a nivel local, determinándose en el diagnóstico inicial.
                     </p>
                     <div class="p-4 rounded-xl bg-red-50/50 border border-red-200/50 text-xs text-red-800">
-                        ⚠️ NOVISOLUTIONS CIA. LTDA. no se hace responsable de los gastos de traslado o envío de los productos hasta las oficinas técnicas de Quito o Guayaquil para ejecutar esta garantía.
+                        ⚠️ NOVITECNOLOGIA CIA. LTDA. no se hace responsable de los gastos de traslado o envío de los productos hasta las oficinas técnicas de Quito o Guayaquil para ejecutar esta garantía.
                     </div>
                     <p>
                         <strong>Aplicabilidad:</strong> Aplica única y exclusivamente a productos de hardware comercializados por la empresa (demostrable mediante la factura de compra original) y no incluye ninguna aplicación de software, programas o productos de terceros.
@@ -227,7 +226,7 @@ html {
                     <ul class="list-disc pl-5 space-y-1.5 font-light text-slate-500">
                         <li>Accidente, mala utilización, abuso, contaminación o mantenimiento inadecuado.</li>
                         <li>Uso bajo parámetros distintos a los establecidos en la documentación del usuario.</li>
-                        <li>Uso de software, interfaces, piezas o repuestos no suministrados por NOVISOLUTIONS CIA. LTDA.</li>
+                        <li>Uso de software, interfaces, piezas o repuestos no suministrados por NOVITECNOLOGIA CIA. LTDA.</li>
                         <li>Daños provocados por infección de virus informáticos.</li>
                         <li>Pérdida o daños ocurridos durante el transporte del equipo.</li>
                         <li>Modificación o servicios técnicos externos a los talleres de la empresa.</li>
@@ -248,7 +247,7 @@ html {
             <div id="nc-limitacion" class="policy-card bg-white">
                 <h4 class="text-base font-bold text-slate-900 mb-3">Limitación de Responsabilidad</h4>
                 <p class="text-slate-600 font-light leading-relaxed text-sm">
-                    La responsabilidad máxima de NOVISOLUTIONS CIA. LTDA. bajo esta Garantía Limitada se reduce expresamente al reembolso del precio menor entre el precio abonado por el producto o el coste de la reparación/sustitución de cualquiera de los componentes de hardware con fallas bajo uso normal.
+                    La responsabilidad máxima de NOVITECNOLOGIA CIA. LTDA. bajo esta Garantía Limitada se reduce expresamente al reembolso del precio menor entre el precio abonado por el producto o el coste de la reparación/sustitución de cualquiera de los componentes de hardware con fallas bajo uso normal.
                 </p>
                 <p class="text-slate-600 font-light leading-relaxed text-sm mt-3">
                     No se asume responsabilidad alguna por daños indirectos, pérdida de beneficios empresariales, daños especiales o reclamaciones efectuadas por terceros.
@@ -295,7 +294,7 @@ html {
                 <h4 class="text-base font-bold text-slate-900 mb-3">Políticas de Reembolso</h4>
                 <div class="text-slate-600 font-light leading-relaxed text-sm space-y-3">
                     <p>
-                        Los reembolsos pueden tardar de <strong>30 a 90 días laborables</strong> debido al procesamiento interbancario y administrativo entre las agencias bancarias y NOVISOLUTIONS CIA. LTDA.
+                        Los reembolsos pueden tardar de <strong>30 a 90 días laborables</strong> debido al procesamiento interbancario y administrativo entre las agencias bancarias y NOVITECNOLOGIA CIA. LTDA.
                     </p>
                     <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800">
                         ⚠️ Si el reembolso no se aplica el mismo día con el corte de los procesadores de tarjetas (DATAFAST o MEDIANET), el trámite se acogerá a los tiempos indicados anteriormente y adicionalmente se descontará una <strong>comisión bancaria del 10%</strong>.

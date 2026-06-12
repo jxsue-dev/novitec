@@ -647,58 +647,6 @@ body { font-family:var(--fb); }
     </div>
 </section>
 
-{{-- ═══ CATEGORÍAS ═══ --}}
-<section class="g-cats-sec">
-    <div class="g-sec-head rv">
-        <div class="g-sec-tag">Selecciona tu equipo</div>
-        <h2 class="g-sec-title">¿Qué tipo de <em class="shimmer-blue" style="font-style:italic">equipo</em> tienes?</h2>
-        <p class="g-sec-sub">Haz clic en la categoría para ver las marcas y el centro de soporte autorizado.</p>
-    </div>
-    <div class="g-cats-grid rv d1" id="gCatsGrid">
-        @foreach([
-            ['COMPUTADORAS','fa-solid fa-laptop','Computadoras'],
-            ['CELULARES','fas fa-mobile-alt','Celulares'],
-            ['TABLETS','fas fa-tablet-alt','Tablets'],
-            ['IMPRESORAS','fa-solid fa-print','Impresoras'],
-            ['TELEVISIONES','fa-solid fa-tv','Televisiones'],
-            ['CONSOLAS','fa-solid fa-gamepad','Consolas'],
-            ['OTROS','fa-solid fa-headphones','Otros'],
-        ] as $cat)
-        <div class="g-cat" data-cat="{{ $cat[0] }}">
-            <div class="g-cat-inner">
-                <div class="g-cat-face g-cat-front">
-                    <span class="g-cat-ico"><i class="{{ $cat[1] }}"></i></span>
-                    <span class="g-cat-lbl">{{ $cat[2] }}</span>
-                </div>
-                <div class="g-cat-face g-cat-back">
-                    <span class="g-cat-ico"><i class="{{ $cat[1] }}"></i></span>
-                    <span class="g-cat-lbl">Ver marcas</span>
-                </div>
-            </div>
-        </div>
-        @endforeach
-    </div>
-</section>
-
-{{-- ═══ BRANDS + DETAIL ═══ --}}
-<section class="g-brands" id="gBrands">
-    <div class="g-brands-hdr">
-        <div class="g-brands-title">
-            <i id="gActIcon" class="fa-solid fa-laptop"></i>
-            <span id="gActName">COMPUTADORAS</span>
-        </div>
-        <div class="g-search-wrap">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" class="g-search" id="gSearch" placeholder="Buscar marca…">
-        </div>
-    </div>
-    <div class="g-brands-grid" id="gBrandsGrid"></div>
-    <div class="g-detail" id="gDetail">
-        <div class="g-detail-info" id="gDetailInfo"></div>
-        <div class="g-detail-map" id="gDetailMap"></div>
-    </div>
-</section>
-
 {{-- ═══ CONSULTA ═══ --}}
 <section class="g-consulta" id="consulta">
     <div class="g-consulta-inner">
@@ -843,6 +791,58 @@ body { font-family:var(--fb); }
         </div>
         @endforeach
         @endif
+    </div>
+</section>
+
+{{-- ═══ CATEGORÍAS ═══ --}}
+<section class="g-cats-sec">
+    <div class="g-sec-head rv">
+        <div class="g-sec-tag">Selecciona tu equipo</div>
+        <h2 class="g-sec-title">¿Qué tipo de <em class="shimmer-blue" style="font-style:italic">equipo</em> tienes?</h2>
+        <p class="g-sec-sub">Haz clic en la categoría para ver las marcas y el centro de soporte autorizado.</p>
+    </div>
+    <div class="g-cats-grid rv d1" id="gCatsGrid">
+        @foreach([
+            ['COMPUTADORAS','fa-solid fa-laptop','Computadoras'],
+            ['CELULARES','fas fa-mobile-alt','Celulares'],
+            ['TABLETS','fas fa-tablet-alt','Tablets'],
+            ['IMPRESORAS','fa-solid fa-print','Impresoras'],
+            ['TELEVISIONES','fa-solid fa-tv','Televisiones'],
+            ['CONSOLAS','fa-solid fa-gamepad','Consolas'],
+            ['OTROS','fa-solid fa-headphones','Otros'],
+        ] as $cat)
+        <div class="g-cat" data-cat="{{ $cat[0] }}">
+            <div class="g-cat-inner">
+                <div class="g-cat-face g-cat-front">
+                    <span class="g-cat-ico"><i class="{{ $cat[1] }}"></i></span>
+                    <span class="g-cat-lbl">{{ $cat[2] }}</span>
+                </div>
+                <div class="g-cat-face g-cat-back">
+                    <span class="g-cat-ico"><i class="{{ $cat[1] }}"></i></span>
+                    <span class="g-cat-lbl">Ver marcas</span>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+</section>
+
+{{-- ═══ BRANDS + DETAIL ═══ --}}
+<section class="g-brands" id="gBrands">
+    <div class="g-brands-hdr">
+        <div class="g-brands-title">
+            <i id="gActIcon" class="fa-solid fa-laptop"></i>
+            <span id="gActName">COMPUTADORAS</span>
+        </div>
+        <div class="g-search-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" class="g-search" id="gSearch" placeholder="Buscar marca…">
+        </div>
+    </div>
+    <div class="g-brands-grid" id="gBrandsGrid"></div>
+    <div class="g-detail" id="gDetail">
+        <div class="g-detail-info" id="gDetailInfo"></div>
+        <div class="g-detail-map" id="gDetailMap"></div>
     </div>
 </section>
 

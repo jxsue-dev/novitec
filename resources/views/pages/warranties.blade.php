@@ -208,19 +208,18 @@ body{font-family:'Inter',sans-serif;}
         <div class="po-entry" id="po-entry-card">
             <div class="po-entry-top">
                 <div class="po-kicker">Validacion de garantia</div>
-                <h1>Antes de ingresar tu preorden, confirma estas autorizaciones.</h1>
-                <p>Queremos que el proceso sea claro y ordenado. Primero acepta las condiciones iniciales y luego ingresa con tu cuenta para continuar con la validacion de garantia.</p>
+                <h1>Antes de ingresar, lee atentamente lo siguiente:</h1>
+                <p>Queremos que el proceso sea claro y ordenado. Primero acepta las condiciones iniciales y luego ingresa con tu cuenta para continuar con la validación de garantía.</p>
             </div>
             <div class="po-entry-body">
                 <div class="po-entry-grid">
                     <div class="po-entry-panel">
                         <h2 class="po-entry-title">Autorizaciones requeridas</h2>
-                        <p class="po-entry-copy">Acepta estas condiciones iniciales y luego accede con tu cuenta para continuar con la preorden de garantia.</p>
                         <div class="po-legal-list">
                             <label class="po-legal-item">
                                 <input type="checkbox" id="po-gate-terms">
                                 <span>
-                                    <strong>Acepto <a href="{{ route('terminos') }}" target="_blank" class="text-blue-600 hover:underline hover:text-blue-800 transition-colors">TyC</a></strong>
+                                    <strong>Acepto los <a href="{{ route('terminos') }}" target="_blank" class="text-blue-600 hover:underline hover:text-blue-800 transition-colors">Términos y Condiciones</a></strong>
                                     <span>Confirmo que he leído y acepto los <a href="{{ route('terminos') }}" target="_blank" class="text-blue-500 hover:underline font-medium hover:text-blue-700 transition-colors">términos y condiciones</a> aplicables al proceso de validación de garantía.</span>
                                 </span>
                             </label>
@@ -229,7 +228,7 @@ body{font-family:'Inter',sans-serif;}
                                 <input type="checkbox" id="po-gate-data">
                                 <span>
                                     <strong>Acepto el <a href="{{ route('privacidad') }}" target="_blank" class="text-blue-600 hover:underline hover:text-blue-800 transition-colors">tratamiento de datos</a></strong>
-                                    <span>Autorizo que mis datos sean tratados conforme a la <a href="{{ route('privacidad') }}" target="_blank" class="text-blue-500 hover:underline font-medium hover:text-blue-700 transition-colors">política de privacidad y protección de datos</a> para gestionar la preorden y la garantía.</span>
+                                    <span>Autorizo que mis datos sean tratados conforme a la <a href="{{ route('privacidad') }}" target="_blank" class="text-blue-500 hover:underline font-medium hover:text-blue-700 transition-colors">ley de proteccion de datos y políticas de privacidad </a> para gestionar la preorden y la garantía.</span>
                                 </span>
                             </label>
                         </div>
