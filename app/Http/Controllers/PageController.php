@@ -86,6 +86,20 @@ class PageController extends Controller
         $q    = trim($request->q);
         $tipo = $request->tipo;
 
+        // Si no está autenticado y busca por cédula/RUC, bloquear
+        if (!auth()->check() && $tipo === 'identificacion') {
+            return back()->with('consulta_error', 'Debes iniciar sesión para realizar búsquedas por Cédula / RUC.');
+        }
+
+        // Si está autenticado y busca por cédula/RUC, validar que sea la suya propia
+        if (auth()->check() && $tipo === 'identificacion') {
+            $userIdents = auth()->user()->orderLookupIdentifications();
+            $searchIdent = \App\Support\IdentityDocument::normalize($q);
+            if (!in_array($searchIdent, $userIdents)) {
+                return back()->with('consulta_error', 'Solo puedes buscar órdenes asociadas a tu documento de identidad.');
+            }
+        }
+
         try {
             $query = DB::connection('novitecdb')->table('vista_ordenes');
 
@@ -95,25 +109,34 @@ class PageController extends Controller
                 $query->where('identificacion', $q);
             }
 
+            $userIdents = auth()->check() ? auth()->user()->orderLookupIdentifications() : [];
+
             $resultados = $query->orderByDesc('fecha_de_ingreso')
                 ->limit(20)
                 ->get()
-                ->map(fn($r) => [
-                    'nro_orden'     => $r->nro_orden,
-                    'estado_orden'  => $r->estado_orden,
-                    'motivo_ingreso'=> $r->motivo_ingreso,
-                    'fecha_ingreso' => $r->fecha_de_ingreso_fmt,
-                    'tecnico'       => $r->tecnico,
-                    'sucursal'      => $r->sucursal,
-                    'tipo_equipo'   => $r->tipo,
-                    'marca_equipo'  => $r->marca,
-                    'modelo_equipo' => $r->modelo,
-                    'falla'         => $r->falla,
-                    'observacion'   => $r->observacion,
-                    'nombres'       => $r->nombres,
-                    'apellidos'     => $r->apellidos,
-                    'cliente'       => $r->cliente,
-                ])->toArray();
+                ->map(function($r) use ($userIdents) {
+                    $orderIdent = \App\Support\IdentityDocument::normalize($r->identificacion);
+                    $showDetails = auth()->check() && in_array($orderIdent, $userIdents);
+
+                    return [
+                        'nro_orden'       => $r->nro_orden,
+                        'estado_orden'    => $r->estado_orden,
+                        'estado_garantia' => $r->estado_garantia ?? null,
+                        'motivo_ingreso'  => $r->motivo_ingreso,
+                        'fecha_ingreso'   => $r->fecha_de_ingreso_fmt,
+                        'tecnico'         => $r->tecnico,
+                        'sucursal'        => $r->sucursal,
+                        'tipo_equipo'     => $r->tipo,
+                        'marca_equipo'    => $r->marca,
+                        'modelo_equipo'   => $r->modelo,
+                        'falla'           => $r->falla,
+                        'observacion'     => $r->observacion,
+                        'nombres'         => $r->nombres,
+                        'apellidos'       => $r->apellidos,
+                        'cliente'         => $r->cliente,
+                        'show_details'    => $showDetails,
+                    ];
+                })->toArray();
 
             if (empty($resultados)) {
                 return back()->with('consulta_error', 'No encontramos órdenes con ese criterio. Verifica el dato ingresado.');
@@ -134,5 +157,21 @@ class PageController extends Controller
         $featured = \App\Models\Review::where('featured', true)->orderByDesc('created_at')->get();
         $all = \App\Models\Review::where('rating', '>=', 3)->orderByDesc('created_at')->get();
         return view('pages.resenas', compact('branches', 'socials', 'settings', 'featured', 'all'));
+    }
+
+    public function privacidad()
+    {
+        $branches = Branch::where('active', true)->orderBy('order')->get();
+        $socials = SocialLink::where('active', true)->orderBy('order')->get();
+        $settings = Setting::pluck('value', 'key');
+        return view('pages.privacidad', compact('branches', 'socials', 'settings'));
+    }
+
+    public function terminos()
+    {
+        $branches = Branch::where('active', true)->orderBy('order')->get();
+        $socials = SocialLink::where('active', true)->orderBy('order')->get();
+        $settings = Setting::pluck('value', 'key');
+        return view('pages.terminos', compact('branches', 'socials', 'settings'));
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateProfileRequest;
+use App\Support\IdentityDocument;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,11 +19,16 @@ class ProfileController extends Controller
     public function update(UpdateProfileRequest $request): RedirectResponse
     {
         $user = $request->user();
+        $nombres = trim($request->nombres);
+        $apellidos = trim($request->apellidos);
 
         $user->fill([
-            'name'  => $request->name,
+            'name' => IdentityDocument::fullName($nombres, $apellidos),
+            'nombres' => $nombres,
+            'apellidos' => $apellidos,
             'email' => $request->email,
             'phone' => $request->phone,
+            'direccion' => trim((string) $request->direccion) ?: null,
         ]);
 
         if ($request->filled('password')) {

@@ -28,10 +28,17 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $redirectTo = $this->resolveRedirectTo($request->input('redirect_to'));
+
+        if ($redirectTo !== null) {
+            return redirect()->to($redirectTo);
+        }
+
         if (auth()->user()->is_admin) {
             return redirect()->route('admin.dashboard');
         }
-        return redirect('/');
+
+        return redirect()->route('client.orders');
     }
 
     /**
@@ -46,5 +53,18 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    private function resolveRedirectTo(?string $redirectTo): ?string
+    {
+        if (! is_string($redirectTo) || $redirectTo === '') {
+            return null;
+        }
+
+        if (! str_starts_with($redirectTo, '/') || str_starts_with($redirectTo, '//')) {
+            return null;
+        }
+
+        return $redirectTo;
     }
 }

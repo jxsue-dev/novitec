@@ -10,19 +10,49 @@
 body{font-family:'Inter',sans-serif;}
 
 /* WRAP */
-.po-wrap{min-height:60vh;background:linear-gradient(135deg,#020817 0%,#0c1a35 60%,#020817 100%);display:flex;align-items:center;justify-content:center;padding:100px 24px 60px;}
+.po-wrap{min-height:60vh;background:linear-gradient(135deg,#f0f4ff 0%,#e8f0fe 28%,#fdf4ff 58%,#ecfdf5 100%);display:flex;align-items:center;justify-content:center;padding:100px 24px 60px;}
+.po-shell{width:100%;max-width:920px;display:flex;flex-direction:column;gap:24px;}
+
+/* ENTRY */
+.po-entry{background:rgba(255,255,255,.9);border:1px solid rgba(255,255,255,.7);border-radius:32px;box-shadow:0 30px 80px rgba(15,23,42,.16);overflow:hidden;backdrop-filter:blur(10px);}
+.po-entry-top{padding:34px 38px 18px;color:#0f172a;background:transparent;}
+.po-entry-top .po-kicker{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#2563eb;margin-bottom:10px;}
+.po-entry-top h1{font-size:30px;font-weight:800;line-height:1.18;margin:0 0 10px;font-family:'Playfair Display',serif;}
+.po-entry-top p{font-size:14px;line-height:1.75;color:#64748b;margin:0;max-width:720px;}
+.po-entry-body{padding:12px 38px 38px;}
+.po-entry-grid{display:grid;grid-template-columns:1fr;gap:18px;}
+.po-entry-panel{border:1px solid #e2e8f0;border-radius:24px;padding:24px;background:#fff;}
+.po-entry-title{font-size:16px;font-weight:800;color:#0f172a;margin:0 0 10px;}
+.po-entry-copy{font-size:13px;line-height:1.7;color:#64748b;margin:0 0 14px;}
+.po-legal-list{display:flex;flex-direction:column;gap:12px;}
+.po-legal-item{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border:1px solid #e2e8f0;border-radius:16px;background:#fff;transition:border-color .2s,box-shadow .2s;}
+.po-legal-item:has(input:checked){border-color:#60a5fa;box-shadow:0 0 0 3px rgba(37,99,235,.08);}
+.po-legal-item input{margin-top:3px;width:18px;height:18px;accent-color:#2563eb;cursor:pointer;flex-shrink:0;}
+.po-legal-item strong{display:block;font-size:13px;color:#0f172a;margin-bottom:4px;}
+.po-legal-item span{display:block;font-size:12px;line-height:1.55;color:#64748b;}
+.po-entry-note{margin-top:16px;font-size:12px;line-height:1.7;color:#64748b;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:16px;padding:13px 15px;}
+.po-user-box{background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8;border-radius:16px;padding:13px 15px;font-size:13px;line-height:1.6;margin-bottom:14px;}
+.po-gate-error{display:none;margin-top:14px;background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;border-radius:12px;padding:11px 14px;font-size:13px;line-height:1.5;}
+.po-entry-actions{display:flex;flex-direction:column;gap:12px;margin-top:18px;}
+.po-entry-btn,.po-entry-link{display:flex;align-items:center;justify-content:center;text-align:center;padding:14px 18px;border-radius:18px;font-size:14px;font-weight:800;transition:transform .15s,opacity .2s,box-shadow .2s;text-decoration:none;border:none;font-family:'Inter',sans-serif;}
+.po-entry-btn:hover:not(:disabled),.po-entry-link:hover:not(.is-disabled){transform:translateY(-2px);}
+.po-entry-btn{background:#2563eb;color:#fff;box-shadow:0 12px 28px rgba(37,99,235,.22);cursor:pointer;}
+.po-entry-btn:disabled{opacity:.5;cursor:not-allowed;box-shadow:none;}
+.po-entry-link.pri{background:#2563eb;color:#fff;box-shadow:0 12px 28px rgba(37,99,235,.22);}
+.po-entry-link.sec{background:#f8fafc;color:#2563eb;border:1px solid #bfdbfe;}
+.po-entry-link.is-disabled{opacity:.5;pointer-events:none;box-shadow:none;}
 
 /* CARD */
-.po-card{background:#fff;border-radius:24px;box-shadow:0 32px 80px rgba(0,0,0,.38);width:100%;max-width:620px;overflow:hidden;}
+.po-card{background:rgba(255,255,255,.94);border:1px solid rgba(255,255,255,.72);border-radius:28px;box-shadow:0 30px 80px rgba(15,23,42,.16);width:100%;max-width:640px;overflow:hidden;backdrop-filter:blur(10px);}
 
 /* HEADER */
-.po-hdr{background:linear-gradient(135deg,#1a3d7c,#2563eb);padding:32px 40px 26px;color:#fff;}
-.po-hdr .po-logo{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.65;margin-bottom:8px;}
-.po-hdr h1{font-size:24px;font-weight:800;margin:0 0 5px;line-height:1.25;}
-.po-hdr p{font-size:14px;opacity:.72;margin:0;}
+.po-hdr{padding:32px 40px 22px;color:#0f172a;background:transparent;border-bottom:1px solid #e2e8f0;}
+.po-hdr .po-logo{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#2563eb;margin-bottom:8px;}
+.po-hdr h1{font-size:28px;font-weight:800;margin:0 0 6px;line-height:1.2;font-family:'Playfair Display',serif;}
+.po-hdr p{font-size:14px;color:#64748b;margin:0;}
 
 /* STEPS */
-.po-steps{display:flex;background:#f0f5ff;border-bottom:1px solid #dde6f7;}
+.po-steps{display:flex;background:#f8fafc;border-bottom:1px solid #e2e8f0;}
 .po-step{flex:1;display:flex;flex-direction:column;align-items:center;padding:16px 6px 12px;font-size:12px;font-weight:600;color:#9ca3af;position:relative;gap:6px;}
 .po-step::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:transparent;border-radius:2px 2px 0 0;transition:background .3s;}
 .po-step.active{color:#1a3d7c;}.po-step.active::after{background:#2563eb;}
@@ -32,37 +62,37 @@ body{font-family:'Inter',sans-serif;}
 .po-step.done .po-snum{border-color:#059669;background:#059669;color:#fff;}
 
 /* BODY */
-.po-body{padding:32px 40px;}
+.po-body{padding:32px 40px;background:transparent;}
 .po-pane{display:none;}.po-pane.active{display:block;}
 
 /* FORM GROUPS */
 .po-g{margin-bottom:20px;}
 .po-g label{display:block;font-size:14px;font-weight:600;color:#374151;margin-bottom:7px;}
 .po-g .req{color:#ef4444;}
-.po-g input,.po-g textarea{display:block;width:100%;padding:12px 16px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:15px;color:#111;background:#fff;transition:border-color .2s,box-shadow .2s;outline:none;font-family:'Inter',sans-serif;}
-.po-g input:focus,.po-g textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.12);}
-.po-g input.poe,.po-g textarea.poe{border-color:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,.1);}
+.po-g input,.po-g select,.po-g textarea{display:block;width:100%;padding:14px 16px;border:1px solid #e2e8f0;border-radius:18px;font-size:15px;color:#111;background:#f8fafc;transition:border-color .2s,box-shadow .2s,background .2s;outline:none;font-family:'Inter',sans-serif;}
+.po-g input:focus,.po-g select:focus,.po-g textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.po-g input.poe,.po-g select.poe,.po-g textarea.poe{border-color:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,.1);}
 .po-g textarea{resize:vertical;min-height:80px;line-height:1.5;}
 .po-hint{font-size:12px;color:#94a3b8;margin-top:5px;line-height:1.4;}
 .po-em{font-size:12px;color:#ef4444;margin-top:5px;display:none;line-height:1.4;}
 
 /* BADGE SUCURSAL */
-.po-suc-badge{display:none;margin-top:10px;padding:12px 16px;border-radius:10px;background:#eff6ff;border:1.5px solid #bfdbfe;font-size:13px;line-height:1.6;}
+.po-suc-badge{display:none;margin-top:10px;padding:14px 16px;border-radius:18px;background:#eff6ff;border:1px solid #bfdbfe;font-size:13px;line-height:1.6;}
 .po-suc-badge .suc-nom{font-weight:700;color:#1a3d7c;font-size:14px;}
 .po-suc-badge .suc-nov{display:inline-block;background:#2563eb;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;margin-left:6px;}
 
 /* BADGE PRODUCTO */
-.po-badge{margin-top:9px;padding:10px 14px;border-radius:9px;font-size:13.5px;font-weight:600;display:none;line-height:1.45;}
+.po-badge{margin-top:9px;padding:12px 14px;border-radius:16px;font-size:13.5px;font-weight:600;display:none;line-height:1.45;}
 .po-badge.ok{background:#dcfce7;color:#166534;border:1px solid #86efac;}
 .po-badge.nok{background:#fef9c3;color:#92400e;border:1px solid #fde68a;}
 
 /* BOTONES */
 .po-brow{display:flex;gap:12px;margin-top:16px;}
-.po-btn{flex:1;display:block;text-align:center;padding:13px 20px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .2s,transform .15s;border:none;font-family:'Inter',sans-serif;}
+.po-btn{flex:1;display:block;text-align:center;padding:14px 20px;border-radius:18px;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .2s,transform .15s;border:none;font-family:'Inter',sans-serif;}
 .po-btn:hover:not([disabled]){opacity:.9;transform:translateY(-2px);}
 .po-btn[disabled]{opacity:.5;cursor:not-allowed;}
-.po-btn.pri{background:#2563eb;color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.35);}
-.po-btn.sec{background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;}
+.po-btn.pri{background:#2563eb;color:#fff;box-shadow:0 10px 24px rgba(37,99,235,.24);}
+.po-btn.sec{background:#f8fafc;color:#475569;border:1px solid #e2e8f0;}
 
 /* ERROR GLOBAL */
 .po-gerr{background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;border-radius:9px;padding:11px 16px;font-size:13px;margin-bottom:16px;display:none;line-height:1.5;}
@@ -100,14 +130,14 @@ body{font-family:'Inter',sans-serif;}
 #pf-input-file,#pf-input-cam{display:none;}
 
 /* CONFIRM */
-.po-confirm-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px 18px;margin-bottom:16px;font-size:13px;color:#374151;line-height:1.8;}
+.po-confirm-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:18px;padding:16px 18px;margin-bottom:16px;font-size:13px;color:#374151;line-height:1.8;}
 .cf-row{display:flex;gap:8px;border-bottom:1px solid #f1f5f9;padding:5px 0;}
 .cf-row:last-child{border-bottom:none;}
 .cf-lbl{color:#94a3b8;font-weight:600;min-width:130px;flex-shrink:0;}
 .cf-val{color:#111;font-weight:500;word-break:break-word;}
 
 /* TERMS */
-.po-terms-box{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:14px 16px;margin-bottom:16px;}
+.po-terms-box{background:#fffbeb;border:1px solid #fde68a;border-radius:18px;padding:14px 16px;margin-bottom:16px;}
 .po-terms-title{font-size:13px;font-weight:700;color:#92400e;margin-bottom:8px;}
 .po-terms-body{max-height:160px;overflow-y:auto;font-size:12px;color:#374151;line-height:1.6;padding-right:4px;margin-bottom:10px;}
 .po-terms-body p{margin-bottom:6px;}
@@ -151,16 +181,6 @@ body{font-family:'Inter',sans-serif;}
 .sg-sep{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;margin:18px 0 14px;display:flex;align-items:center;gap:8px;}
 .sg-sep::before,.sg-sep::after{content:'';flex:1;height:1px;background:#e5e7eb;}
 
-/* MODAL AVISO */
-#po-aviso-overlay{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px);}
-#po-aviso-card{background:#fff;border-radius:20px;max-width:420px;width:100%;padding:32px 28px 28px;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center;}
-#po-aviso-icon{width:64px;height:64px;border-radius:50%;background:#fef9c3;border:3px solid #fde047;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 18px;}
-#po-aviso-card h2{font-size:18px;font-weight:800;color:#1a3d7c;margin:0 0 10px;}
-#po-aviso-card p{font-size:14px;color:#374151;line-height:1.65;margin:0 0 22px;}
-#po-aviso-ok{display:inline-block;padding:13px 36px;border-radius:11px;background:#2563eb;color:#fff;font-size:15px;font-weight:700;cursor:not-allowed;opacity:.45;border:none;transition:opacity .3s;font-family:'Inter',sans-serif;}
-#po-aviso-ok.listo{cursor:pointer;opacity:1;}
-#po-aviso-count{font-size:13px;color:#94a3b8;margin-top:10px;font-weight:600;min-height:20px;}
-
 @media(max-width:640px){
     .po-hdr,.po-body{padding-left:22px;padding-right:22px;}
     .po-hdr{padding-top:24px;padding-bottom:20px;}
@@ -170,28 +190,84 @@ body{font-family:'Inter',sans-serif;}
     .po-g input{font-size:14px;padding:11px 14px;}
     .po-btn{font-size:14px;padding:12px 16px;}
     .sg-row{grid-template-columns:1fr;}
+    .po-entry-top,.po-entry-body{padding-left:22px;padding-right:22px;}
+    .po-entry-top h1{font-size:23px;}
+    .po-entry-grid{grid-template-columns:1fr;}
 }
 </style>
 
-{{-- MODAL AVISO --}}
-<div id="po-aviso-overlay">
-    <div id="po-aviso-card">
-        <div id="po-aviso-icon">⚠️</div>
-        <h2>¡Atención antes de continuar!</h2>
-        <p>Este formulario es <strong>exclusivamente para equipos que presentan algún error o falla</strong>.<br><br>
-        Solo complétalo si tu equipo tiene un defecto de fábrica o problema de funcionamiento y deseas iniciar un proceso de <strong>validación de garantía</strong>.</p>
-        <button id="po-aviso-ok" disabled>Entendido, continuar</button>
-        <div id="po-aviso-count">Podrás continuar en <span id="po-aviso-seg">5</span>s…</div>
-    </div>
-</div>
+@php
+    $authUser = auth()->user();
+    $warrantiesRedirect = route('warranties', [], false);
+    $authIdentity = $authUser ? ($authUser->identificacion ?: $authUser->cedula) : '';
+@endphp
 
 <div class="po-wrap">
-    <div class="po-card">
+    <div class="po-shell">
+
+        <div class="po-entry" id="po-entry-card">
+            <div class="po-entry-top">
+                <div class="po-kicker">Validacion de garantia</div>
+                <h1>Antes de ingresar tu preorden, confirma estas autorizaciones.</h1>
+                <p>Queremos que el proceso sea claro y ordenado. Primero acepta las condiciones iniciales y luego ingresa con tu cuenta para continuar con la validacion de garantia.</p>
+            </div>
+            <div class="po-entry-body">
+                <div class="po-entry-grid">
+                    <div class="po-entry-panel">
+                        <h2 class="po-entry-title">Autorizaciones requeridas</h2>
+                        <p class="po-entry-copy">Acepta estas condiciones iniciales y luego accede con tu cuenta para continuar con la preorden de garantia.</p>
+                        <div class="po-legal-list">
+                            <label class="po-legal-item">
+                                <input type="checkbox" id="po-gate-terms">
+                                <span>
+                                    <strong>Acepto <a href="{{ route('terminos') }}" target="_blank" class="text-blue-600 hover:underline hover:text-blue-800 transition-colors">TyC</a></strong>
+                                    <span>Confirmo que he leído y acepto los <a href="{{ route('terminos') }}" target="_blank" class="text-blue-500 hover:underline font-medium hover:text-blue-700 transition-colors">términos y condiciones</a> aplicables al proceso de validación de garantía.</span>
+                                </span>
+                            </label>
+
+                            <label class="po-legal-item">
+                                <input type="checkbox" id="po-gate-data">
+                                <span>
+                                    <strong>Acepto el <a href="{{ route('privacidad') }}" target="_blank" class="text-blue-600 hover:underline hover:text-blue-800 transition-colors">tratamiento de datos</a></strong>
+                                    <span>Autorizo que mis datos sean tratados conforme a la <a href="{{ route('privacidad') }}" target="_blank" class="text-blue-500 hover:underline font-medium hover:text-blue-700 transition-colors">política de privacidad y protección de datos</a> para gestionar la preorden y la garantía.</span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="po-gate-error" id="po-gate-error">Debes marcar ambas casillas para continuar.</div>
+
+                        @if ($authUser)
+                            <div class="po-entry-actions">
+                                <div class="po-user-box">
+                                    Has iniciado sesion como <strong>{{ $authUser->full_name }}</strong><br>
+                                    Identificacion: <strong>{{ $authIdentity }}</strong>
+                                </div>
+                                <button type="button" class="po-entry-btn" id="po-gate-continue" onclick="poStartFlow()" disabled>
+                                    Continuar con mi preorden
+                                </button>
+                            </div>
+                        @else
+                            <div class="po-entry-actions">
+                                <p class="po-entry-copy" style="margin:0;">Para ingresar tu preorden primero debes acceder con tu cuenta o registrarte en el portal.</p>
+                                <a href="{{ route('login', ['redirect_to' => $warrantiesRedirect]) }}" class="po-entry-link pri po-gate-link is-disabled" onclick="return poGateFollow(event)">
+                                    Iniciar sesion
+                                </a>
+                                <a href="{{ route('register', ['redirect_to' => $warrantiesRedirect]) }}" class="po-entry-link sec po-gate-link is-disabled" onclick="return poGateFollow(event)">
+                                    Crear cuenta
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if ($authUser)
+        <div class="po-card" id="po-flow-card" style="display:none;">
 
         <div class="po-hdr">
             <div class="po-logo">Novitecnología Cía. Ltda.</div>
-            <h1>¡Valida tu Garantía! 🛡️</h1>
-            <p>Es muy fácil — solo sigue los pasos y listo ✅</p>
+            <h1>¡Valida tu Garantía!</h1>
+            <p>Es muy fácil — solo sigue los pasos y listo</p>
         </div>
 
         <div class="po-steps" id="po-sbar">
@@ -208,19 +284,19 @@ body{font-family:'Inter',sans-serif;}
                 <div class="po-g">
                     <label>Número de tu Factura <span class="req">*</span></label>
                     <input type="text" id="po-fac" placeholder="001-001-000000001" maxlength="17" oninput="poFmt(this)">
-                    <div class="po-hint">📄 Encuéntralo en tu factura de compra. Se ve así: <strong>001-001-000000001</strong></div>
-                    <div class="po-em" id="pe1">⚠️ Ese número de factura no es válido. Revísalo e inténtalo de nuevo.</div>
+                    <div class="po-hint"> Encuéntralo en tu factura de compra. Se ve así: <strong>001-001-000000001</strong></div>
+                    <div class="po-em" id="pe1"> Ese número de factura no es válido. Revísalo e inténtalo de nuevo.</div>
                     <div class="po-suc-badge" id="po-suc-badge">
                         <span class="suc-nom" id="po-suc-nom"></span>
                         <span class="suc-nov" id="po-suc-nov"></span>
-                        <br><span style="font-size:12px;color:#475569;">👉 Llevarás tu equipo a nuestra tienda en <strong id="po-suc-ciudad"></strong></span>
+                        <br><span style="font-size:12px;color:#475569;"> Llevarás tu equipo a nuestra tienda en <strong id="po-suc-ciudad"></strong></span>
                     </div>
                 </div>
                 <div class="po-g" id="po-fecha-wrap" style="display:none;">
                     <label>¿Cuándo compraste el equipo? <span class="req">*</span></label>
                     <input type="date" id="po-fecha-fac">
-                    <div class="po-hint">📅 Mira la fecha que aparece en tu factura de compra.</div>
-                    <div class="po-em" id="pe1f">⚠️ La fecha no es válida. Debe ser del último año.</div>
+                    <div class="po-hint"> Mira la fecha que aparece en tu factura de compra.</div>
+                    <div class="po-em" id="pe1f"> La fecha no es válida. Debe ser del último año.</div>
                 </div>
                 <input type="hidden" id="po-suc-cliente-id">
                 <input type="hidden" id="po-novitec-suc-id">
@@ -236,15 +312,15 @@ body{font-family:'Inter',sans-serif;}
                     <label>Código de tu Equipo <span class="req">*</span></label>
                     <input type="text" id="po-cod" placeholder="Ej: 1ENV4569" maxlength="50" autocomplete="off"
                            oninput="this.value=this.value.toUpperCase();poBuscar(this.value)">
-                    <div class="po-hint">🔍 Está en tu factura o en una etiqueta pegada en el equipo.</div>
+                    <div class="po-hint"> Está en tu factura o en una etiqueta pegada en el equipo.</div>
                     <div class="po-badge" id="po-bdg"></div>
-                    <div class="po-em" id="pe2">⚠️ Ese código no lo encontramos. Revísalo bien.</div>
+                    <div class="po-em" id="pe2"> Ese código no lo encontramos. Revísalo bien.</div>
                 </div>
                 <div class="po-g">
                     <label>¿Qué le pasa a tu equipo? <span class="req">*</span></label>
                     <textarea id="po-det" placeholder="Ej: La pantalla no enciende, se cayó al suelo, no carga la batería..." maxlength="1000"></textarea>
-                    <div class="po-hint">✏️ Cuéntanos con tus propias palabras qué falla o qué pasó.</div>
-                    <div class="po-em" id="pe2d">⚠️ Por favor cuéntanos qué le pasa a tu equipo.</div>
+                    <div class="po-hint"> Cuéntanos con tus propias palabras qué falla o qué pasó.</div>
+                    <div class="po-em" id="pe2d"> Por favor cuéntanos qué le pasa a tu equipo.</div>
                 </div>
                 <div class="po-g">
                     <label>📸 Fotos de tu equipo <span class="req">*</span></label>
@@ -297,37 +373,78 @@ body{font-family:'Inter',sans-serif;}
 
             {{-- PASO 3: DATOS CLIENTE --}}
             <div class="po-pane" id="pp3">
+                <div class="po-confirm-box" style="margin-bottom:20px;background:#eff6ff;border-color:#bfdbfe;">
+                    <strong style="display:block;color:#1a3d7c;margin-bottom:4px;">Datos de tu cuenta</strong>
+                    <span style="font-size:13px;color:#475569;">Precargamos tu informacion desde el portal. Puedes ajustar nombre, telefono o correo si hace falta. La identificacion debe coincidir con tu cuenta.</span>
+                </div>
                 <div class="po-g">
                     <label>Tu C.I. o RUC <span class="req">*</span></label>
                     <input type="text" id="po-ci" placeholder="1720000000" maxlength="13"
+                           value="{{ $authIdentity }}"
+                           readonly
                            oninput="this.value=this.value.replace(/\D/g,'').slice(0,13)">
-                    <div class="po-hint">📋 Tu número de cédula (10 dígitos) o RUC (13 dígitos).</div>
-                    <div class="po-em" id="pe3ci">⚠️ Ingresa tu C.I. (10 dígitos) o RUC (13 dígitos).</div>
+                    <div class="po-hint">Tu número de cédula (10 dígitos) o RUC (13 dígitos).</div>
+                    <div class="po-em" id="pe3ci">Ingresa tu C.I. (10 dígitos) o RUC (13 dígitos).</div>
                 </div>
                 <div class="po-g">
                     <label>Tu Nombre <span class="req">*</span></label>
                     <input type="text" id="po-nom" placeholder="JUAN" maxlength="80"
+                           value="{{ $authUser?->nombres }}"
                            oninput="this.value=this.value.toUpperCase().replace(/[^A-ZÁÉÍÓÚÜÑ\s]/g,'')">
-                    <div class="po-em" id="pe3n">⚠️ Ingresa solo tu nombre.</div>
+                    <div class="po-em" id="pe3n"> Ingresa solo tu nombre.</div>
                 </div>
                 <div class="po-g">
                     <label>Tu Apellido <span class="req">*</span></label>
                     <input type="text" id="po-ape" placeholder="PEREZ" maxlength="80"
+                           value="{{ $authUser?->apellidos }}"
                            oninput="this.value=this.value.toUpperCase().replace(/[^A-ZÁÉÍÓÚÜÑ\s]/g,'')">
-                    <div class="po-em" id="pe3a">⚠️ Ingresa solo tu apellido.</div>
+                    <div class="po-em" id="pe3a">Ingresa solo tu apellido.</div>
+                </div>
+                <div class="po-g">
+                    <label>Provincia de procedencia <span class="req">*</span></label>
+                    <select id="po-prov">
+                        <option value="">Seleccione provincia</option>
+                        <option value="AZUAY">AZUAY</option>
+                        <option value="BOLIVAR">BOLIVAR</option>
+                        <option value="CANAR">CANAR</option>
+                        <option value="CARCHI">CARCHI</option>
+                        <option value="COTOPAXI">COTOPAXI</option>
+                        <option value="CHIMBORAZO">CHIMBORAZO</option>
+                        <option value="EL ORO">EL ORO</option>
+                        <option value="ESMERALDAS">ESMERALDAS</option>
+                        <option value="GUAYAS">GUAYAS</option>
+                        <option value="IMBABURA">IMBABURA</option>
+                        <option value="LOJA">LOJA</option>
+                        <option value="LOS RIOS">LOS RIOS</option>
+                        <option value="MANABI">MANABI</option>
+                        <option value="MORONA SANTIAGO">MORONA SANTIAGO</option>
+                        <option value="NAPO">NAPO</option>
+                        <option value="PASTAZA">PASTAZA</option>
+                        <option value="PICHINCHA">PICHINCHA</option>
+                        <option value="TUNGURAHUA">TUNGURAHUA</option>
+                        <option value="ZAMORA CHINCHIPE">ZAMORA CHINCHIPE</option>
+                        <option value="GALAPAGOS">GALAPAGOS</option>
+                        <option value="SUCUMBIOS">SUCUMBIOS</option>
+                        <option value="ORELLANA">ORELLANA</option>
+                        <option value="SANTO DOMINGO">SANTO DOMINGO</option>
+                        <option value="SANTA ELENA">SANTA ELENA</option>
+                    </select>
+                    <div class="po-hint">Se usara para identificar desde donde ingresa la preorden.</div>
+                    <div class="po-em" id="pe3p">Selecciona la provincia de procedencia.</div>
                 </div>
                 <div class="po-g">
                     <label>Tu Número de Celular <span class="req">*</span></label>
                     <input type="tel" id="po-tel" placeholder="0999999999" maxlength="10"
+                           value="{{ $authUser?->phone }}"
                            oninput="this.value=this.value.replace(/\D/g,'').slice(0,10)">
                     <div class="po-hint">📱 Tu número de celular ecuatoriano (10 dígitos, empieza con 09).</div>
-                    <div class="po-em" id="pe3t">⚠️ Revisa tu número. Debe empezar con 09 y tener 10 dígitos.</div>
+                    <div class="po-em" id="pe3t">Revisa tu número. Debe empezar con 09 y tener 10 dígitos.</div>
                 </div>
                 <div class="po-g">
                     <label>Tu Correo Electrónico <span class="req">*</span></label>
-                    <input type="email" id="po-cor" placeholder="tucorreo@ejemplo.com" maxlength="150">
-                    <div class="po-hint">📧 Te enviaremos una confirmación aquí.</div>
-                    <div class="po-em" id="pe3c">⚠️ Ese correo no parece válido.</div>
+                    <input type="email" id="po-cor" placeholder="tucorreo@ejemplo.com" maxlength="150" value="{{ $authUser?->email }}">
+                    <div class="po-hint">Te enviaremos una confirmación aquí.</div>
+                    <div class="po-em" id="pe3c">Ese correo no parece válido.</div>
                 </div>
                 <div class="po-gerr" id="po-gerr3"></div>
                 <div class="po-brow">
@@ -338,27 +455,19 @@ body{font-family:'Inter',sans-serif;}
 
             {{-- PASO 4: CONFIRMACIÓN --}}
             <div class="po-pane" id="pp4">
-                <p style="font-size:14px;font-weight:700;color:#374151;margin-bottom:12px;">👀 Revisa que todo esté correcto antes de enviar</p>
+                <p style="font-size:14px;font-weight:700;color:#374151;margin-bottom:12px;">Revisa que todo esté correcto antes de enviar</p>
                 <div class="po-confirm-box" id="po-resumen"></div>
-                <div class="po-terms-box">
-                    <div class="po-terms-title">📋 Condiciones de la Garantía — Lee antes de aceptar</div>
-                    <div class="po-terms-body">
-                        <p>🛡️ <strong>¿Qué cubre la garantía?</strong> Cubre si tu equipo tiene un defecto de fábrica — es decir, si salió dañado desde que lo fabricaron, sin que tú hayas hecho nada malo.</p>
-                        <p>📅 <strong>¿Hasta cuándo vale?</strong> Solo es válida si todavía no ha pasado el tiempo de garantía que dice tu factura. Si ya venció, ya no aplica.</p>
-                        <p>🚫 <strong>¿Qué NO cubre?</strong> No cubre si el equipo se golpeó, le cayó agua, lo usaste mal, alguien que no es de Novitecnología lo abrió o modificó, o si le instalaron programas no autorizados.</p>
-                        <p>🏪 <strong>¿Qué pasa después?</strong> Debes llevar físicamente tu equipo a la tienda Novitecnología que te indique el sistema. Nuestros técnicos lo revisarán en máximo 5 días hábiles.</p>
-                        <p>💾 <strong>¡Guarda tus fotos y archivos antes!</strong> Novitecnología no se hace responsable si se pierden datos durante la revisión.</p>
-                        <p>🔒 <strong>Tus datos están seguros.</strong> Solo usamos tu información para gestionar tu garantía.</p>
+                <div class="po-terms-box" style="background:#eff6ff;border-color:#bfdbfe;">
+                    <div class="po-terms-title" style="color:#1a3d7c;">Resumen antes de enviar</div>
+                    <div class="po-terms-body" style="max-height:none;color:#475569;margin-bottom:0;">
+                        <p>Al enviar la preorden confirmas que la informacion registrada es correcta y que el equipo sera llevado a la sucursal Novitec asignada para su revision tecnica.</p>
+                        <p>Las aceptaciones de terminos y tratamiento de datos ya quedaron marcadas en el paso inicial del flujo.</p>
                     </div>
-                    <label class="po-terms-check">
-                        <input type="checkbox" id="po-acepto"> ✅ Entendí todo y acepto las condiciones
-                    </label>
-                    <div class="po-em" id="pe4t">⚠️ Necesitas marcar la casilla de arriba para continuar.</div>
                 </div>
                 <div class="po-gerr" id="po-gerr4"></div>
                 <div class="po-brow">
                     <button class="po-btn sec" onclick="poGo(3)">← Atrás</button>
-                    <button class="po-btn pri" id="po-send" onclick="poSend()">🚀 ¡Enviar mi solicitud!</button>
+                    <button class="po-btn pri" id="po-send" onclick="poSend()">¡Enviar mi solicitud!</button>
                 </div>
             </div>
 
@@ -366,23 +475,24 @@ body{font-family:'Inter',sans-serif;}
             <div class="po-pane" id="pp5">
                 <div class="po-ok">
                     <div class="po-ok-icon">✓</div>
-                    <h2>🎉 ¡Todo listo! Tu garantía está registrada</h2>
+                    <h2>¡Todo listo! Tu garantía está registrada</h2>
                     <p>Tu número de solicitud es:</p>
                     <div class="po-nro" id="po-rnro">—</div>
                     <div class="po-eq" id="po-req"></div>
-                    <p>📧 Te enviamos un correo de confirmación a <strong id="po-rcor"></strong>.</p>
-                    <p>Un técnico de Novitecnología te llamará pronto. 😊</p>
+                    <p>Te enviamos un correo de confirmación a <strong id="po-rcor"></strong>.</p>
+                    <p>Un técnico de Novitecnología te llamará pronto. </p>
                     <button class="po-btn pri" onclick="poImprimir()" style="margin-top:16px;max-width:260px;display:inline-block;">
-                        🖨️ Imprimir comprobante
+                         Imprimir comprobante
                     </button>
                     <br>
                     <button onclick="sgAbrir()" style="margin-top:12px;max-width:260px;display:inline-block;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;border-radius:10px;padding:13px 20px;font-size:15px;font-weight:700;cursor:pointer;width:100%;">
-                        💡 Dejar una sugerencia
+                        Dejar una sugerencia
                     </button>
                 </div>
             </div>
 
         </div>
+        @endif
     </div>
 </div>
 
@@ -390,7 +500,7 @@ body{font-family:'Inter',sans-serif;}
 <div id="sg-overlay" onclick="sgCerrar(event)">
     <div id="sg-card">
         <div id="sg-hdr">
-            <h3>💡 Envíanos tu Sugerencia</h3>
+            <h3>Envíanos tu Sugerencia</h3>
             <p>Tu opinión nos ayuda a mejorar. ¡Gracias por compartirla!</p>
             <button id="sg-close" onclick="sgCerrar()">×</button>
         </div>
@@ -400,12 +510,12 @@ body{font-family:'Inter',sans-serif;}
                 <div class="sg-g">
                     <label>Nombres <span class="req">*</span></label>
                     <input type="text" id="sg-nom" placeholder="Juan" maxlength="80" oninput="this.value=this.value.toUpperCase()">
-                    <div class="sg-em" id="sge-nom">⚠️ Ingresa tu nombre.</div>
+                    <div class="sg-em" id="sge-nom">Ingresa tu nombre.</div>
                 </div>
                 <div class="sg-g">
                     <label>Apellidos <span class="req">*</span></label>
                     <input type="text" id="sg-ape" placeholder="Pérez" maxlength="80" oninput="this.value=this.value.toUpperCase()">
-                    <div class="sg-em" id="sge-ape">⚠️ Ingresa tu apellido.</div>
+                    <div class="sg-em" id="sge-ape">Ingresa tu apellido.</div>
                 </div>
             </div>
             <div class="sg-row">
@@ -443,12 +553,12 @@ body{font-family:'Inter',sans-serif;}
             <div class="sg-gerr" id="sg-gerr"></div>
             <div class="sg-brow">
                 <button class="sg-btn sec" onclick="sgCerrar()">Cancelar</button>
-                <button class="sg-btn pri" id="sg-send" onclick="sgEnviar()">📨 Enviar sugerencia</button>
+                <button class="sg-btn pri" id="sg-send" onclick="sgEnviar()">Enviar sugerencia</button>
             </div>
         </div>
         <div id="sg-ok">
             <div class="sg-ok-icon">✓</div>
-            <h3>¡Gracias por tu sugerencia! 🙌</h3>
+            <h3>¡Gracias por tu sugerencia! </h3>
             <p>La recibimos correctamente. Tu opinión es muy valiosa para nosotros.</p>
             <button class="sg-btn pri" onclick="sgCerrar()" style="max-width:180px;display:inline-block;">Cerrar</button>
         </div>
@@ -460,6 +570,7 @@ body{font-family:'Inter',sans-serif;}
 @push('scripts')
 <script>
 var _CSRF = '{{ csrf_token() }}';
+var _PO_AUTH = {{ $authUser ? 'true' : 'false' }};
 var _pv=false,_pt=null,_fv=false,_ft=null,_cp=1;
 
 // ── MODAL AVISO ────────────────────────────────────────────────────
@@ -467,6 +578,7 @@ var _pv=false,_pt=null,_fv=false,_ft=null,_cp=1;
     var seg=5, btn=document.getElementById('po-aviso-ok'),
         cnt=document.getElementById('po-aviso-seg'),
         overlay=document.getElementById('po-aviso-overlay');
+    if(!btn||!cnt||!overlay)return;
     var t=setInterval(function(){
         seg--; cnt.textContent=seg;
         if(seg<=0){
@@ -481,6 +593,59 @@ var _pv=false,_pt=null,_fv=false,_ft=null,_cp=1;
 })();
 
 // ── NAVEGACIÓN ─────────────────────────────────────────────────────
+function poGateAccepted(){
+    var terms=document.getElementById('po-gate-terms');
+    var data=document.getElementById('po-gate-data');
+    return !!(terms && data && terms.checked && data.checked);
+}
+
+function poGateSetError(show){
+    var err=document.getElementById('po-gate-error');
+    if(err)err.style.display=show ? 'block' : 'none';
+}
+
+function poGateRefresh(){
+    var ok=poGateAccepted();
+    poGateSetError(false);
+
+    var btn=document.getElementById('po-gate-continue');
+    if(btn)btn.disabled=!ok;
+
+    document.querySelectorAll('.po-gate-link').forEach(function(link){
+        link.classList.toggle('is-disabled', !ok);
+    });
+}
+
+window.poGateFollow=function(ev){
+    if(poGateAccepted())return true;
+    if(ev)ev.preventDefault();
+    poGateSetError(true);
+    return false;
+};
+
+window.poStartFlow=function(){
+    if(!poGateAccepted()){
+        poGateSetError(true);
+        return;
+    }
+
+    var entry=document.getElementById('po-entry-card');
+    var flow=document.getElementById('po-flow-card');
+    if(entry)entry.style.display='none';
+    if(flow){
+        flow.style.display='block';
+        flow.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+};
+
+(function(){
+    ['po-gate-terms','po-gate-data'].forEach(function(id){
+        var el=document.getElementById(id);
+        if(el)el.addEventListener('change', poGateRefresh);
+    });
+    poGateRefresh();
+})();
+
 window.poGo=function(n){
     if(n>_cp&&!poVal(_cp))return;
     if(n===4)poMostrarResumen();
@@ -536,9 +701,6 @@ function poVal(n){
         return poValC();
     }
     if(n===4){
-        var ch=document.getElementById('po-acepto');
-        if(!ch.checked){document.getElementById('pe4t').style.display='block';return false;}
-        document.getElementById('pe4t').style.display='none';
         return true;
     }
     return true;
@@ -671,9 +833,10 @@ window.poBuscar=function(codigo){
 function poValC(){
     var ok=true;
     var n=document.getElementById('po-nom'),a=document.getElementById('po-ape'),
-        t=document.getElementById('po-tel'),c=document.getElementById('po-cor');
+        p=document.getElementById('po-prov'),t=document.getElementById('po-tel'),c=document.getElementById('po-cor');
     if(!n.value.trim()){poSE('pe3n',n);ok=false;}else poHE('pe3n',n);
     if(!a.value.trim()){poSE('pe3a',a);ok=false;}else poHE('pe3a',a);
+    if(!p.value.trim()){poSE('pe3p',p);ok=false;}else poHE('pe3p',p);
     if(!/^09\d{8}$/.test(t.value.trim())){poSE('pe3t',t);ok=false;}else poHE('pe3t',t);
     var em=c.value.trim();
     if(!em||!em.includes('@')||em.indexOf('.')<0){poSE('pe3c',c);ok=false;}else poHE('pe3c',c);
@@ -692,6 +855,7 @@ window.poMostrarResumen=function(){
         ['Detalle', document.getElementById('po-det').value.trim()],
         ['C.I. / RUC', document.getElementById('po-ci').value.trim()],
         ['Nombre', document.getElementById('po-nom').value.trim()+' '+document.getElementById('po-ape').value.trim()],
+        ['Procedencia', document.getElementById('po-prov').value.trim()],
         ['Teléfono', document.getElementById('po-tel').value.trim()],
         ['Correo', document.getElementById('po-cor').value.trim()],
     ];
@@ -700,15 +864,10 @@ window.poMostrarResumen=function(){
         html+='<div class="cf-row"><span class="cf-lbl">'+r[0]+'</span><span class="cf-val">'+r[1]+'</span></div>';
     });
     document.getElementById('po-resumen').innerHTML=html;
-    document.getElementById('po-acepto').checked=false;
-    document.getElementById('pe4t').style.display='none';
 };
 
 // ── ENVIAR ─────────────────────────────────────────────────────────
 window.poSend=function(){
-    var ch=document.getElementById('po-acepto');
-    if(!ch.checked){document.getElementById('pe4t').style.display='block';return;}
-    document.getElementById('pe4t').style.display='none';
     var ge=document.getElementById('po-gerr4');ge.style.display='none';
     var fd=new FormData();
     fd.append('_token', _CSRF);
@@ -719,6 +878,7 @@ window.poSend=function(){
     fd.append('identificacion', document.getElementById('po-ci').value.trim());
     fd.append('nombres', document.getElementById('po-nom').value.trim());
     fd.append('apellidos', document.getElementById('po-ape').value.trim());
+    fd.append('ciudad_procedencia', document.getElementById('po-prov').value.trim());
     fd.append('telefono', document.getElementById('po-tel').value.trim());
     fd.append('correo', document.getElementById('po-cor').value.trim());
     fd.append('codigo_producto', document.getElementById('po-cod').value.trim());
@@ -766,6 +926,7 @@ window.poImprimir=function(){
     var nro=document.getElementById('po-rnro').textContent;
     var ci=document.getElementById('po-ci').value.trim();
     var nombre=document.getElementById('po-nom').value.trim()+' '+document.getElementById('po-ape').value.trim();
+    var procedencia=document.getElementById('po-prov').value.trim();
     var tel=document.getElementById('po-tel').value.trim();
     var correo=document.getElementById('po-cor').value.trim();
     var fac=document.getElementById('po-fac').value.trim();
@@ -788,7 +949,7 @@ window.poImprimir=function(){
         '<div class="orden-header"><div class="nro">Pre-Orden: '+nro+'</div><div class="meta">Fecha: '+fechaImp+'<br>Estado: Pendiente de ingreso</div></div>'+
         '<div class="sec-titulo">Datos del Cliente</div>'+
         '<table class="datos"><tr><td width="25%"><span class="lbl">Cliente</span>'+nombre+'</td><td width="25%"><span class="lbl">C.I / RUC</span>'+(ci||'-')+'</td><td width="25%"><span class="lbl">Teléfono</span>'+tel+'</td><td width="25%"><span class="lbl">Correo</span>'+correo+'</td></tr>'+
-        '<tr><td colspan="2"><span class="lbl">Sucursal del Cliente</span>'+sucNom+'</td><td><span class="lbl">Motivo de Ingreso</span>Validación de Garantía</td><td><span class="lbl">Nro. Factura</span>'+fac+'</td></tr></table>'+
+        '<tr><td><span class="lbl">Procedencia</span>'+procedencia+'</td><td><span class="lbl">Sucursal del Cliente</span>'+sucNom+'</td><td><span class="lbl">Motivo de Ingreso</span>Validación de Garantía</td><td><span class="lbl">Nro. Factura</span>'+fac+'</td></tr></table>'+
         '<div class="sec-titulo">Datos del Equipo</div>'+
         '<table class="datos"><tr><td width="25%"><span class="lbl">Código</span>'+codigo+'</td><td width="25%"><span class="lbl">Equipo</span>'+equipo+'</td><td width="25%"><span class="lbl">Fecha Facturación</span>'+fechaFac+'</td><td width="25%"><span class="lbl">Sucursal de Atención</span>'+sucCiudad+'</td></tr>'+
         '<tr><td colspan="4"><span class="lbl">Problema Reportado</span>'+detalle+'</td></tr></table>'+

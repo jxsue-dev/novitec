@@ -168,7 +168,8 @@
                     <li><a href="{{ route('conocenos') }}" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">Conócenos</a></li>
                     <li><a href="{{ route('garantias') }}" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">Consultar mi garantía</a></li>
                     <li><a href="{{ route('resenas') }}" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">⭐ Reseñas</a></li>
-                    <li><a href="#" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">Política de privacidad</a></li>
+                    <li><a href="{{ route('privacidad') }}" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">Política de privacidad</a></li>
+                    <li><a href="{{ route('terminos') }}" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">Términos y condiciones</a></li>
                 </ul>
             </div>
 
@@ -205,9 +206,9 @@
         <div style="max-width:1280px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
             <p style="color:#475569; font-size:0.75rem; font-weight:300;">© 2026 Novitecnología Cia. Ltda. — Todos los derechos reservados.</p>
             <div style="display:flex; gap:1.5rem;">
-                <a href="#" style="color:#475569; font-size:0.75rem; text-decoration:none;">Privacidad</a>
-                <a href="#" style="color:#475569; font-size:0.75rem; text-decoration:none;">Términos</a>
-                <a href="#" style="color:#475569; font-size:0.75rem; text-decoration:none;">Cookies</a>
+                <a href="{{ route('privacidad') }}" style="color:#475569; font-size:0.75rem; text-decoration:none;">Privacidad</a>
+                <a href="{{ route('terminos') }}" style="color:#475569; font-size:0.75rem; text-decoration:none;">Términos</a>
+                <a href="{{ route('privacidad') }}" style="color:#475569; font-size:0.75rem; text-decoration:none;">Cookies</a>
             </div>
         </div>
     </div>

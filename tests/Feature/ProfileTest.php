@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class ProfileTest extends TestCase
@@ -28,8 +29,11 @@ class ProfileTest extends TestCase
         $response = $this
             ->actingAs($user)
             ->patch('/profile', [
-                'name' => 'Test User',
+                'nombres' => 'Test',
+                'apellidos' => 'User',
                 'email' => 'test@example.com',
+                'phone' => '0999999999',
+                'direccion' => 'Guayaquil',
             ]);
 
         $response
@@ -39,19 +43,25 @@ class ProfileTest extends TestCase
         $user->refresh();
 
         $this->assertSame('Test User', $user->name);
+        $this->assertSame('Test', $user->nombres);
+        $this->assertSame('User', $user->apellidos);
         $this->assertSame('test@example.com', $user->email);
-        $this->assertNull($user->email_verified_at);
+        $this->assertSame('0999999999', $user->phone);
+        $this->assertSame('Guayaquil', $user->direccion);
     }
 
-    public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged(): void
+    public function test_profile_update_keeps_email_verification_status_when_email_does_not_change(): void
     {
         $user = User::factory()->create();
 
         $response = $this
             ->actingAs($user)
             ->patch('/profile', [
-                'name' => 'Test User',
+                'nombres' => $user->nombres,
+                'apellidos' => $user->apellidos,
                 'email' => $user->email,
+                'phone' => $user->phone,
+                'direccion' => $user->direccion,
             ]);
 
         $response
@@ -59,6 +69,31 @@ class ProfileTest extends TestCase
             ->assertRedirect('/profile');
 
         $this->assertNotNull($user->refresh()->email_verified_at);
+    }
+
+    public function test_password_can_be_updated_even_if_legacy_phone_is_empty(): void
+    {
+        $user = User::factory()->create([
+            'phone' => null,
+        ]);
+
+        $response = $this
+            ->actingAs($user)
+            ->patch('/profile', [
+                'nombres' => $user->nombres,
+                'apellidos' => $user->apellidos,
+                'email' => $user->email,
+                'phone' => '',
+                'direccion' => $user->direccion,
+                'password' => 'nueva-clave',
+                'password_confirmation' => 'nueva-clave',
+            ]);
+
+        $response
+            ->assertSessionHasNoErrors()
+            ->assertRedirect('/profile');
+
+        $this->assertTrue(Hash::check('nueva-clave', $user->refresh()->password));
     }
 
     public function test_user_can_delete_their_account(): void

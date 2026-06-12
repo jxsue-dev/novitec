@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\IdentityDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -25,7 +26,7 @@ class WarrantyController extends Controller
         }
 
         $sc = DB::connection('novitecdb')
-            ->table('SucursalesCliente')
+            ->table('sucursalescliente')
             ->where('numero', $num_suc)
             ->where('activa', 1)
             ->select('id', 'codigo', 'nombre', 'novitec_sucursal')
@@ -39,7 +40,7 @@ class WarrantyController extends Controller
         }
 
         $sn = DB::connection('novitecdb')
-            ->table('Sucursales')
+            ->table('sucursales')
             ->where('secuencial', $sc->novitec_sucursal)
             ->select('id', 'secuencial', 'ciudad')
             ->first();
@@ -66,9 +67,9 @@ class WarrantyController extends Controller
         if (!$codigo) return response()->json(['ok' => false]);
 
         $producto = DB::connection('novitecdb')
-            ->table('ProductosInventario as pi')
-            ->join('Marcas as m', 'pi.marca_id', '=', 'm.id')
-            ->leftJoin('TiposDispositivo as td', 'pi.tipo_dispositivo_id', '=', 'td.id')
+            ->table('productosinventario as pi')
+            ->join('marcas as m', 'pi.marca_id', '=', 'm.id')
+            ->leftJoin('tiposdispositivo as td', 'pi.tipo_dispositivo_id', '=', 'td.id')
             ->where('pi.codigo', $codigo)
             ->select('pi.codigo', 'pi.descripcion', 'm.nombre as marca', 'td.nombre as tipo_nombre')
             ->first();
@@ -80,6 +81,10 @@ class WarrantyController extends Controller
 
     public function guardar(Request $request)
     {
+        if (! $request->user()) {
+            return response()->json(['ok' => false, 'error' => 'Debes iniciar sesion para registrar tu preorden.'], 401);
+        }
+
         $request->validate([
             'nro_factura'       => 'required|string',
             'suc_cliente_id'    => 'required|integer',
@@ -90,6 +95,7 @@ class WarrantyController extends Controller
             'identificacion'    => 'required|string|min:10|max:13',
             'telefono'          => ['required', 'regex:/^09\d{8}$/'],
             'correo'            => 'required|email',
+            'ciudad_procedencia' => 'required|string|max:100',
             'codigo_producto'   => 'required|string',
             'fecha_facturacion' => 'required|date',
             'detalle_equipo'    => 'required|string',
@@ -99,11 +105,21 @@ class WarrantyController extends Controller
             'foto_4'            => 'required|image|max:5120',
         ]);
 
+        $userIdentity = IdentityDocument::canonicalize($request->user()->identificacion ?: $request->user()->cedula);
+        $requestIdentity = IdentityDocument::canonicalize($request->identificacion);
+
+        if ($userIdentity === '' || $requestIdentity !== $userIdentity) {
+            return response()->json([
+                'ok' => false,
+                'error' => 'La identificacion de la preorden debe coincidir con la de tu cuenta.',
+            ], 422);
+        }
+
         $codigo_prod = strtoupper(trim($request->codigo_producto));
         $producto = DB::connection('novitecdb')
-            ->table('ProductosInventario as pi')
-            ->join('Marcas as m', 'pi.marca_id', '=', 'm.id')
-            ->leftJoin('TiposDispositivo as td', 'pi.tipo_dispositivo_id', '=', 'td.id')
+            ->table('productosinventario as pi')
+            ->join('marcas as m', 'pi.marca_id', '=', 'm.id')
+            ->leftJoin('tiposdispositivo as td', 'pi.tipo_dispositivo_id', '=', 'td.id')
             ->where('pi.codigo', $codigo_prod)
             ->select('pi.codigo', 'pi.descripcion', 'm.nombre as marca', 'td.nombre as tipo_nombre')
             ->first();
@@ -127,7 +143,7 @@ class WarrantyController extends Controller
         }
 
         // Insertar en PreOrdenes
-        DB::connection('novitecdb')->table('PreOrdenes')->insert([
+        DB::connection('novitecdb')->table('preordenes')->insert([
             'nro_preorden'       => $nro_preorden,
             'sucursal_id'        => $request->novitec_suc_id,
             'nro_sucursal_cliente' => $request->suc_cliente_id,
@@ -136,6 +152,7 @@ class WarrantyController extends Controller
             'identificacion'     => preg_replace('/\D/', '', $request->identificacion),
             'telefono'           => $request->telefono,
             'correo'             => $request->correo,
+            'ciudad_procedencia' => strtoupper(trim($request->ciudad_procedencia)),
             'nro_factura'        => $request->nro_factura,
             'fecha_facturacion'  => $request->fecha_facturacion,
             'codigo_producto'    => $producto->codigo,
@@ -198,15 +215,15 @@ class WarrantyController extends Controller
     private function generarNroPreorden($secuencial)
     {
         for ($intentos = 0; $intentos < 20; $intentos++) {
-            $n1 = DB::connection('novitecdb')->table('Ordenes')
+            $n1 = DB::connection('novitecdb')->table('ordenes')
                 ->where('nro_orden', 'like', "$secuencial-%")
                 ->max(DB::raw('CAST(SUBSTRING_INDEX(nro_orden,\'-\',-1) AS UNSIGNED)'));
-            $n2 = DB::connection('novitecdb')->table('PreOrdenes')
+            $n2 = DB::connection('novitecdb')->table('preordenes')
                 ->where('nro_preorden', 'like', "PRE-$secuencial-%")
                 ->max(DB::raw('CAST(SUBSTRING_INDEX(nro_preorden,\'-\',-1) AS UNSIGNED)'));
             $num = max((int)$n1, (int)$n2) + 1 + $intentos;
             $candidate = 'PRE-' . $secuencial . '-' . str_pad($num, 6, '0', STR_PAD_LEFT);
-            $exists = DB::connection('novitecdb')->table('PreOrdenes')
+            $exists = DB::connection('novitecdb')->table('preordenes')
                 ->where('nro_preorden', $candidate)->exists();
             if (!$exists) return $candidate;
         }

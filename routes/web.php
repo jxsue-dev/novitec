@@ -27,6 +27,8 @@ Route::get('/servicios/{service:slug}', [ServiceController::class, 'show'])->nam
 Route::get('/conocenos', [PageController::class, 'conocenos'])->name('conocenos');
 Route::get('/resenas', [PageController::class, 'resenas'])->name('resenas');
 Route::post('/resenas', [ReviewController::class, 'store'])->name('reviews.store');
+Route::get('/politica-de-privacidad', [PageController::class, 'privacidad'])->name('privacidad');
+Route::get('/terminos-y-condiciones', [PageController::class, 'terminos'])->name('terminos');
 
 Route::get('/warranties', [WarrantyController::class, 'index'])->name('warranties');
 Route::get('/warranties/validar-factura', [WarrantyController::class, 'validarFactura'])->name('warranties.validar');

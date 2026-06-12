@@ -451,6 +451,92 @@ body { font-family:var(--fb); }
 }
 .g-info-full p { font-size:.82rem; color:rgba(255,255,255,.55); line-height:1.7; }
 
+.g-track {
+    padding:1.35rem 1.5rem 1rem;
+    border-bottom:1px solid rgba(255,255,255,.05);
+    background:linear-gradient(180deg,rgba(5,150,105,.06),rgba(255,255,255,.015));
+}
+.g-track-line {
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    position:relative;
+    gap:.35rem;
+}
+.g-track-line::before {
+    content:'';
+    position:absolute;
+    left:10%;
+    right:10%;
+    top:18px;
+    height:6px;
+    border-radius:999px;
+    background:rgba(255,255,255,.1);
+}
+.g-track-line::after {
+    content:'';
+    position:absolute;
+    left:10%;
+    top:18px;
+    width:var(--track-progress,0%);
+    max-width:80%;
+    height:6px;
+    border-radius:999px;
+    background:#16a34a;
+    box-shadow:0 0 18px rgba(22,163,74,.45);
+}
+.g-track-step {
+    position:relative;
+    z-index:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:.45rem;
+    text-align:center;
+}
+.g-track-dot {
+    width:42px;
+    height:42px;
+    border-radius:999px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:3px solid rgba(255,255,255,.18);
+    background:#111827;
+    color:rgba(255,255,255,.35);
+    transition:.25s ease;
+}
+.g-track-step.done .g-track-dot {
+    background:#16a34a;
+    border-color:#86efac;
+    color:#fff;
+}
+.g-track-step.active .g-track-dot {
+    background:#2563eb;
+    border-color:#93c5fd;
+    color:#fff;
+    box-shadow:0 0 0 6px rgba(37,99,235,.16);
+}
+.g-track-step.blocked .g-track-dot {
+    background:#dc2626;
+    border-color:#fca5a5;
+    color:#fff;
+}
+.g-track-label {
+    font-family:var(--fm);
+    font-size:.58rem;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.42);
+}
+.g-track-step.done .g-track-label,
+.g-track-step.active .g-track-label { color:rgba(255,255,255,.82); }
+.g-track-note {
+    margin-top:1rem;
+    color:rgba(255,255,255,.55);
+    font-size:.78rem;
+    text-align:center;
+}
+
 /* ══ ENV BANNER ════════════════════════ */
 .g-env {
     padding:5rem 3rem;
@@ -501,6 +587,13 @@ body { font-family:var(--fb); }
 @media (max-width:600px) {
     .g-cats-grid { grid-template-columns:repeat(3,1fr); gap:.75rem; }
     .g-brands-grid { grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); }
+    .g-track { padding:1rem .75rem; }
+    .g-track-line { gap:.1rem; }
+    .g-track-dot { width:34px; height:34px; font-size:.8rem; }
+    .g-track-line::before,
+    .g-track-line::after { top:14px; height:5px; }
+    .g-track-label { font-size:.5rem; }
+    .g-track-note { font-size:.72rem; }
 }
 </style>
 
@@ -653,12 +746,37 @@ body { font-family:var(--fb); }
         </div>
         @foreach($resultados as $i => $o)
         @php
+            $estadoRaw = trim((string) ($o['estado_orden'] ?? ''));
+            $estadoGarantia = trim((string) ($o['estado_garantia'] ?? ''));
+            $estadoNorm = str_replace(
+                ['á','é','í','ó','ú','Á','É','Í','Ó','Ú'],
+                ['a','e','i','o','u','a','e','i','o','u'],
+                mb_strtolower($estadoRaw, 'UTF-8')
+            );
+            $bloqueada = str_contains($estadoNorm, 'anulad') || str_contains($estadoNorm, 'rechaz');
+            $pasoActual = 0;
+            if (str_contains($estadoNorm, 'revision') || str_contains($estadoNorm, 'revisi')) $pasoActual = 1;
+            if (str_contains($estadoNorm, 'reparacion') || str_contains($estadoNorm, 'repar') || str_contains($estadoNorm, 'repuesto')) $pasoActual = 2;
+            if (str_contains($estadoNorm, 'finaliz') || str_contains($estadoNorm, 'credito') || str_contains($estadoNorm, 'credit')) $pasoActual = 3;
+            if (str_contains($estadoNorm, 'entreg')) $pasoActual = 4;
+            $labelListo = 'Reparado';
+            if (str_contains($estadoNorm, 'credito') || str_contains($estadoNorm, 'credit')) {
+                $labelListo = 'Nota de crédito';
+            }
+            $avance = $bloqueada ? 0 : ($pasoActual / 4) * 80;
+            $trackSteps = [
+                ['Recibida','fa-file-circle-check'],
+                ['En revisión','fa-magnifying-glass'],
+                ['En proceso','fa-screwdriver-wrench'],
+                [$labelListo,'fa-circle-check'],
+                ['Entregada','fa-box-open'],
+            ];
             $estados = [
                 'En Revisión'        => ['#D97706','En revisión','fa-magnifying-glass'],
                 'En Reparacion'      => ['#2563EB','En reparación','fa-screwdriver-wrench'],
                 'Esperando Repuesto' => ['#7C3AED','Esperando repuesto','fa-box'],
                 'Finalizada'         => ['#059669','Finalizada','fa-circle-check'],
-                'Entregada'          => ['#6B7280','Entregada','fa-hand-holding-box'],
+                'Entregada'          => ['#6B7280','Entregada','fa-box-open'],
                 'Anulada'            => ['#DC2626','Anulada','fa-ban'],
                 'Nota de Credito'    => ['#DB2777','Nota de crédito','fa-file-invoice'],
             ];
@@ -675,6 +793,25 @@ body { font-family:var(--fb); }
                     {{ $label }}
                 </span>
             </div>
+            <div class="g-track">
+                <div class="g-track-line" style="--track-progress:{{ number_format($avance, 2, '.', '') }}%">
+                    @foreach($trackSteps as $idx => $step)
+                    @php
+                        $stepClass = $bloqueada ? ($idx === 0 ? 'blocked active' : '') : ($idx <= $pasoActual ? 'done' : '');
+                    @endphp
+                    <div class="g-track-step {{ $stepClass }}">
+                        <span class="g-track-dot">
+                            <i class="fa-solid {{ $bloqueada && $idx === 0 ? 'fa-xmark' : ($idx <= $pasoActual ? 'fa-check' : $step[1]) }}"></i>
+                        </span>
+                        <span class="g-track-label">{{ $step[0] }}</span>
+                    </div>
+                    @endforeach
+                </div>
+                <div class="g-track-note">
+                    Estado actual: <strong>{{ $label }}</strong>@if($estadoGarantia) · Garantia: <strong>{{ $estadoGarantia }}</strong>@endif
+                </div>
+            </div>
+            @if($o['show_details'])
             <div class="g-card-body">
                 @if($cliente)<div class="g-info"><label>Cliente</label><span>{{ $cliente }}</span></div>@endif
                 <div class="g-info"><label>Equipo</label><span>{{ $equipo ?: '—' }}</span></div>
@@ -684,6 +821,25 @@ body { font-family:var(--fb); }
                 @if(!empty($o['motivo_ingreso']))<div class="g-info"><label>Motivo</label><span>{{ $o['motivo_ingreso'] }}</span></div>@endif
                 @if($falla)<div class="g-info-full"><label>Descripción</label><p>{{ $falla }}</p></div>@endif
             </div>
+            @else
+            <div class="p-6 text-center bg-slate-50/50 border-t border-slate-100/80">
+                <div class="max-w-md mx-auto py-2">
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-400 text-sm mb-2">🔒</span>
+                    @auth
+                        <p class="text-xs text-slate-400 font-light leading-relaxed">
+                            Esta orden no pertenece a tu cuenta registrada. Solo puedes consultar su estado público.
+                        </p>
+                    @else
+                        <p class="text-xs text-slate-400 font-light leading-relaxed mb-3">
+                            Por seguridad, los detalles de la orden están ocultos en la consulta pública.
+                        </p>
+                        <a href="{{ route('login') }}" class="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-colors shadow-sm">
+                            <i class="fa-solid fa-right-to-bracket"></i> Iniciar sesión para ver detalles
+                        </a>
+                    @endauth
+                </div>
+            </div>
+            @endif
         </div>
         @endforeach
         @endif
@@ -694,6 +850,8 @@ body { font-family:var(--fb); }
 
 @push('scripts')
 <script>
+(function(){
+
 @if(session('consulta_resultados') || session('consulta_error'))
 window.addEventListener('load', function(){
     setTimeout(function(){
@@ -701,6 +859,11 @@ window.addEventListener('load', function(){
     }, 100);
 });
 @endif
+
+const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } });
+},{threshold:.1});
+document.querySelectorAll('.rv,.rvl,.rvr').forEach(el => io.observe(el));
 
 const rules = document.querySelectorAll('.g-rule');
 const rObs = new IntersectionObserver(entries => {

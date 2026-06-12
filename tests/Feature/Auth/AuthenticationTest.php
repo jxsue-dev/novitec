@@ -17,25 +17,33 @@ class AuthenticationTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_users_can_authenticate_using_the_login_screen(): void
+    public function test_users_can_authenticate_using_identificacion_on_the_login_screen(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'cedula' => '0912345678',
+            'identificacion' => '0912345678',
+            'identificacion_canonica' => '0912345678',
+        ]);
 
         $response = $this->post('/login', [
-            'email' => $user->email,
+            'identificacion' => '0912345678001',
             'password' => 'password',
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $response->assertRedirect(route('client.orders', absolute: false));
     }
 
     public function test_users_can_not_authenticate_with_invalid_password(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'cedula' => '0912345678',
+            'identificacion' => '0912345678',
+            'identificacion_canonica' => '0912345678',
+        ]);
 
         $this->post('/login', [
-            'email' => $user->email,
+            'identificacion' => $user->identificacion,
             'password' => 'wrong-password',
         ]);
 
