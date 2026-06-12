@@ -142,28 +142,28 @@ class WarrantyController extends Controller
             $fotos[$i] = 'images/warranties/' . $filename;
         }
 
-        // Insertar en PreOrdenes
+        // Insertar en preordenes
         DB::connection('novitecdb')->table('preordenes')->insert([
-            'nro_preorden'       => $nro_preorden,
-            'sucursal_id'        => $request->novitec_suc_id,
+            'nro_preorden'         => $nro_preorden,
+            'sucursal_id'          => $request->novitec_suc_id,
             'nro_sucursal_cliente' => $request->suc_cliente_id,
-            'nombres'            => strtoupper($request->nombres),
-            'apellidos'          => strtoupper($request->apellidos),
-            'identificacion'     => preg_replace('/\D/', '', $request->identificacion),
-            'telefono'           => $request->telefono,
-            'correo'             => $request->correo,
-            'ciudad_procedencia' => strtoupper(trim($request->ciudad_procedencia)),
-            'nro_factura'        => $request->nro_factura,
-            'fecha_facturacion'  => $request->fecha_facturacion,
-            'codigo_producto'    => $producto->codigo,
-            'desc_producto'      => $producto->descripcion,
-            'marca_producto'     => $producto->marca,
-            'tipo_producto'      => $producto->tipo_nombre,
-            'detalle_equipo'     => $request->detalle_equipo,
-            'foto_1'             => $fotos[1],
-            'foto_2'             => $fotos[2],
-            'foto_3'             => $fotos[3],
-            'foto_4'             => $fotos[4],
+            'nombres'              => strtoupper($request->nombres),
+            'apellidos'            => strtoupper($request->apellidos),
+            'identificacion'       => preg_replace('/\D/', '', $request->identificacion),
+            'telefono'             => $request->telefono,
+            'correo'               => $request->correo,
+            'ciudad_procedencia'   => strtoupper(trim($request->ciudad_procedencia)),
+            'nro_factura'          => $request->nro_factura,
+            'fecha_facturacion'    => $request->fecha_facturacion,
+            'codigo_producto'      => $producto->codigo,
+            'desc_producto'        => $producto->descripcion,
+            'marca_producto'       => $producto->marca,
+            'tipo_producto'        => $producto->tipo_nombre,
+            'detalle_equipo'       => $request->detalle_equipo,
+            'foto_1'               => $fotos[1],
+            'foto_2'               => $fotos[2],
+            'foto_3'               => $fotos[3],
+            'foto_4'               => $fotos[4],
         ]);
 
         // Enviar correo
@@ -179,9 +179,9 @@ class WarrantyController extends Controller
         } catch (\Exception $e) {}
 
         return response()->json([
-            'ok'          => true,
+            'ok'           => true,
             'nro_preorden' => $nro_preorden,
-            'equipo'      => $equipo_txt,
+            'equipo'       => $equipo_txt,
         ]);
     }
 
