@@ -29,13 +29,13 @@
 
                 <div class="flex items-start justify-between gap-3">
                     <div class="flex items-center gap-3 min-w-0">
-                        <div class="w-10 h-10 bg-blue-50 border border-blue-100 rounded-xl flex items-center justify-center text-lg flex-shrink-0">
+                        <div class="w-10 h-10 bg-blue-50 border border-blue-100 rounded-xl flex items-center justify-center text-lg flex-shrink-0 text-blue-600">
                             @if(str_contains(strtolower($order->tipo ?? ''), 'celular') || str_contains(strtolower($order->tipo ?? ''), 'smartphone'))
-                                📱
+                                <i class="fa-solid fa-mobile-screen"></i>
                             @elseif(str_contains(strtolower($order->tipo ?? ''), 'impresora'))
-                                🖨️
+                                <i class="fa-solid fa-print"></i>
                             @else
-                                💻
+                                <i class="fa-solid fa-laptop"></i>
                             @endif
                         </div>
                         <div class="min-w-0">
@@ -56,19 +56,19 @@
                 </div>
 
                 <div class="mt-3 pt-3 border-t border-slate-50 flex items-center gap-4 text-xs text-slate-400 font-light flex-wrap">
-                    <span>📅 {{ $order->fecha_de_ingreso_fmt }}</span>
+                    <span><i class="fa-solid fa-calendar-days"></i> {{ $order->fecha_de_ingreso_fmt }}</span>
                     @if($order->estado_orden !== 'Entregada' && $order->fecha_entrega_fmt)
-                    <span>🕐 Entrega: {{ $order->fecha_entrega_fmt }}</span>
+                    <span><i class="fa-solid fa-clock"></i> Entrega: {{ $order->fecha_entrega_fmt }}</span>
                     @endif
                     @if($order->sucursal)
-                    <span>📍 {{ $order->sucursal }}</span>
+                    <span><i class="fa-solid fa-location-dot"></i> {{ $order->sucursal }}</span>
                     @endif
                 </div>
 
             </a>
             @empty
             <div class="bg-white border border-slate-100 rounded-2xl p-12 text-center">
-                <div class="text-5xl mb-4">📭</div>
+                <div class="text-5xl mb-4 text-slate-300"><i class="fa-solid fa-box-open"></i></div>
                 <p class="text-slate-900 font-semibold mb-2">No tienes órdenes aún</p>
                 <p class="text-slate-400 text-sm font-light mb-6">Cuando traigas tu equipo al servicio técnico podrás ver el estado aquí.</p>
                 <a href="/#contacto" class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-8 py-3 rounded-xl transition-colors">

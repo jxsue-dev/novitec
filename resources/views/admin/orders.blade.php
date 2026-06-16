@@ -24,7 +24,7 @@
             <div class="px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors cursor-pointer"
                  onclick="this.closest('[x-data]').__x.$data.open = !this.closest('[x-data]').__x.$data.open">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center text-sm">💻</div>
+                    <div class="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center text-sm text-blue-600"><i class="fa-solid fa-laptop"></i></div>
                     <div>
                         <p class="text-slate-900 text-sm font-medium">{{ $order->device }}
                             @if($order->brand) — {{ $order->brand }} @endif

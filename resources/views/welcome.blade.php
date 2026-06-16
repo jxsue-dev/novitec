@@ -156,7 +156,7 @@ body { font-family: 'DM Sans', sans-serif; }
                     <div class="absolute -inset-1.5 rounded-2xl blur-md opacity-75" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)"></div>
                     <div class="relative rounded-2xl p-0.5" style="background:linear-gradient(135deg,#d97706,#fbbf24,#d97706)">
                         <div class="relative rounded-2xl px-4 py-3 flex items-center gap-3" style="background:linear-gradient(135deg,#1e1b4b,#1e3a5f)">
-                            <span class="text-2xl">🎁</span>
+                            <i class="fa-solid fa-gift text-2xl text-yellow-300"></i>
                             <div>
                                 <span class="text-gold font-black block" style="font-size:1.8rem; line-height:1; font-family:'Playfair Display',serif;">50% OFF</span>
                                 <span class="text-yellow-200 text-xs font-light">al registrarte</span>
@@ -203,9 +203,9 @@ body { font-family: 'DM Sans', sans-serif; }
 {{-- STATS --}}
 <div class="bg-slate-900 border-y border-slate-800">
     <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-800">
-        @foreach([['12+','Años de experiencia','🏆'],['80K+','Equipos habilitados','🔧'],['50K+','Cientes satisfechos','💻'],['100%','De garantia en servicios','✅']] as $i=>$s)
+        @foreach([['12+','Años de experiencia','fa-trophy'],['80K+','Equipos habilitados','fa-wrench'],['50K+','Cientes satisfechos','fa-laptop'],['100%','De garantia en servicios','fa-circle-check']] as $i=>$s)
         <div class="reveal py-10 px-8 hover:bg-slate-800/50 transition-colors" style="transition-delay:{{$i*.1}}s">
-            <div class="text-xl mb-2">{{$s[2]}}</div>
+            <div class="text-xl mb-2 text-blue-400"><i class="fa-solid {{ $s[2] }}"></i></div>
             <p class="font-serif text-3xl font-bold text-white mb-1">{{$s[0]}}</p>
             <p class="text-xs text-slate-400 font-light">{{$s[1]}}</p>
         </div>
@@ -223,17 +223,17 @@ body { font-family: 'DM Sans', sans-serif; }
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             @foreach([
-                ['https://images.unsplash.com/photo-1531492746076-161ca9bcad58?w=800&q=80&fit=crop','🔧','Reparación de equipos','Diagnóstico, mantenimiento y reparación de computadores, laptops, celulares e impresoras de cualquier marca.',['Computadores y laptops','Celulares y tablets','Impresoras']],
-                ['https://images.unsplash.com/photo-1600267175161-cfaa711b4a81?w=800&q=80&fit=crop','🖥️','Soporte IT remoto y presencial','Asistencia técnica especializada para empresas y hogares. Resolución de problemas de software y sistemas.',['Soporte remoto 24/7','Visitas presenciales','Mantenimiento preventivo']],
-                ['https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80&fit=crop','🌐','Infraestructura de red','Diseño, instalación y configuración de redes cableadas e inalámbricas para hogares y empresas.',['Redes cableadas','WiFi empresarial','Seguridad de red']],
-                ['https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=800&q=80&fit=crop','📷','CCTV y videovigilancia','Instalación y configuración de sistemas de videovigilancia con acceso remoto desde cualquier dispositivo.',['Cámaras HD y 4K','Acceso remoto','Monitoreo 24/7']],
+                ['https://images.unsplash.com/photo-1531492746076-161ca9bcad58?w=800&q=80&fit=crop','fa-wrench','Reparación de equipos','Diagnóstico, mantenimiento y reparación de computadores, laptops, celulares e impresoras de cualquier marca.',['Computadores y laptops','Celulares y tablets','Impresoras']],
+                ['https://images.unsplash.com/photo-1600267175161-cfaa711b4a81?w=800&q=80&fit=crop','fa-desktop','Soporte IT remoto y presencial','Asistencia técnica especializada para empresas y hogares. Resolución de problemas de software y sistemas.',['Soporte remoto 24/7','Visitas presenciales','Mantenimiento preventivo']],
+                ['https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80&fit=crop','fa-globe','Infraestructura de red','Diseño, instalación y configuración de redes cableadas e inalámbricas para hogares y empresas.',['Redes cableadas','WiFi empresarial','Seguridad de red']],
+                ['https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=800&q=80&fit=crop','fa-camera','CCTV y videovigilancia','Instalación y configuración de sistemas de videovigilancia con acceso remoto desde cualquier dispositivo.',['Cámaras HD y 4K','Acceso remoto','Monitoreo 24/7']],
             ] as $i=>$s)
             <div class="service-card reveal overflow-hidden p-0" style="transition-delay:{{$i*.1}}s; border-radius:20px;">
                 <div class="relative h-40 md:h-52 overflow-hidden">
                     <img src="{{$s[0]}}" alt="{{$s[2]}}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105">
                     <div class="absolute inset-0" style="background:linear-gradient(to bottom,transparent 40%,rgba(15,23,42,.6) 100%)"></div>
                     <div class="absolute bottom-3 left-4 flex items-center gap-2">
-                        <span class="text-xl md:text-2xl">{{$s[1]}}</span>
+                        <i class="fa-solid {{ $s[1] }} text-white text-xl md:text-2xl"></i>
                         <h3 class="font-serif font-bold text-white text-base md:text-lg">{{$s[2]}}</h3>
                     </div>
                 </div>
@@ -266,14 +266,14 @@ body { font-family: 'DM Sans', sans-serif; }
         </div>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
             @foreach([
-                ['01','📥','Recepción','Traes tu equipo. Registramos el caso y te damos número de seguimiento.'],
-                ['02','🔍','Diagnóstico','Revisamos tu equipo e informamos el problema y presupuesto exacto.'],
-                ['03','🔧','Reparación','Con tu aprobación usamos repuestos de alta calidad.'],
-                ['04','✅','Entrega','Te entregamos en máximo 5 días hábiles con garantía escrita.'],
+                ['01','fa-inbox','Recepción','Traes tu equipo. Registramos el caso y te damos número de seguimiento.'],
+                ['02','fa-magnifying-glass','Diagnóstico','Revisamos tu equipo e informamos el problema y presupuesto exacto.'],
+                ['03','fa-wrench','Reparación','Con tu aprobación usamos repuestos de alta calidad.'],
+                ['04','fa-circle-check','Entrega','Te entregamos en máximo 5 días hábiles con garantía escrita.'],
             ] as $i=>$step)
             <div class="step-card reveal" style="transition-delay:{{$i*.1}}s">
                 <div class="relative inline-flex flex-col items-center mb-4">
-                    <div class="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-2xl shadow-lg shadow-blue-600/20">{{$step[1]}}</div>
+                    <div class="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-2xl shadow-lg shadow-blue-600/20"><i class="fa-solid {{ $step[1] }} text-white"></i></div>
                     <span class="absolute -top-2 -right-2 bg-slate-900 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">{{$step[0]}}</span>
                 </div>
                 <h3 class="font-semibold text-slate-900 text-sm mb-2">{{$step[2]}}</h3>
@@ -329,7 +329,7 @@ body { font-family: 'DM Sans', sans-serif; }
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="relative">
                         <div class="w-24 h-24 rounded-2xl flex items-center justify-center text-5xl shadow-2xl" style="background:linear-gradient(135deg,#7c3aed,#2563eb)">
-                            💎
+                            <i class="fa-solid fa-gem text-white"></i>
                         </div>
                         <div class="absolute -top-3 -right-3 bg-yellow-400 text-slate-900 text-xs font-bold px-3 py-1 rounded-full">50% OFF</div>
                     </div>
@@ -347,13 +347,13 @@ body { font-family: 'DM Sans', sans-serif; }
 
                 {{-- Tags flotantes --}}
                 <div class="absolute top-4 right-0 bg-white/5 border border-white/10 backdrop-blur rounded-xl px-3 py-2 float-anim">
-                    <p class="text-white text-xs font-medium">🔧 Reparación</p>
+                    <p class="text-white text-xs font-medium"><i class="fa-solid fa-wrench"></i> Reparación</p>
                 </div>
                 <div class="absolute bottom-8 left-0 bg-white/5 border border-white/10 backdrop-blur rounded-xl px-3 py-2 float-anim" style="animation-delay:1s">
-                    <p class="text-white text-xs font-medium">🌐 Redes</p>
+                    <p class="text-white text-xs font-medium"><i class="fa-solid fa-globe"></i> Redes</p>
                 </div>
                 <div class="absolute top-1/2 right-2 bg-white/5 border border-white/10 backdrop-blur rounded-xl px-3 py-2 float-anim" style="animation-delay:2s">
-                    <p class="text-white text-xs font-medium">📷 CCTV</p>
+                    <p class="text-white text-xs font-medium"><i class="fa-solid fa-camera"></i> CCTV</p>
                 </div>
             </div>
         </div>
@@ -399,13 +399,13 @@ body { font-family: 'DM Sans', sans-serif; }
             <p class="text-slate-500 font-light mb-10 reveal-right d2">Más de 10 años resolviendo problemas tecnológicos en Quito.</p>
             <div class="space-y-5">
                 @foreach([
-                    ['🏅','Técnicos certificados','Nuestro equipo cuenta con certificaciones en las principales marcas y tecnologías del mercado.'],
-                    ['🛡️','Garantía en todos los servicios','Todos nuestros trabajos incluyen garantía escrita. Si falla, lo resolvemos sin costo adicional.'],
-                    ['📦','Tiempo de entrega de 5 días','Entregamos tu equipo reparado en un plazo máximo de 5 días hábiles según el diagnóstico.'],
-                    ['🔧','Repuestos de calidad','Trabajamos únicamente con repuestos originales o de alta calidad certificada.'],
+                    ['fa-medal','Técnicos certificados','Nuestro equipo cuenta con certificaciones en las principales marcas y tecnologías del mercado.'],
+                    ['fa-shield-halved','Garantía en todos los servicios','Todos nuestros trabajos incluyen garantía escrita. Si falla, lo resolvemos sin costo adicional.'],
+                    ['fa-box','Tiempo de entrega de 5 días','Entregamos tu equipo reparado en un plazo máximo de 5 días hábiles según el diagnóstico.'],
+                    ['fa-wrench','Repuestos de calidad','Trabajamos únicamente con repuestos originales o de alta calidad certificada.'],
                 ] as $i=>$f)
                 <div class="flex gap-4 reveal-right" style="transition-delay:{{($i+3)*.08}}s">
-                    <div class="w-10 h-10 bg-violet-50 border border-violet-100 rounded-xl flex items-center justify-center flex-shrink-0 text-lg">{{$f[0]}}</div>
+                    <div class="w-10 h-10 bg-violet-50 border border-violet-100 rounded-xl flex items-center justify-center flex-shrink-0 text-lg text-violet-600"><i class="fa-solid {{ $f[0] }}"></i></div>
                     <div>
                         <p class="font-semibold text-slate-900 text-sm mb-1">{{$f[1]}}</p>
                         <p class="text-sm text-slate-500 font-light">{{$f[2]}}</p>
@@ -426,12 +426,12 @@ body { font-family: 'DM Sans', sans-serif; }
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             @foreach([
-                ['Carlos M.','Empresa Constructora','Llevé mi laptop con pantalla rota y en menos de 5 días ya estaba lista. Excelente servicio y precio justo.','⭐⭐⭐⭐⭐'],
-                ['María F.','Diseñadora independiente','Recuperaron todos mis archivos cuando el disco duro falló. Pensé que había perdido 3 años de trabajo.','⭐⭐⭐⭐⭐'],
-                ['Roberto A.','Gerente TI','Contratamos el soporte IT mensual y ha sido excelente. Responden rápido y resuelven todo eficientemente.','⭐⭐⭐⭐⭐'],
+                ['Carlos M.','Empresa Constructora','Llevé mi laptop con pantalla rota y en menos de 5 días ya estaba lista. Excelente servicio y precio justo.'],
+                ['María F.','Diseñadora independiente','Recuperaron todos mis archivos cuando el disco duro falló. Pensé que había perdido 3 años de trabajo.'],
+                ['Roberto A.','Gerente TI','Contratamos el soporte IT mensual y ha sido excelente. Responden rápido y resuelven todo eficientemente.'],
             ] as $i=>$t)
             <div class="testi-card reveal" style="transition-delay:{{$i*.1}}s">
-                <p class="text-xl mb-4">{{$t[3]}}</p>
+                <p class="text-xl mb-4 text-yellow-400">@for($k=0;$k<5;$k++)<i class="fa-solid fa-star"></i>@endfor</p>
                 <p class="text-slate-300 text-sm font-light leading-relaxed mb-6 italic">"{{$t[2]}}"</p>
                 <div class="flex items-center gap-3 pt-4 border-t border-white/10">
                     <div class="w-9 h-9 bg-violet-600 rounded-full flex items-center justify-center text-white text-sm font-bold">{{substr($t[0],0,1)}}</div>
@@ -462,10 +462,10 @@ body { font-family: 'DM Sans', sans-serif; }
                     <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>{{$branch->name}}
                 </h3>
                 <div class="space-y-2 text-sm text-slate-500 font-light mb-5">
-                    <p>📍 {{$branch->address}}</p>
-                    <p>📞 {{$branch->phone}}</p>
-                    @if($branch->email)<p>✉️ {{$branch->email}}</p>@endif
-                    @if($branch->schedule)<p>🕐 {{$branch->schedule}}</p>@endif
+                    <p><i class="fa-solid fa-location-dot text-blue-500"></i> {{$branch->address}}</p>
+                    <p><i class="fa-solid fa-phone text-blue-500"></i> {{$branch->phone}}</p>
+                    @if($branch->email)<p><i class="fa-solid fa-envelope text-blue-500"></i> {{$branch->email}}</p>@endif
+                    @if($branch->schedule)<p><i class="fa-solid fa-clock text-blue-500"></i> {{$branch->schedule}}</p>@endif
                 </div>
                 @if($branch->whatsapp)
                 <a href="https://wa.me/{{$branch->whatsapp}}" target="_blank"

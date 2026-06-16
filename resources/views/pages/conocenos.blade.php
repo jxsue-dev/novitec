@@ -93,14 +93,14 @@ body { font-family: 'Inter', sans-serif; }
 <section class="py-24 px-6" style="background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
         <div class="reveal-left">
-            <div class="w-12 h-12 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-center text-2xl mb-6">🎯</div>
+            <div class="w-12 h-12 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-center text-2xl mb-6 text-blue-600"><i class="fa-solid fa-bullseye"></i></div>
             <h2 class="font-serif text-3xl font-bold text-slate-900 mb-4">Nuestra misión</h2>
             <p class="text-slate-500 font-light leading-relaxed">
                 Brindar soluciones tecnológicas accesibles, confiables y de alta calidad a personas y empresas en Ecuador, siendo el aliado estratégico que garantiza la continuidad operativa de nuestros clientes con rapidez, honestidad y garantía en cada servicio.
             </p>
         </div>
         <div class="reveal-right">
-            <div class="w-12 h-12 bg-violet-50 border border-violet-100 rounded-2xl flex items-center justify-center text-2xl mb-6">🔭</div>
+            <div class="w-12 h-12 bg-violet-50 border border-violet-100 rounded-2xl flex items-center justify-center text-2xl mb-6 text-violet-600"><i class="fa-solid fa-binoculars"></i></div>
             <h2 class="font-serif text-3xl font-bold text-slate-900 mb-4">Nuestra visión</h2>
             <p class="text-slate-500 font-light leading-relaxed">
                 Ser la empresa de soporte tecnológico más confiable y reconocida del Ecuador, expandiendo nuestra presencia nacional con un equipo certificado, tecnología de punta y un modelo de servicio que pone al cliente en el centro de cada decisión.
@@ -118,15 +118,15 @@ body { font-family: 'Inter', sans-serif; }
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             @foreach([
-                ['🤝', 'Honestidad', 'Transparencia total en diagnósticos, precios y tiempos. Si no podemos repararlo, te lo decimos antes de cobrar.'],
-                ['⚡', 'Rapidez', 'Sabemos que tu equipo es tu herramienta de trabajo. Por eso actuamos con urgencia sin sacrificar la calidad.'],
-                ['🛡️', 'Garantía', 'Todos nuestros servicios tienen garantía escrita. Si falla, volvemos a resolverlo sin costo adicional.'],
-                ['🏅', 'Excelencia', 'Técnicos certificados, repuestos de calidad y procesos estandarizados para un resultado siempre profesional.'],
-                ['❤️', 'Compromiso', 'Cada equipo que recibimos lo tratamos como si fuera nuestro. El cuidado está en cada detalle.'],
-                ['🌱', 'Mejora continua', 'Nos capacitamos constantemente para estar al día con las últimas tecnologías y ofrecer siempre lo mejor.'],
+                ['fa-handshake', 'Honestidad', 'Transparencia total en diagnósticos, precios y tiempos. Si no podemos repararlo, te lo decimos antes de cobrar.'],
+                ['fa-bolt', 'Rapidez', 'Sabemos que tu equipo es tu herramienta de trabajo. Por eso actuamos con urgencia sin sacrificar la calidad.'],
+                ['fa-shield-halved', 'Garantía', 'Todos nuestros servicios tienen garantía escrita. Si falla, volvemos a resolverlo sin costo adicional.'],
+                ['fa-medal', 'Excelencia', 'Técnicos certificados, repuestos de calidad y procesos estandarizados para un resultado siempre profesional.'],
+                ['fa-heart', 'Compromiso', 'Cada equipo que recibimos lo tratamos como si fuera nuestro. El cuidado está en cada detalle.'],
+                ['fa-seedling', 'Mejora continua', 'Nos capacitamos constantemente para estar al día con las últimas tecnologías y ofrecer siempre lo mejor.'],
             ] as $i => $v)
             <div class="bg-slate-50 border border-slate-100 rounded-2xl p-6 hover:border-blue-200 hover:shadow-md transition-all reveal" style="transition-delay:{{ $i * 0.08 }}s">
-                <div class="text-3xl mb-4">{{ $v[0] }}</div>
+                <div class="text-3xl mb-4 text-blue-600"><i class="fa-solid {{ $v[0] }}"></i></div>
                 <h3 class="font-semibold text-slate-900 text-sm mb-2">{{ $v[1] }}</h3>
                 <p class="text-sm text-slate-500 font-light leading-relaxed">{{ $v[2] }}</p>
             </div>
@@ -168,10 +168,10 @@ body { font-family: 'Inter', sans-serif; }
                     {{ $branch->name }}
                 </h3>
                 <div class="space-y-2 text-sm text-slate-500 font-light mb-4">
-                    <p>📍 {{ $branch->address }}</p>
-                    <p>📞 {{ $branch->phone }}</p>
-                    @if($branch->email)<p>✉️ {{ $branch->email }}</p>@endif
-                    @if($branch->schedule)<p>🕐 {{ $branch->schedule }}</p>@endif
+                    <p><i class="fa-solid fa-location-dot text-blue-500"></i> {{ $branch->address }}</p>
+                    <p><i class="fa-solid fa-phone text-blue-500"></i> {{ $branch->phone }}</p>
+                    @if($branch->email)<p><i class="fa-solid fa-envelope text-blue-500"></i> {{ $branch->email }}</p>@endif
+                    @if($branch->schedule)<p><i class="fa-solid fa-clock text-blue-500"></i> {{ $branch->schedule }}</p>@endif
                 </div>
                 @if($branch->whatsapp)
                 <a href="https://wa.me/{{ $branch->whatsapp }}" target="_blank"

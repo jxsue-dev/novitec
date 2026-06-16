@@ -723,7 +723,7 @@ body { font-family:var(--fb); }
             @else
             <div class="p-6 text-center bg-slate-50/50 border-t border-slate-100/80">
                 <div class="max-w-md mx-auto py-2">
-                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-400 text-sm mb-2">🔒</span>
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-400 text-sm mb-2"><i class="fa-solid fa-lock"></i></span>
                     @auth
                         <p class="text-xs text-slate-400 font-light leading-relaxed">
                             Esta orden no pertenece a tu cuenta registrada. Solo puedes consultar su estado público.
@@ -780,12 +780,12 @@ body { font-family:var(--fb); }
 
         <div class="g-hero-right">
             @foreach([
-                ['🗓️','10–<sup>15</sup>','Días laborables de respuesta'],
-                ['📂','7<sup>+</sup>','Categorías de equipos'],
-                ['🏷️','20<sup>+</sup>','Marcas con soporte autorizado'],
+                ['fa-calendar-days','10–<sup>15</sup>','Días laborables de respuesta'],
+                ['fa-folder-open','7<sup>+</sup>','Categorías de equipos'],
+                ['fa-tag','20<sup>+</sup>','Marcas con soporte autorizado'],
             ] as $i => $s)
             <div class="g-stat-card rv" style="animation-delay:{{ .3 + $i * .12 }}s">
-                <div class="g-stat-icon">{{ $s[0] }}</div>
+                <div class="g-stat-icon"><i class="fa-solid {{ $s[0] }}"></i></div>
                 <div class="g-stat-num">{!! $s[1] !!}</div>
                 <div class="g-stat-lbl">{{ $s[2] }}</div>
             </div>
@@ -919,7 +919,7 @@ body { font-family:var(--fb); }
             @else
             <div class="p-6 text-center bg-slate-50/50 border-t border-slate-100/80">
                 <div class="max-w-md mx-auto py-2">
-                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-400 text-sm mb-2">🔒</span>
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-400 text-sm mb-2"><i class="fa-solid fa-lock"></i></span>
                     @auth
                         <p class="text-xs text-slate-400 font-light leading-relaxed">
                             Esta orden no pertenece a tu cuenta registrada. Solo puedes consultar su estado público.

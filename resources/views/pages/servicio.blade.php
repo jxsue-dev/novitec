@@ -124,12 +124,12 @@ body { font-family: 'Inter', sans-serif; }
         </h2>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
             @foreach([
-                ['🔍', 'Diagnóstico incluido', 'Revisamos e informamos el problema y costo antes de proceder.'],
-                ['🛡️', 'Garantía escrita', 'Todos los servicios incluyen garantía. Si falla, lo resolvemos sin costo.'],
-                ['⚡', 'Entrega en 5 días', 'La mayoría de trabajos listos en máximo 5 días hábiles.'],
+                ['fa-magnifying-glass', 'Diagnóstico incluido', 'Revisamos e informamos el problema y costo antes de proceder.'],
+                ['fa-shield-halved', 'Garantía escrita', 'Todos los servicios incluyen garantía. Si falla, lo resolvemos sin costo.'],
+                ['fa-bolt', 'Entrega en 5 días', 'La mayoría de trabajos listos en máximo 5 días hábiles.'],
             ] as $i => $g)
             <div class="reveal" style="background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:12px;transition-delay:{{ $i * 0.1 }}s">
-                <span style="font-size:32px;">{{ $g[0] }}</span>
+                <span style="font-size:32px;color:#2563eb;"><i class="fa-solid {{ $g[0] }}"></i></span>
                 <p style="font-weight:600;color:#0f172a;font-size:15px;">{{ $g[1] }}</p>
                 <p style="color:#64748b;font-size:13px;font-weight:300;line-height:1.6;">{{ $g[2] }}</p>
             </div>

@@ -322,23 +322,23 @@ body{font-family:'Inter',sans-serif;}
                     <div class="po-em" id="pe2d"> Por favor cuéntanos qué le pasa a tu equipo.</div>
                 </div>
                 <div class="po-g">
-                    <label>📸 Fotos de tu equipo <span class="req">*</span></label>
+                    <label><i class="fa-solid fa-camera"></i> Fotos de tu equipo <span class="req">*</span></label>
                     <div class="po-fotos-grid">
                         @foreach([['1','Lado derecho'],['2','Lado izquierdo'],['3','De frente'],['4','Parte trasera']] as [$n,$label])
                         <div class="po-foto-slot" id="pfs{{ $n }}" onclick="poAbrirModal({{ $n }})">
                             <input type="file" accept="image/*" onchange="poFotoLoad(this,{{ $n }})">
                             <div class="pf-body">
-                                <span style="font-size:28px;">📷</span>
+                                <span style="font-size:28px;"><i class="fa-solid fa-camera"></i></span>
                                 <span class="pf-tag">{{ $label }}</span>
                                 <span class="pf-lbl">Toca para subir</span>
                             </div>
-                            <span class="pf-check">✓</span>
+                            <span class="pf-check"><i class="fa-solid fa-check"></i></span>
                             <button class="pf-rm" type="button" onclick="poFotoRm(event,{{ $n }})">×</button>
                         </div>
                         @endforeach
                     </div>
-                    <div style="font-size:12px;color:#ef4444;margin-top:4px;display:none;" id="pe2f">⚠️ Necesitas subir las 4 fotos de tu equipo para continuar.</div>
-                    <div class="po-hint">📷 Sube 4 fotos de tu equipo · JPG, PNG o WEBP · Máx. 5 MB por foto</div>
+                    <div style="font-size:12px;color:#ef4444;margin-top:4px;display:none;" id="pe2f"><i class="fa-solid fa-triangle-exclamation"></i> Necesitas subir las 4 fotos de tu equipo para continuar.</div>
+                    <div class="po-hint"><i class="fa-solid fa-camera"></i> Sube 4 fotos de tu equipo · JPG, PNG o WEBP · Máx. 5 MB por foto</div>
                 </div>
 
                 {{-- Modal selección foto --}}
@@ -348,12 +348,12 @@ body{font-family:'Inter',sans-serif;}
                         <p>¿Cómo deseas agregar la foto?</p>
                         <div class="pf-modal-opts">
                             <div class="pf-mopt" onclick="pfElegir('archivo')">
-                                <span class="pf-mopt-icon">🖼️</span>
+                                <span class="pf-mopt-icon"><i class="fa-solid fa-image"></i></span>
                                 <span class="pf-mopt-lbl">Galería</span>
                                 <span class="pf-mopt-sub">Elige una foto guardada</span>
                             </div>
                             <div class="pf-mopt" onclick="pfElegir('camara')">
-                                <span class="pf-mopt-icon">📷</span>
+                                <span class="pf-mopt-icon"><i class="fa-solid fa-camera"></i></span>
                                 <span class="pf-mopt-lbl">Cámara</span>
                                 <span class="pf-mopt-sub">Toma una foto ahora</span>
                             </div>
@@ -436,7 +436,7 @@ body{font-family:'Inter',sans-serif;}
                     <input type="tel" id="po-tel" placeholder="0999999999" maxlength="10"
                            value="{{ $authUser?->phone }}"
                            oninput="this.value=this.value.replace(/\D/g,'').slice(0,10)">
-                    <div class="po-hint">📱 Tu número de celular ecuatoriano (10 dígitos, empieza con 09).</div>
+                    <div class="po-hint"><i class="fa-solid fa-mobile-screen"></i> Tu número de celular ecuatoriano (10 dígitos, empieza con 09).</div>
                     <div class="po-em" id="pe3t">Revisa tu número. Debe empezar con 09 y tener 10 dígitos.</div>
                 </div>
                 <div class="po-g">
@@ -473,7 +473,7 @@ body{font-family:'Inter',sans-serif;}
             {{-- PASO 5: ÉXITO --}}
             <div class="po-pane" id="pp5">
                 <div class="po-ok">
-                    <div class="po-ok-icon">✓</div>
+                    <div class="po-ok-icon"><i class="fa-solid fa-check"></i></div>
                     <h2>¡Todo listo! Tu garantía está registrada</h2>
                     <p>Tu número de solicitud es:</p>
                     <div class="po-nro" id="po-rnro">—</div>
@@ -547,7 +547,7 @@ body{font-family:'Inter',sans-serif;}
             <div class="sg-g">
                 <label>Tu sugerencia <span class="req">*</span></label>
                 <textarea id="sg-txt" placeholder="Cuéntanos qué podríamos mejorar..." maxlength="2000"></textarea>
-                <div class="sg-em" id="sge-txt">⚠️ Escribe tu sugerencia antes de enviar.</div>
+                <div class="sg-em" id="sge-txt"><i class="fa-solid fa-triangle-exclamation"></i> Escribe tu sugerencia antes de enviar.</div>
             </div>
             <div class="sg-gerr" id="sg-gerr"></div>
             <div class="sg-brow">
@@ -556,7 +556,7 @@ body{font-family:'Inter',sans-serif;}
             </div>
         </div>
         <div id="sg-ok">
-            <div class="sg-ok-icon">✓</div>
+            <div class="sg-ok-icon"><i class="fa-solid fa-check"></i></div>
             <h3>¡Gracias por tu sugerencia! </h3>
             <p>La recibimos correctamente. Tu opinión es muy valiosa para nosotros.</p>
             <button class="sg-btn pri" onclick="sgCerrar()" style="max-width:180px;display:inline-block;">Cerrar</button>
@@ -815,7 +815,9 @@ window.poBuscar=function(codigo){
             if(d.ok&&d.producto){
                 _pv=true;
                 bdg.className='po-badge ok';
-                bdg.textContent='✓ '+d.producto.descripcion+' · '+d.producto.marca+(d.producto.tipo_nombre?' · '+d.producto.tipo_nombre:'');
+                bdg.textContent='';
+                bdg.appendChild(Object.assign(document.createElement('i'),{className:'fa-solid fa-check'}));
+                bdg.appendChild(document.createTextNode(' '+d.producto.descripcion+' · '+d.producto.marca+(d.producto.tipo_nombre?' · '+d.producto.tipo_nombre:'')));
                 bdg.style.display='block';
                 inp.classList.remove('poe');
             } else {
@@ -850,7 +852,7 @@ window.poMostrarResumen=function(){
         ['Sucursal', document.getElementById('po-suc-nom').textContent],
         ['Novitec', document.getElementById('po-suc-nov').textContent+' — '+document.getElementById('po-suc-ciudad').textContent],
         ['Código equipo', document.getElementById('po-cod').value.trim()],
-        ['Equipo', document.getElementById('po-bdg').textContent.replace('✓ ','')],
+        ['Equipo', document.getElementById('po-bdg').textContent.trim()],
         ['Detalle', document.getElementById('po-det').value.trim()],
         ['C.I. / RUC', document.getElementById('po-ci').value.trim()],
         ['Nombre', document.getElementById('po-nom').value.trim()+' '+document.getElementById('po-ape').value.trim()],
@@ -895,7 +897,7 @@ window.poSend=function(){
         if(!d.ok){
             ge.textContent=d.error||'Hubo un problema. Inténtalo de nuevo.';
             ge.style.display='block';
-            btn.disabled=false;btn.textContent='🚀 ¡Enviar mi solicitud!';
+            btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-paper-plane"></i> ¡Enviar mi solicitud!';
             return;
         }
         document.getElementById('po-rnro').textContent=d.nro_preorden;
@@ -914,9 +916,9 @@ window.poSend=function(){
         document.getElementById('sg-cor').value=document.getElementById('po-cor').value.trim();
     })
     .catch(function(){
-        ge.textContent='⚠️ Sin conexión. Revisa tu internet e inténtalo de nuevo.';
+        ge.innerHTML='<i class="fa-solid fa-triangle-exclamation"></i> Sin conexión. Revisa tu internet e inténtalo de nuevo.';
         ge.style.display='block';
-        btn.disabled=false;btn.textContent='🚀 ¡Enviar mi solicitud!';
+        btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-paper-plane"></i> ¡Enviar mi solicitud!';
     });
 };
 
@@ -933,7 +935,7 @@ window.poImprimir=function(){
     var sucNom=document.getElementById('po-suc-nom').textContent;
     var sucCiudad=document.getElementById('po-suc-ciudad').textContent;
     var codigo=document.getElementById('po-cod').value.trim();
-    var equipo=document.getElementById('po-bdg').textContent.replace('✓ ','');
+    var equipo=document.getElementById('po-bdg').textContent.trim();
     var detalle=document.getElementById('po-det').value.trim();
     var ahora=new Date();
     var pad=function(n){return n<10?'0'+n:n;};
@@ -941,8 +943,10 @@ window.poImprimir=function(){
 
     var css='*{margin:0;padding:0;box-sizing:border-box;}body{font-family:Arial,sans-serif;font-size:7.5pt;color:#000;background:#fff;}@media print{@page{size:A4 portrait;margin:10mm}.no-print{display:none!important}body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}.wrap{width:100%;max-width:190mm;margin:auto;padding:4mm;}.header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1.5px solid #000;padding-bottom:3px;margin-bottom:4px;}.header-info{font-size:7pt;line-height:1.4;}.header-info .empresa{font-size:9pt;font-weight:bold;}.orden-header{display:flex;justify-content:space-between;align-items:center;background:#1a56db;color:#fff;padding:3px 8px;border-radius:3px;margin-bottom:4px;}.orden-header .nro{font-size:10pt;font-weight:bold;}.orden-header .meta{font-size:6.5pt;text-align:right;}.sec-titulo{background:#dbeafe;font-weight:bold;font-size:6.5pt;text-transform:uppercase;padding:2px 6px;border-left:3px solid #1a56db;margin-bottom:1px;}table.datos{width:100%;border-collapse:collapse;margin-bottom:3px;}table.datos td{border:1px solid #d1d5db;padding:2px 5px;font-size:7pt;vertical-align:top;}table.datos td .lbl{font-size:5.5pt;color:#6b7280;font-weight:bold;text-transform:uppercase;display:block;margin-bottom:0;}.firmas{display:flex;justify-content:space-between;margin:4px 0;}.firma-box{width:44%;text-align:center;}.firma-linea{border-top:1px solid #000;padding-top:3px;font-size:7pt;margin-top:20px;}.condiciones-titulo{text-align:center;font-weight:bold;font-size:7.5pt;text-decoration:underline;margin-bottom:2px;}.condiciones{font-size:5.5pt;text-align:justify;line-height:1.3;color:#111;}.condiciones p{margin-bottom:1px;}.btn-print{position:fixed;top:10px;right:10px;background:#1a56db;color:white;border:none;padding:10px 20px;border-radius:6px;font-size:13px;cursor:pointer;font-weight:bold;z-index:999;}';
 
-    var html='<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Pre-Orden '+nro+'</title><style>'+css+'</style></head><body>'+
-        '<button class="btn-print no-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>'+
+    var html='<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Pre-Orden '+nro+'</title>'+
+        '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">'+
+        '<style>'+css+'</style></head><body>'+
+        '<button class="btn-print no-print" onclick="window.print()"><i class="fa-solid fa-print"></i> Imprimir / Guardar PDF</button>'+
         '<div class="wrap">'+
         '<div class="header"><div class="header-info"><div class="empresa">Novitecnología Cía. Ltda.</div><div><b>GYE:</b> 04-6031337 / 0960500158 &nbsp;&nbsp; <b>UIO:</b> 02-6001635 / 0960500156</div><div>https://www.novitec.com.ec</div></div></div>'+
         '<div class="orden-header"><div class="nro">Pre-Orden: '+nro+'</div><div class="meta">Fecha: '+fechaImp+'<br>Estado: Pendiente de ingreso</div></div>'+
@@ -977,7 +981,7 @@ window.sgAbrir=function(){
         var e=document.getElementById(id);if(e)e.style.display='none';
     });
     var btn=document.getElementById('sg-send');
-    btn.disabled=false;btn.textContent='📨 Enviar sugerencia';
+    btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-paper-plane"></i> Enviar sugerencia';
     document.getElementById('sg-overlay').classList.add('open');
     document.body.style.overflow='hidden';
 };
@@ -1017,7 +1021,7 @@ window.sgEnviar=function(){
             var ge=document.getElementById('sg-gerr');
             ge.textContent=d.error||'Hubo un problema. Inténtalo de nuevo.';
             ge.style.display='block';
-            btn.disabled=false;btn.textContent='📨 Enviar sugerencia';
+            btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-paper-plane"></i> Enviar sugerencia';
             return;
         }
         document.getElementById('sg-body').style.display='none';
@@ -1025,9 +1029,9 @@ window.sgEnviar=function(){
     })
     .catch(function(){
         var ge=document.getElementById('sg-gerr');
-        ge.textContent='⚠️ Sin conexión. Inténtalo de nuevo.';
+        ge.innerHTML='<i class="fa-solid fa-triangle-exclamation"></i> Sin conexión. Inténtalo de nuevo.';
         ge.style.display='block';
-        btn.disabled=false;btn.textContent='📨 Enviar sugerencia';
+        btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-paper-plane"></i> Enviar sugerencia';
     });
 };
 </script>

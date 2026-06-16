@@ -150,12 +150,12 @@ body { font-family: 'Inter', sans-serif; }
 <section class="py-20 px-6 bg-slate-900">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
         @foreach([
-            ['🔍', 'Diagnóstico incluido', 'Revisamos tu equipo e informamos el problema y costo antes de proceder.'],
-            ['🛡️', 'Garantía escrita', 'Todos los servicios incluyen garantía. Si falla, lo resolvemos sin costo.'],
-            ['⚡', 'Entrega en 5 días', 'La mayoría de reparaciones listas en máximo 5 días hábiles.'],
+            ['fa-magnifying-glass', 'Diagnóstico incluido', 'Revisamos tu equipo e informamos el problema y costo antes de proceder.'],
+            ['fa-shield-halved', 'Garantía escrita', 'Todos los servicios incluyen garantía. Si falla, lo resolvemos sin costo.'],
+            ['fa-bolt', 'Entrega en 5 días', 'La mayoría de reparaciones listas en máximo 5 días hábiles.'],
         ] as $i => $g)
         <div class="flex gap-4 reveal" style="transition-delay:{{ $i * 0.1 }}s">
-            <div class="w-12 h-12 bg-blue-600/20 border border-blue-500/30 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">{{ $g[0] }}</div>
+            <div class="w-12 h-12 bg-blue-600/20 border border-blue-500/30 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 text-blue-400"><i class="fa-solid {{ $g[0] }}"></i></div>
             <div>
                 <p class="text-white font-semibold text-sm mb-1">{{ $g[1] }}</p>
                 <p class="text-slate-400 text-sm font-light">{{ $g[2] }}</p>

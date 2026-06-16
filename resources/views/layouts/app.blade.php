@@ -45,8 +45,8 @@
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </button>
                 <div class="absolute top-full left-0 mt-2 w-52 rounded-xl border border-white/10 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200" style="background:rgba(9,11,24,.97);backdrop-filter:blur(12px)">
-                    <a href="{{ route('garantias') }}" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors">🔍 Consultar mi garantía</a>
-                    <a href="{{ route('warranties') }}" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors border-t border-white/5">✅ Validar mi garantía</a>
+                    <a href="{{ route('garantias') }}" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors"><i class="fa-solid fa-magnifying-glass"></i> Consultar mi garantía</a>
+                    <a href="{{ route('warranties') }}" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors border-t border-white/5"><i class="fa-solid fa-circle-check"></i> Validar mi garantía</a>
                 </div>
             </li>
             <li><a href="{{ route('contacto') }}" class="hover:text-white transition-colors duration-200 tracking-wide">Contacto</a></li>
@@ -64,8 +64,8 @@
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                     </button>
                     <div class="absolute top-full right-0 mt-2 w-44 rounded-xl border border-white/10 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200" style="background:rgba(9,11,24,.97);backdrop-filter:blur(12px)">
-                        <a href="{{ route('client.orders') }}" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors">📦 Mis órdenes</a>
-                        <a href="{{ route('profile.edit') }}" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors border-t border-white/5">⚙️ Mi perfil</a>
+                        <a href="{{ route('client.orders') }}" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors"><i class="fa-solid fa-box"></i> Mis órdenes</a>
+                        <a href="{{ route('profile.edit') }}" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors border-t border-white/5"><i class="fa-solid fa-gear"></i> Mi perfil</a>
                     </div>
                 </div>
                 @endif
@@ -100,8 +100,8 @@
         <a href="{{ route('servicios') }}" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2.5 transition-colors">Servicios</a>
         <div class="border-t border-white/5 pt-2 mt-1">
             <p class="text-xs text-slate-500 uppercase tracking-widest mb-2 font-medium">Garantías</p>
-            <a href="{{ route('garantias') }}" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2 pl-2 transition-colors">🔍 Consultar mi garantía</a>
-            <a href="{{ route('warranties') }}" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2 pl-2 transition-colors">✅ Validar mi garantía</a>
+            <a href="{{ route('garantias') }}" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2 pl-2 transition-colors"><i class="fa-solid fa-magnifying-glass"></i> Consultar mi garantía</a>
+            <a href="{{ route('warranties') }}" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2 pl-2 transition-colors"><i class="fa-solid fa-circle-check"></i> Validar mi garantía</a>
         </div>
         <a href="{{ route('contacto') }}" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2.5 transition-colors">Contacto</a>
 
@@ -110,8 +110,8 @@
                 @if(auth()->user()->is_admin)
                 {{-- Sin botón admin en el header --}}
                 @else
-                <a href="{{ route('client.orders') }}" onclick="toggleMenu()" class="block text-sm border border-white/20 text-slate-300 text-center py-2.5 rounded-xl">📦 Mis órdenes</a>
-                <a href="{{ route('profile.edit') }}" onclick="toggleMenu()" class="block text-sm border border-white/20 text-slate-300 text-center py-2.5 rounded-xl">⚙️ Mi perfil</a>
+                <a href="{{ route('client.orders') }}" onclick="toggleMenu()" class="block text-sm border border-white/20 text-slate-300 text-center py-2.5 rounded-xl"><i class="fa-solid fa-box"></i> Mis órdenes</a>
+                <a href="{{ route('profile.edit') }}" onclick="toggleMenu()" class="block text-sm border border-white/20 text-slate-300 text-center py-2.5 rounded-xl"><i class="fa-solid fa-gear"></i> Mi perfil</a>
                 @endif
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -178,10 +178,10 @@
                 @if($mainBranch)
                 <div style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1rem;">
                     <p style="color:#60a5fa; font-size:0.75rem; font-weight:500;">{{ $mainBranch->name }}</p>
-                    <p style="color:#94a3b8; font-size:0.875rem; font-weight:300;">📍 {{ $mainBranch->address }}</p>
-                    <p style="color:#94a3b8; font-size:0.875rem; font-weight:300;">📞 {{ $mainBranch->phone }}</p>
-                    @if($mainBranch->email)<p style="color:#94a3b8; font-size:0.875rem; font-weight:300;">✉️ {{ $mainBranch->email }}</p>@endif
-                    @if($mainBranch->schedule)<p style="color:#94a3b8; font-size:0.875rem; font-weight:300;">🕐 {{ $mainBranch->schedule }}</p>@endif
+                    <p style="color:#94a3b8; font-size:0.875rem; font-weight:300;"><i class="fa-solid fa-location-dot"></i> {{ $mainBranch->address }}</p>
+                    <p style="color:#94a3b8; font-size:0.875rem; font-weight:300;"><i class="fa-solid fa-phone"></i> {{ $mainBranch->phone }}</p>
+                    @if($mainBranch->email)<p style="color:#94a3b8; font-size:0.875rem; font-weight:300;"><i class="fa-solid fa-envelope"></i> {{ $mainBranch->email }}</p>@endif
+                    @if($mainBranch->schedule)<p style="color:#94a3b8; font-size:0.875rem; font-weight:300;"><i class="fa-solid fa-clock"></i> {{ $mainBranch->schedule }}</p>@endif
                 </div>
                 @if($mainBranch->whatsapp)
                 <a href="https://wa.me/{{ $mainBranch->whatsapp }}" target="_blank"

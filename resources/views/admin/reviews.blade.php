@@ -17,14 +17,14 @@
             $positive = $reviews->where('rating', '>=', 3)->count();
         @endphp
         @foreach([
-            ['Total', $total, '#2563eb'],
-            ['Destacadas', $featured . '/4', '#7c3aed'],
-            ['Positivas (3+★)', $positive, '#059669'],
-            ['Promedio', number_format($avg, 1) . ' ★', '#d97706'],
+            ['Total', $total, '#2563eb', null],
+            ['Destacadas', $featured . '/4', '#7c3aed', null],
+            ['Positivas (3+)', $positive, '#059669', 'fa-star'],
+            ['Promedio', number_format($avg, 1), '#d97706', 'fa-star'],
         ] as $stat)
         <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;">
             <p style="font-size:11px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">{{ $stat[0] }}</p>
-            <p style="font-size:24px;font-weight:700;color:{{ $stat[2] }};">{{ $stat[1] }}</p>
+            <p style="font-size:24px;font-weight:700;color:{{ $stat[2] }};">{{ $stat[1] }} @if($stat[3])<i class="fa-solid {{ $stat[3] }}" style="font-size:14px;"></i>@endif</p>
         </div>
         @endforeach
     </div>
@@ -57,7 +57,7 @@
 
                     @if($review->featured)
                     <span style="font-size:11px;font-weight:600;color:#2563eb;background:#eff6ff;border:1px solid #bfdbfe;padding:2px 10px;border-radius:20px;">
-                        ⭐ Destacada
+                        <i class="fa-solid fa-star"></i> Destacada
                     </span>
                     @endif
 
@@ -77,7 +77,7 @@
                     @csrf @method('PATCH')
                     <button type="submit"
                             style="font-size:12px;padding:6px 14px;border-radius:8px;cursor:pointer;width:100%;{{ $review->featured ? 'background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;' : 'background:#f8fafc;color:#64748b;border:1px solid #e2e8f0;' }}">
-                        {{ $review->featured ? '★ Quitar' : '☆ Destacar' }}
+                        @if($review->featured)<i class="fa-solid fa-star"></i> Quitar@else<i class="fa-regular fa-star"></i> Destacar@endif
                     </button>
                 </form>
                 <form method="POST" action="{{ route('admin.reviews.destroy', $review) }}"

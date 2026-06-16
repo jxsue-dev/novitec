@@ -208,7 +208,7 @@ html {
                         <strong>Tiempos de Respuesta:</strong> El tiempo estándar de respuesta del servicio de garantía está sujeto a la disponibilidad de piezas a nivel local, determinándose en el diagnóstico inicial.
                     </p>
                     <div class="p-4 rounded-xl bg-red-50/50 border border-red-200/50 text-xs text-red-800">
-                        ⚠️ NOVITECNOLOGIA CIA. LTDA. no se hace responsable de los gastos de traslado o envío de los productos hasta las oficinas técnicas de Quito o Guayaquil para ejecutar esta garantía.
+                        <i class="fa-solid fa-triangle-exclamation"></i> NOVITECNOLOGIA CIA. LTDA. no se hace responsable de los gastos de traslado o envío de los productos hasta las oficinas técnicas de Quito o Guayaquil para ejecutar esta garantía.
                     </div>
                     <p>
                         <strong>Aplicabilidad:</strong> Aplica única y exclusivamente a productos de hardware comercializados por la empresa (demostrable mediante la factura de compra original) y no incluye ninguna aplicación de software, programas o productos de terceros.
@@ -297,7 +297,7 @@ html {
                         Los reembolsos pueden tardar de <strong>30 a 90 días laborables</strong> debido al procesamiento interbancario y administrativo entre las agencias bancarias y NOVITECNOLOGIA CIA. LTDA.
                     </p>
                     <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800">
-                        ⚠️ Si el reembolso no se aplica el mismo día con el corte de los procesadores de tarjetas (DATAFAST o MEDIANET), el trámite se acogerá a los tiempos indicados anteriormente y adicionalmente se descontará una <strong>comisión bancaria del 10%</strong>.
+                        <i class="fa-solid fa-triangle-exclamation"></i> Si el reembolso no se aplica el mismo día con el corte de los procesadores de tarjetas (DATAFAST o MEDIANET), el trámite se acogerá a los tiempos indicados anteriormente y adicionalmente se descontará una <strong>comisión bancaria del 10%</strong>.
                     </div>
                 </div>
             </div>

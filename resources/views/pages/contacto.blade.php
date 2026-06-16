@@ -38,16 +38,16 @@ body { font-family: 'Inter', sans-serif; }
 <section class="py-16 px-6 bg-white">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
         @foreach([
-            ['📞', 'Llámanos', 'Atención telefónica en horario de oficina.', $branches->first()->phone ?? '', 'tel:' . ($branches->first()->phone ?? '')],
-            ['✉️', 'Escríbenos', 'Respondemos en menos de 24 horas.', $branches->first()->email ?? '', 'mailto:' . ($branches->first()->email ?? '')],
-            ['💬', 'WhatsApp', 'La forma más rápida de contactarnos.', 'Escribir ahora', 'https://wa.me/593960500156'],
+            ['fa-solid fa-phone', 'Llámanos', 'Atención telefónica en horario de oficina.', $branches->first()->phone ?? '', 'tel:' . ($branches->first()->phone ?? '')],
+            ['fa-solid fa-envelope', 'Escríbenos', 'Respondemos en menos de 24 horas.', $branches->first()->email ?? '', 'mailto:' . ($branches->first()->email ?? '')],
+            ['fa-brands fa-whatsapp', 'WhatsApp', 'La forma más rápida de contactarnos.', 'Escribir ahora', 'https://wa.me/593960500156'],
         ] as $i => $c)
         @if(!empty($c[4]))
         <a href="{{ $c[4] }}" target="_blank" class="block bg-slate-50 border border-slate-100 rounded-2xl p-6 text-center hover:border-blue-200 hover:shadow-md transition-all reveal hover:-translate-y-1" style="transition-delay:{{ $i * 0.1 }}s; text-decoration:none;">
         @else
         <div class="bg-slate-50 border border-slate-100 rounded-2xl p-6 text-center hover:border-blue-200 hover:shadow-md transition-all reveal" style="transition-delay:{{ $i * 0.1 }}s">
         @endif
-            <div class="text-4xl mb-4">{{ $c[0] }}</div>
+            <div class="text-4xl mb-4 text-blue-600"><i class="{{ $c[0] }}"></i></div>
             <h3 class="font-semibold text-slate-900 text-sm mb-2">{{ $c[1] }}</h3>
             <p class="text-slate-500 text-xs font-light mb-3">{{ $c[2] }}</p>
             <p class="text-blue-600 text-sm font-medium">{{ $c[3] }}</p>
@@ -83,10 +83,10 @@ body { font-family: 'Inter', sans-serif; }
                         </span>
                     </h3>
                     <div class="space-y-1.5 text-sm text-slate-500 font-light mb-3">
-                        <p class="flex items-center gap-2">📍 {{ $branch->address }}</p>
-                        <p>📞 {{ $branch->phone }}</p>
-                        @if($branch->email)<p>✉️ {{ $branch->email }}</p>@endif
-                        @if($branch->schedule)<p>🕐 {{ $branch->schedule }}</p>@endif
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-blue-500"></i> {{ $branch->address }}</p>
+                        <p><i class="fa-solid fa-phone text-blue-500"></i> {{ $branch->phone }}</p>
+                        @if($branch->email)<p><i class="fa-solid fa-envelope text-blue-500"></i> {{ $branch->email }}</p>@endif
+                        @if($branch->schedule)<p><i class="fa-solid fa-clock text-blue-500"></i> {{ $branch->schedule }}</p>@endif
                     </div>
                     @if($branch->whatsapp)
                     <a href="https://wa.me/{{ $branch->whatsapp }}" target="_blank"
