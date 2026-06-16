@@ -126,8 +126,16 @@
                 fields.nombres.value = cliente.nombres || '';
                 fields.apellidos.value = cliente.apellidos || '';
                 fields.phone.value = cliente.telefono || '';
-                fields.email.value = cliente.correo || '';
+                fields.email.value = '';
                 fields.direccion.value = cliente.direccion || '';
+            };
+
+            const clearFields = () => {
+                fields.nombres.value = '';
+                fields.apellidos.value = '';
+                fields.phone.value = '';
+                fields.email.value = '';
+                fields.direccion.value = '';
             };
 
             const setStatus = (message, type = 'default') => {
@@ -182,12 +190,19 @@
                         throw new Error(data.message || 'No se pudo consultar SGN.');
                     }
 
+                    if (data.already_registered) {
+                        clearFields();
+                        setStatus(data.message || 'Ya existe una cuenta para esta identificacion. Inicia sesion.', 'warning');
+                        return;
+                    }
+
                     if (data.found && data.cliente) {
                         fillFields(data.cliente);
                         setStatus('Cliente encontrado en SGN. Revisa los datos antes de guardar.', 'success');
                         return;
                     }
 
+                    clearFields();
                     setStatus('No encontramos ese cliente en SGN. Completa el registro manualmente.', 'warning');
                 } catch (error) {
                     setStatus(error.message || 'No se pudo consultar SGN en este momento.', 'error');

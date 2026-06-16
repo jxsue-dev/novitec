@@ -130,16 +130,14 @@ class WarrantyController extends Controller
 
         $nro_preorden = $this->generarNroPreorden($request->secuencial);
 
-        // Subir fotos
+        // Subir fotos en storage publico persistente
         $fotos = [];
-        $uploadDir = base_path('../public_html/images/warranties');
-        if (!file_exists($uploadDir)) mkdir($uploadDir, 0755, true);
 
         for ($i = 1; $i <= 4; $i++) {
             $file = $request->file("foto_$i");
             $filename = $nro_preorden . '_f' . $i . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move($uploadDir, $filename);
-            $fotos[$i] = 'images/warranties/' . $filename;
+            $path = $file->storeAs('warranties', $filename, 'public');
+            $fotos[$i] = 'storage/' . $path;
         }
 
         // Insertar en preordenes

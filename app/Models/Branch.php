@@ -17,4 +17,9 @@ class Branch extends Model
     'active',
     'order'
     ];
+
+    public function getNameAttribute($value): string
+    {
+        return preg_replace('/nonitec/i', 'Novitec', (string) $value) ?? (string) $value;
+    }
 }

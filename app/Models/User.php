@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\ResetClientPasswordNotification;
 use App\Support\IdentityDocument;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -54,5 +55,10 @@ class User extends Authenticatable
     public function orderLookupIdentifications(): array
     {
         return IdentityDocument::equivalentIdentifiers($this->identificacion ?: $this->cedula);
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new ResetClientPasswordNotification($token));
     }
 }

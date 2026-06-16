@@ -598,6 +598,153 @@ body { font-family:var(--fb); }
 </style>
 
 {{-- ═══ HERO ═══ --}}
+{{-- ═════════ CONSULTA ═════════ --}}
+<section class="g-consulta" id="consulta">
+    <div class="g-consulta-inner">
+        <div class="g-consulta-head rv">
+            <div class="g-consulta-tag">Consulta en línea</div>
+            <h2 class="g-consulta-title">Consulta el estado de tu <em class="shimmer-blue" style="font-style:italic">equipo</em></h2>
+            <p class="g-consulta-sub">Ingresa tu número de orden o cédula para ver el estado en tiempo real.</p>
+        </div>
+
+        <form class="g-search-box rv d1" method="POST" action="{{ route('garantias.consulta') }}" autocomplete="off">
+            @csrf
+            <div class="g-tabs">
+                <button type="button" class="g-tab active" onclick="setTipo('nro_orden',this)">
+                    <i class="fa-solid fa-hashtag"></i> Número de orden
+                </button>
+                <button type="button" class="g-tab" onclick="setTipo('identificacion',this)">
+                    <i class="fa-solid fa-id-card"></i> Cédula / RUC
+                </button>
+            </div>
+            <input type="hidden" name="tipo" id="tipoInput" value="nro_orden">
+            <div class="g-input-row">
+                <div class="g-input-wrap">
+                    <i class="fa-solid fa-magnifying-glass" id="inputIcon"></i>
+                    <input type="text" name="q" id="qInput" class="g-input" placeholder="Ej: UIO-000123" required>
+                </div>
+                <button type="submit" class="g-btn-buscar">
+                    <i class="fa-solid fa-search"></i> Consultar
+                </button>
+            </div>
+            <p class="g-hint" id="hintText">Ingresa el número completo tal como aparece en tu comprobante de ingreso.</p>
+        </form>
+
+        @if(session('consulta_error'))
+        <div class="g-error rv">
+            <i class="fa-solid fa-circle-exclamation" style="margin-top:2px;flex-shrink:0"></i>
+            <span>{{ session('consulta_error') }}</span>
+        </div>
+        @endif
+
+        @if(session('consulta_resultados'))
+        @php $resultados = session('consulta_resultados'); @endphp
+        <div class="g-res-header rv">
+            <span class="g-res-label">Resultados</span>
+            <span class="g-res-count">{{ count($resultados) }} orden{{ count($resultados) > 1 ? 'es' : '' }} encontrada{{ count($resultados) > 1 ? 's' : '' }}</span>
+        </div>
+        @foreach($resultados as $i => $o)
+        @php
+            $estadoRaw = trim((string) ($o['estado_orden'] ?? ''));
+            $estadoGarantia = trim((string) ($o['estado_garantia'] ?? ''));
+            $estadoNorm = str_replace(
+                ['Ã¡','Ã©','Ã­','Ã³','Ãº','Ã','Ã‰','Ã','Ã“','Ãš'],
+                ['a','e','i','o','u','a','e','i','o','u'],
+                mb_strtolower($estadoRaw, 'UTF-8')
+            );
+            $bloqueada = str_contains($estadoNorm, 'anulad') || str_contains($estadoNorm, 'rechaz');
+            $pasoActual = 0;
+            if (str_contains($estadoNorm, 'revision') || str_contains($estadoNorm, 'revisi')) $pasoActual = 1;
+            if (str_contains($estadoNorm, 'reparacion') || str_contains($estadoNorm, 'repar') || str_contains($estadoNorm, 'repuesto')) $pasoActual = 2;
+            if (str_contains($estadoNorm, 'finaliz') || str_contains($estadoNorm, 'credito') || str_contains($estadoNorm, 'credit')) $pasoActual = 3;
+            if (str_contains($estadoNorm, 'entreg')) $pasoActual = 4;
+            $labelListo = 'Reparado';
+            if (str_contains($estadoNorm, 'credito') || str_contains($estadoNorm, 'credit')) {
+                $labelListo = 'Nota de crédito';
+            }
+            $avance = $bloqueada ? 0 : ($pasoActual / 4) * 80;
+            $trackSteps = [
+                ['Recibida','fa-file-circle-check'],
+                ['En revisión','fa-magnifying-glass'],
+                ['En proceso','fa-screwdriver-wrench'],
+                [$labelListo,'fa-circle-check'],
+                ['Entregada','fa-box-open'],
+            ];
+            $estados = [
+                'En Revisión'        => ['#D97706','En revisión','fa-magnifying-glass'],
+                'En Reparacion'      => ['#2563EB','En reparación','fa-screwdriver-wrench'],
+                'Esperando Repuesto' => ['#7C3AED','Esperando repuesto','fa-box'],
+                'Finalizada'         => ['#059669','Finalizada','fa-circle-check'],
+                'Entregada'          => ['#6B7280','Entregada','fa-box-open'],
+                'Anulada'            => ['#DC2626','Anulada','fa-ban'],
+                'Nota de Credito'    => ['#DB2777','Nota de crédito','fa-file-invoice'],
+            ];
+            [$color,$label,$icon] = $estados[$o['estado_orden'] ?? ''] ?? ['#6B7280',$o['estado_orden'] ?? '—','fa-file-lines'];
+            $equipo = trim(implode(' ', array_filter([$o['tipo_equipo'] ?? '',$o['marca_equipo'] ?? '',$o['modelo_equipo'] ?? ''])));
+            $cliente = trim(($o['nombres'] ?? '').' '.($o['apellidos'] ?? '')) ?: ($o['cliente'] ?? '');
+            $falla = trim(($o['falla'] ?? '').(($o['falla'] && $o['observacion']) ? ' — ' : '').($o['observacion'] ?? ''));
+        @endphp
+        <div class="g-orden-card" style="animation-delay:{{ $i * 0.06 }}s">
+            <div class="g-card-head">
+                <span class="g-nro">{{ $o['nro_orden'] ?? '—' }}</span>
+                <span class="g-estado" style="color:{{ $color }};border-color:{{ $color }}40;background:{{ $color }}15">
+                    <i class="fa-solid {{ $icon }}" style="font-size:9px"></i>
+                    {{ $label }}
+                </span>
+            </div>
+            <div class="g-track">
+                <div class="g-track-line" style="--track-progress:{{ number_format($avance, 2, '.', '') }}%">
+                    @foreach($trackSteps as $idx => $step)
+                    @php
+                        $stepClass = $bloqueada ? ($idx === 0 ? 'blocked active' : '') : ($idx <= $pasoActual ? 'done' : '');
+                    @endphp
+                    <div class="g-track-step {{ $stepClass }}">
+                        <span class="g-track-dot">
+                            <i class="fa-solid {{ $bloqueada && $idx === 0 ? 'fa-xmark' : ($idx <= $pasoActual ? 'fa-check' : $step[1]) }}"></i>
+                        </span>
+                        <span class="g-track-label">{{ $step[0] }}</span>
+                    </div>
+                    @endforeach
+                </div>
+                <div class="g-track-note">
+                    Estado actual: <strong>{{ $label }}</strong>@if($estadoGarantia) · Garantia: <strong>{{ $estadoGarantia }}</strong>@endif
+                </div>
+            </div>
+            @if($o['show_details'])
+            <div class="g-card-body">
+                @if($cliente)<div class="g-info"><label>Cliente</label><span>{{ $cliente }}</span></div>@endif
+                <div class="g-info"><label>Equipo</label><span>{{ $equipo ?: '—' }}</span></div>
+                <div class="g-info"><label>Técnico</label><span>{{ $o['tecnico'] ?? '—' }}</span></div>
+                <div class="g-info"><label>Sucursal</label><span>{{ $o['sucursal'] ?? '—' }}</span></div>
+                @if(!empty($o['fecha_ingreso']))<div class="g-info"><label>Ingreso</label><span>{{ $o['fecha_ingreso'] }}</span></div>@endif
+                @if(!empty($o['motivo_ingreso']))<div class="g-info"><label>Motivo</label><span>{{ $o['motivo_ingreso'] }}</span></div>@endif
+                @if($falla)<div class="g-info-full"><label>Descripción</label><p>{{ $falla }}</p></div>@endif
+            </div>
+            @else
+            <div class="p-6 text-center bg-slate-50/50 border-t border-slate-100/80">
+                <div class="max-w-md mx-auto py-2">
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-400 text-sm mb-2">🔒</span>
+                    @auth
+                        <p class="text-xs text-slate-400 font-light leading-relaxed">
+                            Esta orden no pertenece a tu cuenta registrada. Solo puedes consultar su estado público.
+                        </p>
+                    @else
+                        <p class="text-xs text-slate-400 font-light leading-relaxed mb-3">
+                            Por seguridad, los detalles de la orden están ocultos en la consulta pública.
+                        </p>
+                        <a href="{{ route('login') }}" class="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-colors shadow-sm">
+                            <i class="fa-solid fa-right-to-bracket"></i> Iniciar sesión para ver detalles
+                        </a>
+                    @endauth
+                </div>
+            </div>
+            @endif
+        </div>
+        @endforeach
+        @endif
+    </div>
+</section>
+
 <section class="g-hero">
     <div class="g-hero-grid"></div>
     <div class="g-hero-glow1"></div>
@@ -648,7 +795,7 @@ body { font-family:var(--fb); }
 </section>
 
 {{-- ═══ CONSULTA ═══ --}}
-<section class="g-consulta" id="consulta">
+<section class="g-consulta" id="consulta-legacy" style="display:none;">
     <div class="g-consulta-inner">
         <div class="g-consulta-head rv">
             <div class="g-consulta-tag">Consulta en línea</div>

@@ -29,10 +29,25 @@ class RegisteredUserController extends Controller
             'identificacion' => ['required', 'string', new EcuadorIdentificacion()],
         ]);
 
-        $cliente = $clientes->findByIdentificacion($data['identificacion']);
+        $identificacion = IdentityDocument::normalize($data['identificacion']);
+        $identificacionCanonica = IdentityDocument::canonicalize($identificacion);
+
+        if (User::where('identificacion_canonica', $identificacionCanonica)->exists()) {
+            return response()->json([
+                'found' => false,
+                'already_registered' => true,
+                'message' => 'Ya existe una cuenta para esta identificacion. Inicia sesion con tu clave.',
+                'login_url' => route('login'),
+                'cliente' => null,
+                'source' => 'web_users',
+            ]);
+        }
+
+        $cliente = $clientes->findByIdentificacion($identificacion);
 
         return response()->json([
             'found' => $cliente !== null,
+            'already_registered' => false,
             'cliente' => $cliente,
             'source' => $cliente ? 'sgn_clientes' : null,
         ]);
