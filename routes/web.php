@@ -18,23 +18,23 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\PageController;
 
-Route::post('/garantias/consulta', [PageController::class, 'consultaGarantia'])->name('garantias.consulta');
+Route::post('/garantias/consulta', [PageController::class, 'consultaGarantia'])->middleware('throttle:15,1')->name('garantias.consulta');
 Route::get('/garantias', [PageController::class, 'garantias'])->name('garantias');
-Route::post('/contacto', [PageController::class, 'sendContacto'])->name('contacto.send');
+Route::post('/contacto', [PageController::class, 'sendContacto'])->middleware('throttle:5,1')->name('contacto.send');
 Route::get('/contacto', [PageController::class, 'contacto'])->name('contacto');
 Route::get('/servicios', [PageController::class, 'servicios'])->name('servicios');
 Route::get('/servicios/{service:slug}', [ServiceController::class, 'show'])->name('servicios.show');
 Route::get('/conocenos', [PageController::class, 'conocenos'])->name('conocenos');
 Route::get('/resenas', [PageController::class, 'resenas'])->name('resenas');
-Route::post('/resenas', [ReviewController::class, 'store'])->name('reviews.store');
+Route::post('/resenas', [ReviewController::class, 'store'])->middleware('throttle:5,1')->name('reviews.store');
 Route::get('/politica-de-privacidad', [PageController::class, 'privacidad'])->name('privacidad');
 Route::get('/terminos-y-condiciones', [PageController::class, 'terminos'])->name('terminos');
 
 Route::get('/warranties', [WarrantyController::class, 'index'])->name('warranties');
-Route::get('/warranties/validar-factura', [WarrantyController::class, 'validarFactura'])->name('warranties.validar');
-Route::get('/warranties/buscar-producto', [WarrantyController::class, 'buscarProducto'])->name('warranties.producto');
-Route::post('/warranties/guardar', [WarrantyController::class, 'guardar'])->name('warranties.guardar');
-Route::post('/warranties/sugerencia', [WarrantyController::class, 'guardarSugerencia'])->name('warranties.sugerencia');
+Route::get('/warranties/validar-factura', [WarrantyController::class, 'validarFactura'])->middleware('throttle:30,1')->name('warranties.validar');
+Route::get('/warranties/buscar-producto', [WarrantyController::class, 'buscarProducto'])->middleware('throttle:30,1')->name('warranties.producto');
+Route::post('/warranties/guardar', [WarrantyController::class, 'guardar'])->middleware('throttle:5,1')->name('warranties.guardar');
+Route::post('/warranties/sugerencia', [WarrantyController::class, 'guardarSugerencia'])->middleware('throttle:5,1')->name('warranties.sugerencia');
 
 Route::get('/', function () {
     $branches = Branch::where('active', true)->orderBy('order')->get();

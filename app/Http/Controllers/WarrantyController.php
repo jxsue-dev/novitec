@@ -99,10 +99,10 @@ class WarrantyController extends Controller
             'codigo_producto'   => 'required|string',
             'fecha_facturacion' => 'required|date',
             'detalle_equipo'    => 'required|string',
-            'foto_1'            => 'required|image|max:5120',
-            'foto_2'            => 'required|image|max:5120',
-            'foto_3'            => 'required|image|max:5120',
-            'foto_4'            => 'required|image|max:5120',
+            'foto_1'            => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'foto_2'            => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'foto_3'            => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'foto_4'            => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
         $userIdentity = IdentityDocument::canonicalize($request->user()->identificacion ?: $request->user()->cedula);
@@ -113,6 +113,21 @@ class WarrantyController extends Controller
                 'ok' => false,
                 'error' => 'La identificacion de la preorden debe coincidir con la de tu cuenta.',
             ], 422);
+        }
+
+        $sc = DB::connection('novitecdb')
+            ->table('sucursalescliente')
+            ->where('id', $request->suc_cliente_id)
+            ->where('activa', 1)
+            ->first();
+
+        $sn = DB::connection('novitecdb')
+            ->table('sucursales')
+            ->where('id', $request->novitec_suc_id)
+            ->first();
+
+        if (!$sc || !$sn || $sc->novitec_sucursal !== $sn->secuencial || $request->secuencial !== $sn->secuencial) {
+            return response()->json(['ok' => false, 'error' => 'Sucursal inválida.'], 422);
         }
 
         $codigo_prod = strtoupper(trim($request->codigo_producto));
@@ -131,11 +146,20 @@ class WarrantyController extends Controller
         $nro_preorden = $this->generarNroPreorden($request->secuencial);
 
         // Subir fotos en storage publico persistente
+        $extensionesPermitidas = [
+            'image/jpeg' => 'jpg',
+            'image/png'  => 'png',
+            'image/webp' => 'webp',
+        ];
         $fotos = [];
 
         for ($i = 1; $i <= 4; $i++) {
             $file = $request->file("foto_$i");
-            $filename = $nro_preorden . '_f' . $i . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $extension = $extensionesPermitidas[$file->getMimeType()] ?? null;
+            if (!$extension) {
+                return response()->json(['ok' => false, 'error' => 'Formato de imagen no soportado.'], 422);
+            }
+            $filename = $nro_preorden . '_f' . $i . '_' . time() . '.' . $extension;
             $path = $file->storeAs('warranties', $filename, 'public');
             $fotos[$i] = 'storage/' . $path;
         }
@@ -191,8 +215,8 @@ class WarrantyController extends Controller
             'sg_texto'     => 'required|string|min:10',
         ]);
 
-        $nombres   = strtoupper(trim($request->sg_nombres));
-        $apellidos = strtoupper(trim($request->sg_apellidos));
+        $nombres   = str_replace(["\r", "\n"], ' ', strtoupper(trim($request->sg_nombres)));
+        $apellidos = str_replace(["\r", "\n"], ' ', strtoupper(trim($request->sg_apellidos)));
         $texto     = trim($request->sg_texto);
         $categoria = $request->sg_categoria ?? 'General';
         $fecha     = now()->format('d/m/Y H:i');
@@ -201,7 +225,7 @@ class WarrantyController extends Controller
             Mail::html($this->sugerenciaHtml($nombres, $apellidos, $request->sg_identificacion, $request->sg_telefono, $request->sg_correo, $categoria, $texto, $fecha), function ($m) use ($nombres, $apellidos) {
                 $m->to('sistemas@novicompu.com')
                   ->cc('josuer@novitec.com.ec')
-                  ->subject("💡 Nueva Sugerencia — $nombres $apellidos");
+                  ->subject("Nueva Sugerencia — $nombres $apellidos");
             });
         } catch (\Exception $e) {
             return response()->json(['ok' => false, 'error' => 'No se pudo enviar la sugerencia.']);
@@ -230,6 +254,13 @@ class WarrantyController extends Controller
 
     private function emailHtml($nro, $nombres, $apellidos, $equipo, $codigo, $factura)
     {
+        $nro = htmlspecialchars($nro);
+        $nombres = htmlspecialchars($nombres);
+        $apellidos = htmlspecialchars($apellidos);
+        $equipo = htmlspecialchars($equipo);
+        $codigo = htmlspecialchars($codigo);
+        $factura = htmlspecialchars($factura);
+
         return "
         <div style='font-family:Arial,sans-serif;max-width:560px;margin:auto;'>
           <div style='background:#1a3d7c;padding:20px 28px;border-radius:8px 8px 0 0;'>
@@ -257,10 +288,18 @@ class WarrantyController extends Controller
 
     private function sugerenciaHtml($nombres, $apellidos, $ci, $tel, $correo, $categoria, $texto, $fecha)
     {
+        $nombres = htmlspecialchars($nombres);
+        $apellidos = htmlspecialchars($apellidos);
+        $ci = htmlspecialchars($ci);
+        $tel = htmlspecialchars($tel);
+        $correo = htmlspecialchars($correo);
+        $categoria = htmlspecialchars($categoria);
+        $fecha = htmlspecialchars($fecha);
+
         return "
         <div style='font-family:Arial,sans-serif;max-width:520px;margin:auto;'>
           <div style='background:#059669;padding:20px 28px;border-radius:8px 8px 0 0;'>
-            <h2 style='color:#fff;margin:0;'>💡 Nueva Sugerencia Recibida</h2>
+            <h2 style='color:#fff;margin:0;'>Nueva Sugerencia Recibida</h2>
             <p style='color:rgba(255,255,255,.75);margin:4px 0 0;font-size:13px;'>Novitecnología Cía. Ltda. — $fecha</p>
           </div>
           <div style='background:#f9fafb;padding:24px 28px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px;'>
