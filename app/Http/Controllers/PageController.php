@@ -76,6 +76,14 @@ class PageController extends Controller
         return view('pages.garantias', compact('branches', 'socials', 'settings'));
     }
 
+    public function soporteAutorizado()
+    {
+        $branches = Branch::where('active', true)->orderBy('order')->get();
+        $socials = SocialLink::where('active', true)->orderBy('order')->get();
+        $settings = Setting::pluck('value', 'key');
+        return view('pages.soporte-autorizado', compact('branches', 'socials', 'settings'));
+    }
+
         public function consultaGarantia(Request $request)
     {
         $request->validate([

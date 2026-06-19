@@ -20,6 +20,7 @@ use App\Http\Controllers\PageController;
 
 Route::post('/garantias/consulta', [PageController::class, 'consultaGarantia'])->middleware('throttle:15,1')->name('garantias.consulta');
 Route::get('/garantias', [PageController::class, 'garantias'])->name('garantias');
+Route::get('/soporte-autorizado', [PageController::class, 'soporteAutorizado'])->name('soporte-autorizado');
 Route::post('/contacto', [PageController::class, 'sendContacto'])->middleware('throttle:5,1')->name('contacto.send');
 Route::get('/contacto', [PageController::class, 'contacto'])->name('contacto');
 Route::get('/servicios', [PageController::class, 'servicios'])->name('servicios');
