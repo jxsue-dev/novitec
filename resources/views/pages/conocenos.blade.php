@@ -47,14 +47,14 @@ body { font-family: 'Inter', sans-serif; }
         <div class="relative reveal">
             <div id="slider" class="flex transition-transform duration-700 ease-in-out">
                 @foreach([
-                    ['eq_uio.png',  'Servicio Técnico Quito',      'Nuestro equipo en Quito — listos para atenderte de lunes a sábado con el más alto nivel técnico.'],
-                    ['eq_gye.png',  'Servicio Técnico Guayaquil',   'Presencia en la costa con técnicos especializados en reparación y soporte IT para la región.'],
-                    ['eq_mta.png',  'Servicio Técnico Manta',       'Equipo comprometido en Manta, brindando soluciones tecnológicas a empresas y personas de la zona.'],
-                    ['it_uio.png',  'Sistemas y Desarrollo',        'El equipo de sistemas y desarrollo que mantiene nuestra plataforma y soluciones IT corporativas.'],
+                    ['https://res.cloudinary.com/dobuneref/image/upload/v1781882846/eq_uio_e0uxid.webp',  'Servicio Técnico Quito',      'Nuestro equipo en Quito — listos para atenderte de lunes a sábado con el más alto nivel técnico.'],
+                    ['https://res.cloudinary.com/dobuneref/image/upload/v1781882846/eq_gye_pwsime.webp',  'Servicio Técnico Guayaquil',   'Presencia en la costa con técnicos especializados en reparación y soporte IT para la región.'],
+                    ['https://res.cloudinary.com/dobuneref/image/upload/v1781882846/eq_mta_bj2io5.webp',  'Servicio Técnico Manta',       'Equipo comprometido en Manta, brindando soluciones tecnológicas a empresas y personas de la zona.'],
+                    ['https://res.cloudinary.com/dobuneref/image/upload/v1781882846/it_uio_mw28xo.webp',  'Sistemas y Desarrollo',        'El equipo de sistemas y desarrollo que mantiene nuestra plataforma y soluciones IT corporativas.'],
                 ] as $i => $slide)
                 <div class="min-w-full px-4">
                     <div class="relative rounded-3xl overflow-hidden aspect-video md:aspect-[21/8] bg-slate-100">
-                        <img src="{{ asset('images/' . $slide[0]) }}"
+                        <img src="{{ $slide[0] }}"
                              alt="{{ $slide[1] }}"
                              class="w-full h-full object-cover">
                         <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(2,8,23,.8) 0%,transparent 60%)"></div>
