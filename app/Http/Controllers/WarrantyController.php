@@ -97,6 +97,8 @@ class WarrantyController extends Controller
             'correo'            => 'required|email',
             'ciudad_procedencia' => 'required|string|max:100',
             'codigo_producto'   => 'required|string',
+            'serie'             => 'required|string|max:100',
+            'marca'             => 'required|string|max:100',
             'fecha_facturacion' => 'required|date',
             'detalle_equipo'    => 'required|string',
             'foto_1'            => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
@@ -139,6 +141,8 @@ class WarrantyController extends Controller
             ->select('pi.codigo', 'pi.descripcion', 'm.nombre as marca', 'td.nombre as tipo_nombre')
             ->first();
 
+        $marca = strtoupper(trim($request->marca));
+
         if (!$producto) {
             return response()->json(['ok' => false, 'error' => 'Código de producto no encontrado.']);
         }
@@ -178,8 +182,9 @@ class WarrantyController extends Controller
             'nro_factura'          => $request->nro_factura,
             'fecha_facturacion'    => $request->fecha_facturacion,
             'codigo_producto'      => $producto->codigo,
+            'serie'                => strtoupper(trim($request->serie)),
             'desc_producto'        => $producto->descripcion,
-            'marca_producto'       => $producto->marca,
+            'marca_producto'       => $marca,
             'tipo_producto'        => $producto->tipo_nombre,
             'detalle_equipo'       => $request->detalle_equipo,
             'foto_1'               => $fotos[1],
@@ -189,12 +194,12 @@ class WarrantyController extends Controller
         ]);
 
         // Enviar correo
-        $equipo_txt = $producto->tipo_nombre . ' — ' . $producto->marca . ' — ' . $producto->descripcion;
+        $equipo_txt = $producto->tipo_nombre . ' — ' . $marca . ' — ' . $producto->descripcion;
         $nombres = strtoupper($request->nombres);
         $apellidos = strtoupper($request->apellidos);
 
         try {
-            Mail::html($this->emailHtml($nro_preorden, $nombres, $apellidos, $equipo_txt, $producto->codigo, $request->nro_factura), function ($m) use ($request, $nro_preorden) {
+            Mail::html($this->emailHtml($nro_preorden, $nombres, $apellidos, $equipo_txt, $producto->codigo, strtoupper(trim($request->serie)), $request->nro_factura), function ($m) use ($request, $nro_preorden) {
                 $m->to($request->correo)
                   ->subject("Pre-Orden $nro_preorden — Novitecnología");
             });
@@ -252,13 +257,14 @@ class WarrantyController extends Controller
         return 'PRE-' . $secuencial . '-' . time();
     }
 
-    private function emailHtml($nro, $nombres, $apellidos, $equipo, $codigo, $factura)
+    private function emailHtml($nro, $nombres, $apellidos, $equipo, $codigo, $serie, $factura)
     {
         $nro = htmlspecialchars($nro);
         $nombres = htmlspecialchars($nombres);
         $apellidos = htmlspecialchars($apellidos);
         $equipo = htmlspecialchars($equipo);
         $codigo = htmlspecialchars($codigo);
+        $serie = htmlspecialchars($serie);
         $factura = htmlspecialchars($factura);
 
         return "
@@ -276,6 +282,7 @@ class WarrantyController extends Controller
                     <td style='padding:5px 0;font-weight:700;font-size:15px;color:#1a3d7c;'>$nro</td></tr>
                 <tr><td style='padding:5px 0;color:#6b7280;'>Equipo</td><td style='padding:5px 0;'>$equipo</td></tr>
                 <tr><td style='padding:5px 0;color:#6b7280;'>Código</td><td style='padding:5px 0;'>$codigo</td></tr>
+                <tr><td style='padding:5px 0;color:#6b7280;'>Serie</td><td style='padding:5px 0;'>$serie</td></tr>
                 <tr><td style='padding:5px 0;color:#6b7280;'>Nro. Factura</td><td style='padding:5px 0;'>$factura</td></tr>
               </table>
             </div>

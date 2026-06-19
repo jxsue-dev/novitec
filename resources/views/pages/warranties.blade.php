@@ -316,6 +316,20 @@ body{font-family:'Inter',sans-serif;}
                     <div class="po-em" id="pe2"> Ese código no lo encontramos. Revísalo bien.</div>
                 </div>
                 <div class="po-g">
+                    <label>Serie del Equipo <span class="req">*</span></label>
+                    <input type="text" id="po-serie" placeholder="Ej: ABC123456789" maxlength="100" autocomplete="off"
+                           oninput="this.value=this.value.toUpperCase()">
+                    <div class="po-hint"> Está en la etiqueta del equipo. Debe coincidir con el producto que envías a garantía.</div>
+                    <div class="po-em" id="pe2s"> Ingresa la serie de tu equipo.</div>
+                </div>
+                <div class="po-g">
+                    <label>Marca del Equipo <span class="req">*</span></label>
+                    <input type="text" id="po-marca" placeholder="Ej: HP, DELL, LENOVO, SAMSUNG" maxlength="100" autocomplete="off"
+                           oninput="this.value=this.value.toUpperCase()">
+                    <div class="po-hint"> Si tu código no trae marca automática, escríbela manualmente.</div>
+                    <div class="po-em" id="pe2m"> Ingresa la marca de tu equipo.</div>
+                </div>
+                <div class="po-g">
                     <label>¿Qué le pasa a tu equipo? <span class="req">*</span></label>
                     <textarea id="po-det" placeholder="Ej: La pantalla no enciende, se cayó al suelo, no carga la batería..." maxlength="1000"></textarea>
                     <div class="po-hint"> Cuéntanos con tus propias palabras qué falla o qué pasó.</div>
@@ -679,6 +693,12 @@ function poVal(n){
         var ok=true;
         var c=document.getElementById('po-cod');
         if(!_pv){poSE('pe2',c);ok=false;}else poHE('pe2',c);
+        var serie=document.getElementById('po-serie');
+        if(!serie.value.trim()){poSE('pe2s',serie);serie.classList.add('poe');ok=false;}
+        else{poHE('pe2s',serie);serie.classList.remove('poe');}
+        var marca=document.getElementById('po-marca');
+        if(!marca.value.trim()){poSE('pe2m',marca);marca.classList.add('poe');ok=false;}
+        else{poHE('pe2m',marca);marca.classList.remove('poe');}
         var det=document.getElementById('po-det');
         if(!det.value.trim()){poSE('pe2d',det);det.classList.add('poe');ok=false;}
         else{poHE('pe2d',det);det.classList.remove('poe');}
@@ -814,6 +834,8 @@ window.poBuscar=function(codigo){
         .then(function(d){
             if(d.ok&&d.producto){
                 _pv=true;
+                document.getElementById('po-marca').value=(d.producto.marca||'').toUpperCase();
+                poHE('pe2m',document.getElementById('po-marca'));
                 bdg.className='po-badge ok';
                 bdg.textContent='';
                 bdg.appendChild(Object.assign(document.createElement('i'),{className:'fa-solid fa-check'}));
@@ -852,6 +874,8 @@ window.poMostrarResumen=function(){
         ['Sucursal', document.getElementById('po-suc-nom').textContent],
         ['Novitec', document.getElementById('po-suc-nov').textContent+' — '+document.getElementById('po-suc-ciudad').textContent],
         ['Código equipo', document.getElementById('po-cod').value.trim()],
+        ['Serie', document.getElementById('po-serie').value.trim()],
+        ['Marca', document.getElementById('po-marca').value.trim()],
         ['Equipo', document.getElementById('po-bdg').textContent.trim()],
         ['Detalle', document.getElementById('po-det').value.trim()],
         ['C.I. / RUC', document.getElementById('po-ci').value.trim()],
@@ -883,6 +907,8 @@ window.poSend=function(){
     fd.append('telefono', document.getElementById('po-tel').value.trim());
     fd.append('correo', document.getElementById('po-cor').value.trim());
     fd.append('codigo_producto', document.getElementById('po-cod').value.trim());
+    fd.append('serie', document.getElementById('po-serie').value.trim());
+    fd.append('marca', document.getElementById('po-marca').value.trim());
     fd.append('fecha_facturacion', document.getElementById('po-fecha-fac').value);
     fd.append('detalle_equipo', document.getElementById('po-det').value.trim());
     for(var fi=1;fi<=4;fi++){
@@ -901,7 +927,7 @@ window.poSend=function(){
             return;
         }
         document.getElementById('po-rnro').textContent=d.nro_preorden;
-        document.getElementById('po-req').innerHTML='<strong>Equipo:</strong> '+d.equipo;
+        document.getElementById('po-req').innerHTML='<strong>Equipo:</strong> '+d.equipo+'<br><strong>Serie:</strong> '+document.getElementById('po-serie').value.trim();
         document.getElementById('po-rcor').textContent=document.getElementById('po-cor').value.trim();
         document.getElementById('po-sbar').style.display='none';
         for(var j=1;j<=5;j++){
@@ -935,6 +961,8 @@ window.poImprimir=function(){
     var sucNom=document.getElementById('po-suc-nom').textContent;
     var sucCiudad=document.getElementById('po-suc-ciudad').textContent;
     var codigo=document.getElementById('po-cod').value.trim();
+    var serie=document.getElementById('po-serie').value.trim();
+    var marca=document.getElementById('po-marca').value.trim();
     var equipo=document.getElementById('po-bdg').textContent.trim();
     var detalle=document.getElementById('po-det').value.trim();
     var ahora=new Date();
@@ -954,8 +982,9 @@ window.poImprimir=function(){
         '<table class="datos"><tr><td width="25%"><span class="lbl">Cliente</span>'+nombre+'</td><td width="25%"><span class="lbl">C.I / RUC</span>'+(ci||'-')+'</td><td width="25%"><span class="lbl">Teléfono</span>'+tel+'</td><td width="25%"><span class="lbl">Correo</span>'+correo+'</td></tr>'+
         '<tr><td><span class="lbl">Procedencia</span>'+procedencia+'</td><td><span class="lbl">Sucursal del Cliente</span>'+sucNom+'</td><td><span class="lbl">Motivo de Ingreso</span>Validación de Garantía</td><td><span class="lbl">Nro. Factura</span>'+fac+'</td></tr></table>'+
         '<div class="sec-titulo">Datos del Equipo</div>'+
-        '<table class="datos"><tr><td width="25%"><span class="lbl">Código</span>'+codigo+'</td><td width="25%"><span class="lbl">Equipo</span>'+equipo+'</td><td width="25%"><span class="lbl">Fecha Facturación</span>'+fechaFac+'</td><td width="25%"><span class="lbl">Sucursal de Atención</span>'+sucCiudad+'</td></tr>'+
-        '<tr><td colspan="4"><span class="lbl">Problema Reportado</span>'+detalle+'</td></tr></table>'+
+        '<table class="datos"><tr><td width="25%"><span class="lbl">Código</span>'+codigo+'</td><td width="25%"><span class="lbl">Marca</span>'+marca+'</td><td width="25%"><span class="lbl">Fecha Facturación</span>'+fechaFac+'</td><td width="25%"><span class="lbl">Sucursal de Atención</span>'+sucCiudad+'</td></tr>'+
+        '<tr><td colspan="4"><span class="lbl">Equipo</span>'+equipo+'</td></tr>'+
+        '<tr><td width="25%"><span class="lbl">Serie</span>'+serie+'</td><td colspan="3"><span class="lbl">Problema Reportado</span>'+detalle+'</td></tr></table>'+
         '<div style="border-top:1.5px solid #000;padding-top:4px;margin-top:6px;"><div class="condiciones-titulo">Condiciones</div><div class="condiciones">'+
         '<p><b>1. VALIDACIÓN GARANTÍA:</b> Los equipos que ingresen bajo esta condición deberán ser evaluados obligatoriamente por un técnico.</p>'+
         '<p><b>2. RESPALDO DE INFORMACIÓN:</b> El cliente es el único responsable de realizar el debido respaldo de toda la información contenida en su equipo.</p>'+
