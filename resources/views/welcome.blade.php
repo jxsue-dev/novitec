@@ -135,49 +135,49 @@ body { font-family: 'DM Sans', sans-serif; }
     <div class="absolute top-1/2 right-1/3 w-[300px] h-[300px] rounded-full blur-2xl pointer-events-none" style="background:radial-gradient(circle,rgba(16,185,129,.1),transparent 70%)"></div>
     <div class="absolute inset-0 pointer-events-none" style="background-image:linear-gradient(rgba(59,130,246,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.04) 1px,transparent 1px);background-size:60px 60px"></div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-5 md:px-8 pt-24 pb-14 md:pt-28 md:pb-18 lg:pt-32 lg:pb-24 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
+    <div class="relative z-10 max-w-7xl mx-auto px-5 md:px-8 pt-20 pb-8 md:pt-28 md:pb-16 lg:pt-32 lg:pb-24 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 lg:gap-16 items-center">
         <div>
-            <div class="inline-flex items-center gap-2 bg-white border border-blue-100 rounded-full px-4 py-1.5 mb-7 reveal shadow-sm">
-                <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+            <div class="inline-flex items-center gap-2 bg-white border border-blue-100 rounded-full px-3 py-1 md:px-4 md:py-1.5 mb-3 md:mb-7 reveal shadow-sm">
+                <span class="w-1.5 h-1.5 md:w-2 md:h-2 bg-blue-500 rounded-full animate-pulse"></span>
                 <span class="text-blue-700 text-xs font-medium tracking-widest uppercase">Novitecnología Cia. Ldta.</span>
             </div>
 
-            <h1 class="font-serif text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-5 md:mb-6 reveal d1 leading-tight text-slate-900">
+            <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-3 md:mb-6 reveal d1 leading-tight text-slate-900">
                 Servicios<br>que impulsan<br><span class="text-gradient">tu negocio</span>
             </h1>
 
-            <p class="text-slate-500 text-base max-w-md mb-8 reveal d2 leading-relaxed font-light">
+            <p class="text-slate-500 text-sm md:text-base max-w-md mb-4 md:mb-8 reveal d2 leading-relaxed font-light">
                 Reparamos computadores, celulares e impresoras. Soporte IT remoto y presencial, redes y CCTV para personas y empresas.
             </p>
 
             {{-- 50% OFF DESTACADO --}}
-            <div class="reveal d2 mb-8 flex">
+            <div class="reveal d2 mb-4 md:mb-8 flex">
                 <div class="relative">
-                    <div class="absolute -inset-1.5 rounded-2xl blur-md opacity-75" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)"></div>
-                    <div class="relative rounded-2xl p-0.5" style="background:linear-gradient(135deg,#d97706,#fbbf24,#d97706)">
-                        <div class="relative rounded-2xl px-4 py-3 flex items-center gap-3" style="background:linear-gradient(135deg,#1e1b4b,#1e3a5f)">
-                            <i class="fa-solid fa-gift text-2xl text-yellow-300"></i>
+                    <div class="absolute -inset-1 rounded-xl blur-md opacity-75" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)"></div>
+                    <div class="relative rounded-xl p-0.5" style="background:linear-gradient(135deg,#d97706,#fbbf24,#d97706)">
+                        <div class="relative rounded-xl px-3 py-2 flex items-center gap-2.5" style="background:linear-gradient(135deg,#1e1b4b,#1e3a5f)">
+                            <i class="fa-solid fa-gift text-lg md:text-2xl text-yellow-300 flex-shrink-0"></i>
                             <div>
-                                <span class="text-gold font-black block" style="font-size:1.8rem; line-height:1; font-family:'Playfair Display',serif;">50% OFF</span>
+                                <span class="text-gold font-black block" style="font-size:clamp(1.1rem,4vw,1.8rem);line-height:1;font-family:'DM Sans',sans-serif;">50% OFF</span>
                                 <span class="text-yellow-200 text-xs font-light">al registrarte</span>
                             </div>
-                            <div class="w-px h-8 bg-white/20"></div>
+                            <div class="w-px h-7 bg-white/20 flex-shrink-0"></div>
                             <a href="{{ route('register') }}"
-                               class="pulse-gold bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-bold text-xs px-3 py-2 rounded-lg transition-all hover:-translate-y-0.5 whitespace-nowrap text-center">
+                               class="pulse-gold bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-bold text-xs px-2.5 py-1.5 md:px-3 md:py-2 rounded-lg transition-all hover:-translate-y-0.5 whitespace-nowrap text-center flex-shrink-0">
                                 Quiero mi<br>descuento →
                             </a>
                         </div>
                     </div>
-                    <div class="badge-bounce absolute -top-3 -right-3 bg-red-500 text-white text-xs font-black px-2.5 py-1 rounded-full shadow-lg border-2 border-white">
+                    <div class="badge-bounce absolute -top-2.5 -right-2.5 bg-red-500 text-white text-xs font-black px-2 py-0.5 rounded-full shadow-lg border-2 border-white">
                         ¡NUEVO!
                     </div>
                 </div>
             </div>
 
-            <div class="flex items-center gap-5 md:gap-8 mt-6 md:mt-10 reveal d4">
+            <div class="flex items-center gap-5 md:gap-8 mt-4 md:mt-10 reveal d4">
                 @foreach([['12+','años exp.'],['80K+','equipos'],['100%','garantía']] as $s)
                 <div>
-                    <p class="text-xl md:text-2xl font-bold text-slate-900 font-serif">{{$s[0]}}</p>
+                    <p class="text-lg md:text-2xl font-bold text-slate-900 font-serif">{{$s[0]}}</p>
                     <p class="text-xs text-slate-400 font-light">{{$s[1]}}</p>
                 </div>
                 @endforeach
@@ -187,9 +187,9 @@ body { font-family: 'DM Sans', sans-serif; }
         <div class="reveal-right hidden md:flex items-center justify-center">
             <div class="relative group">
                 <div class="absolute -inset-6 bg-blue-100 rounded-3xl blur-2xl group-hover:bg-violet-100 transition-all duration-700"></div>
-                <img src="{{ asset('images/tiers.png') }}"
+                <img src="https://res.cloudinary.com/dobuneref/image/upload/v1782155254/certificaciones_kvy1a4.gif"
                      alt="Certificaciones Novitec"
-                     class="relative w-full max-w-md mx-auto float-anim drop-shadow-xl group-hover:scale-105 transition-transform duration-700">
+                     class="relative w-full max-w-md mx-auto drop-shadow-xl group-hover:scale-105 transition-transform duration-700">
             </div>
         </div>
     </div>
@@ -204,10 +204,10 @@ body { font-family: 'DM Sans', sans-serif; }
 <div class="bg-slate-900 border-y border-slate-800">
     <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-800">
         @foreach([['12+','Años de experiencia','fa-trophy'],['80K+','Equipos habilitados','fa-wrench'],['50K+','Cientes satisfechos','fa-laptop'],['100%','De garantia en servicios','fa-circle-check']] as $i=>$s)
-        <div class="reveal py-7 px-4 md:py-10 md:px-8 hover:bg-slate-800/50 transition-colors" style="transition-delay:{{$i*.1}}s">
-            <div class="text-lg md:text-xl mb-2 text-blue-400"><i class="fa-solid {{ $s[2] }}"></i></div>
-            <p class="font-serif text-2xl md:text-3xl font-bold text-white mb-1">{{$s[0]}}</p>
-            <p class="text-xs text-slate-400 font-light">{{$s[1]}}</p>
+        <div class="reveal py-5 px-3 md:py-10 md:px-8 hover:bg-slate-800/50 transition-colors" style="transition-delay:{{$i*.1}}s">
+            <div class="text-base md:text-xl mb-1 md:mb-2 text-blue-400"><i class="fa-solid {{ $s[2] }}"></i></div>
+            <p class="font-serif text-xl md:text-3xl font-bold text-white mb-0.5 md:mb-1">{{$s[0]}}</p>
+            <p class="text-xs text-slate-400 font-light leading-tight">{{$s[1]}}</p>
         </div>
         @endforeach
     </div>
