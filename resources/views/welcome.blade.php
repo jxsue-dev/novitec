@@ -187,7 +187,7 @@ body { font-family: 'DM Sans', sans-serif; }
         <div class="reveal-right hidden md:flex items-center justify-center">
             <div class="relative group">
                 <div class="absolute -inset-6 bg-blue-100 rounded-3xl blur-2xl group-hover:bg-violet-100 transition-all duration-700"></div>
-                <img src="https://res.cloudinary.com/dobuneref/image/upload/v1782155254/certificaciones_kvy1a4.gif"
+                <img src="https://res.cloudinary.com/dobuneref/image/upload/f_auto,q_auto:best,w_480/v1782155254/certificaciones_kvy1a4.gif"
                      alt="Certificaciones Novitec"
                      class="relative w-full max-w-md mx-auto drop-shadow-xl group-hover:scale-105 transition-transform duration-700">
             </div>
