@@ -134,8 +134,8 @@
 
 {{-- FOOTER --}}
 <footer style="background:linear-gradient(135deg,#020817 0%,#0c1a35 50%,#020817 100%);">
-    <div style="border-bottom:1px solid rgba(255,255,255,0.05); padding:4rem 2rem;">
-        <div style="max-width:1280px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:3rem;">
+    <div class="border-b border-white/5 py-14 md:py-16 px-5 md:px-8">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
 
             {{-- MARCA --}}
             <div>
@@ -203,8 +203,8 @@
     </div>
 
     {{-- FRANJA INFERIOR --}}
-    <div style="padding:1.5rem 2rem;">
-        <div style="max-width:1280px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+    <div class="py-6 px-5 md:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
             <p style="color:#475569; font-size:0.75rem; font-weight:300;">© 2026 Novitecnología Cia. Ltda. — Todos los derechos reservados.</p>
             <div style="display:flex; gap:1.5rem;">
                 <a href="{{ route('privacidad') }}" style="color:#475569; font-size:0.75rem; text-decoration:none;">Privacidad</a>

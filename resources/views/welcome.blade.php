@@ -128,21 +128,21 @@ body { font-family: 'DM Sans', sans-serif; }
 </style>
 
 {{-- HERO --}}
-<section class="relative min-h-screen flex items-center overflow-hidden" style="background:linear-gradient(135deg,#f0f4ff 0%,#e8f0fe 25%,#fdf4ff 50%,#f0f9ff 75%,#ecfdf5 100%);">
+<section class="relative overflow-hidden" style="background:linear-gradient(135deg,#f0f4ff 0%,#e8f0fe 25%,#fdf4ff 50%,#f0f9ff 75%,#ecfdf5 100%);">
 
     <div class="absolute top-0 right-0 w-[500px] h-[500px] rounded-full blur-3xl -translate-y-1/3 translate-x-1/4 pointer-events-none" style="background:radial-gradient(circle,rgba(139,92,246,.15),transparent 70%)"></div>
     <div class="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" style="background:radial-gradient(circle,rgba(59,130,246,.12),transparent 70%)"></div>
     <div class="absolute top-1/2 right-1/3 w-[300px] h-[300px] rounded-full blur-2xl pointer-events-none" style="background:radial-gradient(circle,rgba(16,185,129,.1),transparent 70%)"></div>
     <div class="absolute inset-0 pointer-events-none" style="background-image:linear-gradient(rgba(59,130,246,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.04) 1px,transparent 1px);background-size:60px 60px"></div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-8 py-36 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+    <div class="relative z-10 max-w-7xl mx-auto px-5 md:px-8 pt-24 pb-14 md:pt-28 md:pb-18 lg:pt-32 lg:pb-24 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
         <div>
             <div class="inline-flex items-center gap-2 bg-white border border-blue-100 rounded-full px-4 py-1.5 mb-7 reveal shadow-sm">
                 <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
                 <span class="text-blue-700 text-xs font-medium tracking-widest uppercase">Novitecnología Cia. Ldta.</span>
             </div>
 
-            <h1 class="font-serif text-6xl md:text-7xl font-bold mb-6 reveal d1 leading-tight text-slate-900">
+            <h1 class="font-serif text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-5 md:mb-6 reveal d1 leading-tight text-slate-900">
                 Servicios<br>que impulsan<br><span class="text-gradient">tu negocio</span>
             </h1>
 
@@ -174,17 +174,17 @@ body { font-family: 'DM Sans', sans-serif; }
                 </div>
             </div>
 
-            <div class="flex items-center gap-8 mt-10 reveal d4">
-                @foreach([['12+','años de experiencia'],['80K+','equipos habilitados'],['100%','garantía en servicios']] as $s)
+            <div class="flex items-center gap-5 md:gap-8 mt-6 md:mt-10 reveal d4">
+                @foreach([['12+','años exp.'],['80K+','equipos'],['100%','garantía']] as $s)
                 <div>
-                    <p class="text-2xl font-bold text-slate-900 font-serif">{{$s[0]}}</p>
+                    <p class="text-xl md:text-2xl font-bold text-slate-900 font-serif">{{$s[0]}}</p>
                     <p class="text-xs text-slate-400 font-light">{{$s[1]}}</p>
                 </div>
                 @endforeach
             </div>
         </div>
 
-        <div class="reveal-right flex items-center justify-center">
+        <div class="reveal-right hidden md:flex items-center justify-center">
             <div class="relative group">
                 <div class="absolute -inset-6 bg-blue-100 rounded-3xl blur-2xl group-hover:bg-violet-100 transition-all duration-700"></div>
                 <img src="{{ asset('images/tiers.png') }}"
@@ -204,9 +204,9 @@ body { font-family: 'DM Sans', sans-serif; }
 <div class="bg-slate-900 border-y border-slate-800">
     <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-800">
         @foreach([['12+','Años de experiencia','fa-trophy'],['80K+','Equipos habilitados','fa-wrench'],['50K+','Cientes satisfechos','fa-laptop'],['100%','De garantia en servicios','fa-circle-check']] as $i=>$s)
-        <div class="reveal py-10 px-8 hover:bg-slate-800/50 transition-colors" style="transition-delay:{{$i*.1}}s">
-            <div class="text-xl mb-2 text-blue-400"><i class="fa-solid {{ $s[2] }}"></i></div>
-            <p class="font-serif text-3xl font-bold text-white mb-1">{{$s[0]}}</p>
+        <div class="reveal py-7 px-4 md:py-10 md:px-8 hover:bg-slate-800/50 transition-colors" style="transition-delay:{{$i*.1}}s">
+            <div class="text-lg md:text-xl mb-2 text-blue-400"><i class="fa-solid {{ $s[2] }}"></i></div>
+            <p class="font-serif text-2xl md:text-3xl font-bold text-white mb-1">{{$s[0]}}</p>
             <p class="text-xs text-slate-400 font-light">{{$s[1]}}</p>
         </div>
         @endforeach
@@ -214,11 +214,11 @@ body { font-family: 'DM Sans', sans-serif; }
 </div>
 
 {{-- SERVICIOS --}}
-<section id="servicios" class="py-24 px-6" style="background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);">
+<section id="servicios" class="py-14 px-4 md:py-24 md:px-6" style="background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);">
     <div class="max-w-7xl mx-auto">
         <div class="max-w-xl mb-14">
             <p class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3 reveal">Lo que hacemos</p>
-            <h2 class="font-serif text-5xl font-bold text-slate-900 mb-4 reveal d1">Nuestros servicios</h2>
+            <h2 class="font-serif text-3xl md:text-5xl font-bold text-slate-900 mb-4 reveal d1">Nuestros servicios</h2>
             <p class="text-slate-500 font-light reveal d2 leading-relaxed">Soluciones tecnológicas completas para personas y empresas — con garantía en cada trabajo.</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -257,11 +257,11 @@ body { font-family: 'DM Sans', sans-serif; }
 </section>
 
 {{-- PROCESO --}}
-<section class="py-24 px-6 bg-white">
+<section class="py-14 px-4 md:py-24 md:px-6 bg-white">
     <div class="max-w-7xl mx-auto">
         <div class="text-center max-w-xl mx-auto mb-14">
             <p class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3 reveal">Cómo trabajamos</p>
-            <h2 class="font-serif text-5xl font-bold text-slate-900 mb-4 reveal d1">Simple y transparente</h2>
+            <h2 class="font-serif text-3xl md:text-5xl font-bold text-slate-900 mb-4 reveal d1">Simple y transparente</h2>
             <p class="text-slate-500 font-light reveal d2">Siempre sabrás qué pasa con tu equipo.</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -285,7 +285,7 @@ body { font-family: 'DM Sans', sans-serif; }
 </section>
 
 {{-- 50% OFF --}}
-<section class="py-24 px-6 relative overflow-hidden" style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);">
+<section class="py-14 px-4 md:py-24 md:px-6 relative overflow-hidden" style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);">
     <div class="absolute inset-0 pointer-events-none" style="background-image:linear-gradient(rgba(139,92,246,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,.06) 1px,transparent 1px);background-size:50px 50px"></div>
     <div class="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none" style="background:radial-gradient(circle,rgba(139,92,246,.2),transparent 70%)"></div>
     <div class="absolute bottom-0 left-0 w-72 h-72 rounded-full blur-3xl pointer-events-none" style="background:radial-gradient(circle,rgba(59,130,246,.15),transparent 70%)"></div>
@@ -297,7 +297,7 @@ body { font-family: 'DM Sans', sans-serif; }
                 <span class="w-1.5 h-1.5 bg-yellow-400 rounded-full animate-pulse"></span>
                 Beneficio exclusivo
             </span>
-            <h2 class="font-serif text-5xl font-bold text-white leading-tight mb-6">
+            <h2 class="font-serif text-3xl md:text-5xl font-bold text-white leading-tight mb-6">
                 Obtén un <span class="text-yellow-400">50% OFF</span> en tu próximo servicio
             </h2>
             <p class="text-slate-400 font-light leading-relaxed mb-8 max-w-md">Regístrate y accede a descuentos exclusivos, seguimiento en tiempo real y soporte prioritario.</p>
@@ -361,7 +361,7 @@ body { font-family: 'DM Sans', sans-serif; }
 </section>
 
 {{-- POR QUÉ NOSOTROS --}}
-<section id="nosotros" class="py-24 px-6" style="background:linear-gradient(135deg,#faf5ff 0%,#f0f9ff 50%,#fff 100%);">
+<section id="nosotros" class="py-14 px-4 md:py-24 md:px-6" style="background:linear-gradient(135deg,#faf5ff 0%,#f0f9ff 50%,#fff 100%);">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
 
         <div class="reveal-left flex items-center justify-center order-2 md:order-1">
@@ -395,7 +395,7 @@ body { font-family: 'DM Sans', sans-serif; }
 
         <div class="order-1 md:order-2">
             <p class="text-xs font-semibold tracking-widest uppercase text-violet-600 mb-3 reveal-right">Por qué Novitec</p>
-            <h2 class="font-serif text-5xl font-bold text-slate-900 mb-3 reveal-right d1 leading-tight">Rápido, confiable<br>y con garantía</h2>
+            <h2 class="font-serif text-3xl md:text-5xl font-bold text-slate-900 mb-3 reveal-right d1 leading-tight">Rápido, confiable<br>y con garantía</h2>
             <p class="text-slate-500 font-light mb-10 reveal-right d2">Más de 10 años resolviendo problemas tecnológicos en Quito.</p>
             <div class="space-y-5">
                 @foreach([
@@ -418,11 +418,11 @@ body { font-family: 'DM Sans', sans-serif; }
 </section>
 
 {{-- TESTIMONIOS --}}
-<section class="py-24 px-6 bg-slate-900">
+<section class="py-14 px-4 md:py-24 md:px-6 bg-slate-900">
     <div class="max-w-7xl mx-auto">
         <div class="text-center max-w-xl mx-auto mb-14">
             <p class="text-xs font-semibold tracking-widest uppercase text-violet-400 mb-3 reveal">Testimonios</p>
-            <h2 class="font-serif text-5xl font-bold text-white mb-4 reveal d1">Lo que dicen<br>nuestros clientes</h2>
+            <h2 class="font-serif text-3xl md:text-5xl font-bold text-white mb-4 reveal d1">Lo que dicen<br>nuestros clientes</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             @foreach([
@@ -447,11 +447,11 @@ body { font-family: 'DM Sans', sans-serif; }
 </section>
 
 {{-- CONTACTO --}}
-<section id="contacto" class="py-24 px-6" style="background:linear-gradient(135deg,#eff6ff 0%,#f8fafc 100%);">
+<section id="contacto" class="py-14 px-4 md:py-24 md:px-6" style="background:linear-gradient(135deg,#eff6ff 0%,#f8fafc 100%);">
     <div class="max-w-5xl mx-auto">
         <div class="text-center mb-14">
             <p class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3 reveal">Encuéntranos</p>
-            <h2 class="font-serif text-5xl font-bold text-slate-900 mb-4 reveal d1">¿Tu equipo tiene<br>un problema?</h2>
+            <h2 class="font-serif text-3xl md:text-5xl font-bold text-slate-900 mb-4 reveal d1">¿Tu equipo tiene<br>un problema?</h2>
             <p class="text-slate-500 font-light reveal d2">Diagnóstico y atención rápida garantizada.</p>
         </div>
         @php $branchCols = count($branches) > 1 ? '2' : '1'; @endphp

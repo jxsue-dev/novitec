@@ -19,11 +19,11 @@ body { font-family: 'Inter', sans-serif; }
 </style>
 
 {{-- HERO --}}
-<section class="relative pt-36 pb-24 px-6 overflow-hidden" style="background:linear-gradient(135deg,#020817 0%,#0c1a35 50%,#020817 100%);">
+<section class="relative pt-24 pb-14 md:pt-32 md:pb-20 px-5 md:px-6 overflow-hidden" style="background:linear-gradient(135deg,#020817 0%,#0c1a35 50%,#020817 100%);">
     <div class="absolute inset-0 pointer-events-none" style="background-image:linear-gradient(rgba(59,130,246,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.04) 1px,transparent 1px);background-size:60px 60px"></div>
     <div class="relative max-w-4xl mx-auto text-center">
         <p class="text-xs font-semibold tracking-widest uppercase text-blue-400 mb-4 reveal">Lo que hacemos</p>
-        <h1 class="font-serif text-5xl md:text-6xl font-bold text-white mb-6 reveal leading-tight">
+        <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 reveal leading-tight">
             Soluciones tecnológicas<br>
             <span style="background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">para cada necesidad</span>
         </h1>
@@ -34,7 +34,7 @@ body { font-family: 'Inter', sans-serif; }
 </section>
 
 {{-- BUSCADOR Y FILTROS --}}
-<section class="py-10 px-6 bg-white border-b border-slate-100 sticky top-16 z-20">
+<section class="py-8 px-4 md:py-10 md:px-6 bg-white border-b border-slate-100 sticky top-16 z-20">
     <div class="max-w-7xl mx-auto">
         <form method="GET" action="{{ route('servicios') }}" id="filterForm">
             {{-- BUSCADOR --}}
@@ -82,7 +82,7 @@ body { font-family: 'Inter', sans-serif; }
 </section>
 
 {{-- CATÁLOGO --}}
-<section class="py-16 px-6 bg-white">
+<section class="py-10 px-4 md:py-16 md:px-6 bg-white">
     <div class="max-w-7xl mx-auto">
 
         @php
@@ -168,7 +168,7 @@ body { font-family: 'Inter', sans-serif; }
 </section>
 
 {{-- GARANTÍA --}}
-<section class="py-20 px-6 bg-slate-900">
+<section class="py-12 px-4 md:py-20 md:px-6 bg-slate-900">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
         @foreach([
             ['fa-magnifying-glass', 'Diagnóstico incluido', 'Revisamos tu equipo e informamos el problema y costo antes de proceder.'],
@@ -187,9 +187,9 @@ body { font-family: 'Inter', sans-serif; }
 </section>
 
 {{-- CTA --}}
-<section class="py-20 px-6" style="background:linear-gradient(135deg,#1d4ed8 0%,#4f46e5 50%,#7c3aed 100%);">
+<section class="py-12 px-4 md:py-20 md:px-6" style="background:linear-gradient(135deg,#1d4ed8 0%,#4f46e5 50%,#7c3aed 100%);">
     <div class="max-w-3xl mx-auto text-center">
-        <h2 class="font-serif text-4xl font-bold text-white mb-4 reveal">¿Necesitas alguno de estos servicios?</h2>
+        <h2 class="font-serif text-2xl md:text-4xl font-bold text-white mb-4 reveal">¿Necesitas alguno de estos servicios?</h2>
         <p class="text-blue-100 font-light mb-10 reveal">Contáctanos hoy — atención rápida y garantizada.</p>
         <div class="flex flex-col sm:flex-row justify-center gap-4 reveal">
             <a href="/contacto" class="bg-white text-blue-700 hover:bg-yellow-300 hover:text-blue-900 text-sm font-semibold px-8 py-3.5 rounded-xl transition-all">

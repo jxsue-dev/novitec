@@ -14,10 +14,17 @@ body { font-family: 'Inter', sans-serif; }
 .star-btn:hover { transform: scale(1.2); }
 .review-card { background:#fff; border:1px solid #e2e8f0; border-radius:20px; padding:24px; transition:all .3s ease; }
 .review-card:hover { border-color:#bfdbfe; box-shadow:0 8px 24px rgba(59,130,246,.08); transform:translateY(-2px); }
+.r-hero { padding:140px 24px 80px; }
+.r-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+@media (max-width:640px) {
+    .r-hero { padding:90px 20px 50px; }
+    .r-form-grid { grid-template-columns:1fr; }
+    .r-section { padding:48px 20px !important; }
+}
 </style>
 
 {{-- HERO --}}
-<section style="background:linear-gradient(135deg,#020817 0%,#0c1a35 50%,#020817 100%);padding:140px 24px 80px;position:relative;overflow:hidden;">
+<section class="r-hero" style="background:linear-gradient(135deg,#020817 0%,#0c1a35 50%,#020817 100%);position:relative;overflow:hidden;">
     <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(59,130,246,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;"></div>
     <div style="max-width:700px;margin:0 auto;text-align:center;position:relative;">
         <p style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#60a5fa;margin-bottom:16px;" class="reveal">Lo que dicen nuestros clientes</p>
@@ -32,7 +39,7 @@ body { font-family: 'Inter', sans-serif; }
 
 {{-- RESEÑAS DESTACADAS --}}
 @if($featured->count() > 0)
-<section style="padding:80px 24px;background:#f8fafc;">
+<section class="r-section" style="padding:80px 24px;background:#f8fafc;">
     <div style="max-width:1100px;margin:0 auto;">
         <h2 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#0f172a;margin-bottom:8px;text-align:center;" class="reveal">
             Reseñas destacadas
@@ -73,7 +80,7 @@ body { font-family: 'Inter', sans-serif; }
 
 {{-- TODAS LAS RESEÑAS --}}
 @if($all->count() > 0)
-<section style="padding:80px 24px;background:#fff;">
+<section class="r-section" style="padding:80px 24px;background:#fff;">
     <div style="max-width:1100px;margin:0 auto;">
         <h2 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#0f172a;margin-bottom:8px;text-align:center;" class="reveal">
             Todas las reseñas
@@ -110,7 +117,7 @@ body { font-family: 'Inter', sans-serif; }
 @endif
 
 {{-- FORMULARIO --}}
-<section style="padding:80px 24px;background:#f8fafc;">
+<section class="r-section" style="padding:80px 24px;background:#f8fafc;">
     <div style="max-width:600px;margin:0 auto;">
         <h2 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#0f172a;margin-bottom:8px;text-align:center;" class="reveal">
             Deja tu reseña
@@ -127,7 +134,7 @@ body { font-family: 'Inter', sans-serif; }
               style="background:#fff;border:1px solid #e2e8f0;border-radius:24px;padding:32px;" class="reveal">
             @csrf
 
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+            <div class="r-form-grid">
                 <div>
                     <label style="display:block;font-size:12px;color:#64748b;margin-bottom:6px;font-weight:500;">Nombre</label>
                     <input type="text" name="name" required value="{{ old('name') }}"

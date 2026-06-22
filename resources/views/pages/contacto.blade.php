@@ -19,13 +19,13 @@ body { font-family: 'Inter', sans-serif; }
 </style>
 
 {{-- HERO --}}
-<section class="relative pt-36 pb-24 px-6 overflow-hidden" style="background:linear-gradient(135deg,#020817 0%,#0c1a35 50%,#020817 100%);">
+<section class="relative pt-24 pb-14 md:pt-32 md:pb-20 px-5 md:px-6 overflow-hidden" style="background:linear-gradient(135deg,#020817 0%,#0c1a35 50%,#020817 100%);">
     <div class="absolute inset-0 pointer-events-none" style="background-image:linear-gradient(rgba(59,130,246,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.04) 1px,transparent 1px);background-size:60px 60px"></div>
     <div class="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none" style="background:radial-gradient(circle,rgba(59,130,246,.15),transparent 70%)"></div>
 
     <div class="relative max-w-4xl mx-auto text-center">
         <p class="text-xs font-semibold tracking-widest uppercase text-blue-400 mb-4 reveal">Estamos aquí para ayudarte</p>
-        <h1 class="font-serif text-5xl md:text-6xl font-bold text-white mb-6 reveal d1 leading-tight">
+        <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 reveal d1 leading-tight">
             Contáctanos
         </h1>
         <p class="text-slate-400 text-base font-light max-w-2xl mx-auto reveal d2 leading-relaxed">
@@ -35,7 +35,7 @@ body { font-family: 'Inter', sans-serif; }
 </section>
 
 {{-- CANALES DE CONTACTO --}}
-<section class="py-16 px-6 bg-white">
+<section class="py-10 px-4 md:py-16 md:px-6 bg-white">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
         @foreach([
             ['fa-solid fa-phone', 'Llámanos', 'Atención telefónica en horario de oficina.', $branches->first()->phone ?? '', 'tel:' . ($branches->first()->phone ?? '')],
@@ -61,8 +61,8 @@ body { font-family: 'Inter', sans-serif; }
 </section>
 
 {{-- SUCURSALES + FORMULARIO --}}
-<section class="py-16 px-6" style="background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+<section class="py-10 px-4 md:py-16 md:px-6" style="background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
 
         {{-- SUCURSALES --}}
         <div class="reveal-left">
@@ -113,7 +113,7 @@ body { font-family: 'Inter', sans-serif; }
                 @endif
                 <form method="POST" action="{{ route('contacto.send') }}" class="space-y-4">
                     @csrf
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs text-slate-500 mb-1.5">Nombre *</label>
                             <input type="text" name="name" required value="{{ old('name') }}"
@@ -189,7 +189,7 @@ body { font-family: 'Inter', sans-serif; }
 </div>
 
 {{-- REDES SOCIALES --}}
-<section class="py-16 px-6 bg-white">
+<section class="py-10 px-4 md:py-16 md:px-6 bg-white">
     <div class="max-w-3xl mx-auto text-center">
         <p class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3 reveal">Síguenos</p>
         <h2 class="font-serif text-3xl font-bold text-slate-900 mb-8 reveal d1">Encuéntranos en redes</h2>

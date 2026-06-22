@@ -19,14 +19,14 @@ body { font-family: 'Inter', sans-serif; }
 </style>
 
 {{-- HERO --}}
-<section class="relative pt-36 pb-24 px-6 overflow-hidden" style="background:linear-gradient(135deg,#020817 0%,#0c1a35 50%,#020817 100%);">
+<section class="relative pt-24 pb-14 md:pt-32 md:pb-20 px-5 md:px-6 overflow-hidden" style="background:linear-gradient(135deg,#020817 0%,#0c1a35 50%,#020817 100%);">
     <div class="absolute inset-0 pointer-events-none" style="background-image:linear-gradient(rgba(59,130,246,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.04) 1px,transparent 1px);background-size:60px 60px"></div>
     <div class="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none" style="background:radial-gradient(circle,rgba(139,92,246,.15),transparent 70%)"></div>
     <div class="absolute bottom-0 left-0 w-72 h-72 rounded-full blur-3xl pointer-events-none" style="background:radial-gradient(circle,rgba(59,130,246,.1),transparent 70%)"></div>
 
     <div class="relative max-w-4xl mx-auto text-center">
         <p class="text-xs font-semibold tracking-widest uppercase text-blue-400 mb-4 reveal">Novitecnología Cia. Ldta.</p>
-        <h1 class="font-serif text-5xl md:text-6xl font-bold text-white mb-6 reveal d1 leading-tight">
+        <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 reveal d1 leading-tight">
             Más de una década<br>resolviendo lo que<br><span style="background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">otros no pueden</span>
         </h1>
         <p class="text-slate-400 text-base font-light max-w-2xl mx-auto reveal d2 leading-relaxed">
@@ -36,7 +36,7 @@ body { font-family: 'Inter', sans-serif; }
 </section>
 
 {{-- EQUIPO --}}
-<section class="py-24 px-6 bg-white overflow-hidden">
+<section class="py-14 px-4 md:py-24 md:px-6 bg-white overflow-hidden">
     <div class="max-w-7xl mx-auto">
         <div class="text-center max-w-xl mx-auto mb-16">
             <p class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3 reveal">Las personas detrás</p>
@@ -90,7 +90,7 @@ body { font-family: 'Inter', sans-serif; }
 </section>
 
 {{-- MISIÓN Y VISIÓN --}}
-<section class="py-24 px-6" style="background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);">
+<section class="py-14 px-4 md:py-24 md:px-6" style="background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
         <div class="reveal-left">
             <div class="w-12 h-12 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-center text-2xl mb-6 text-blue-600"><i class="fa-solid fa-bullseye"></i></div>
@@ -110,7 +110,7 @@ body { font-family: 'Inter', sans-serif; }
 </section>
 
 {{-- VALORES --}}
-<section class="py-24 px-6 bg-white">
+<section class="py-14 px-4 md:py-24 md:px-6 bg-white">
     <div class="max-w-7xl mx-auto">
         <div class="text-center max-w-xl mx-auto mb-16">
             <p class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3 reveal">Lo que nos define</p>
@@ -136,7 +136,7 @@ body { font-family: 'Inter', sans-serif; }
 </section>
 
 {{-- STATS --}}
-<section class="py-20 px-6" style="background:linear-gradient(135deg,#020817 0%,#0c1a35 50%,#020817 100%);">
+<section class="py-12 px-4 md:py-20 md:px-6" style="background:linear-gradient(135deg,#020817 0%,#0c1a35 50%,#020817 100%);">
     <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
         @foreach([
             ['10+', 'Años de experiencia'],
@@ -153,7 +153,7 @@ body { font-family: 'Inter', sans-serif; }
 </section>
 
 {{-- SUCURSALES --}}
-<section id="sucursales" class="py-24 px-6" style="background:linear-gradient(135deg,#eff6ff 0%,#f8fafc 100%);">
+<section id="sucursales" class="py-14 px-4 md:py-24 md:px-6" style="background:linear-gradient(135deg,#eff6ff 0%,#f8fafc 100%);">
     <div class="max-w-5xl mx-auto">
         <div class="text-center mb-16">
             <p class="text-xs font-semibold tracking-widest uppercase text-blue-600 mb-3 reveal">Dónde estamos</p>
@@ -186,9 +186,9 @@ body { font-family: 'Inter', sans-serif; }
 </section>
 
 {{-- CTA --}}
-<section class="py-20 px-6" style="background:linear-gradient(135deg,#1d4ed8 0%,#4f46e5 50%,#7c3aed 100%);">
+<section class="py-12 px-4 md:py-20 md:px-6" style="background:linear-gradient(135deg,#1d4ed8 0%,#4f46e5 50%,#7c3aed 100%);">
     <div class="max-w-3xl mx-auto text-center">
-        <h2 class="font-serif text-4xl font-bold text-white mb-4 reveal">¿Listo para trabajar juntos?</h2>
+        <h2 class="font-serif text-2xl md:text-4xl font-bold text-white mb-4 reveal">¿Listo para trabajar juntos?</h2>
         <p class="text-blue-100 font-light mb-10 reveal d1">Cuéntanos tu problema y lo resolvemos.</p>
         <div class="flex flex-col sm:flex-row justify-center gap-4 reveal d2">
             <a href="{{ route('contacto') }}" class="bg-white text-blue-700 hover:bg-yellow-300 hover:text-blue-900 text-sm font-semibold px-8 py-3.5 rounded-xl transition-all">
