@@ -36,8 +36,12 @@ return [
     ],
 
     'turnstile' => [
-        'site' => env('TURNSTILE_SITE_KEY'),
+        'site'   => env('TURNSTILE_SITE_KEY'),
         'secret' => env('TURNSTILE_SECRET_KEY'),
+    ],
+
+    'grok' => [
+        'api_key' => env('GROK_API_KEY'),
     ],
 
 ];

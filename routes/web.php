@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\SocialLinkController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\PageController;
 
 Route::post('/garantias/consulta', [PageController::class, 'consultaGarantia'])->middleware('throttle:consulta')->name('garantias.consulta');
@@ -55,6 +56,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::prefix('chat')->middleware(['auth'])->group(function () {
+    Route::get('/', [ChatController::class, 'index'])->name('chat.index');
+    Route::post('/new', [ChatController::class, 'store'])->name('chat.new');
+    Route::get('/{conversation}', [ChatController::class, 'show'])->name('chat.show');
+    Route::post('/{conversation}/message', [ChatController::class, 'sendMessage'])->name('chat.message');
+    Route::delete('/{conversation}', [ChatController::class, 'destroy'])->name('chat.destroy');
 });
 
 Route::prefix('mi-cuenta')->middleware(['auth'])->group(function () {

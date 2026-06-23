@@ -47,6 +47,11 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
+    public function conversations()
+    {
+        return $this->hasMany(Conversation::class);
+    }
+
     public function getFullNameAttribute(): string
     {
         return IdentityDocument::fullName($this->nombres, $this->apellidos) ?: (string) $this->name;
