@@ -10,6 +10,10 @@ class Conversation extends Model
 {
     protected $fillable = ['user_id', 'title'];
 
+    protected $casts = [
+        'title' => 'encrypted',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

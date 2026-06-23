@@ -9,6 +9,10 @@ class Message extends Model
 {
     protected $fillable = ['conversation_id', 'role', 'content'];
 
+    protected $casts = [
+        'content' => 'encrypted',
+    ];
+
     public function conversation(): BelongsTo
     {
         return $this->belongsTo(Conversation::class);
