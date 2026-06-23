@@ -78,7 +78,100 @@
             @endforelse
         </div>
 
+        {{-- SUGGESTIONS BOX --}}
+        <div class="mt-8 bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
+                    <i class="fa-solid fa-lightbulb text-sm"></i>
+                </div>
+                <div>
+                    <h2 class="text-sm font-semibold text-slate-900">Buzón de sugerencias</h2>
+                    <p class="text-xs text-slate-400 font-light">Ayúdanos a mejorar nuestro servicio técnico</p>
+                </div>
+            </div>
+            
+            <form id="sugerenciaForm" method="POST" action="{{ route('client.sugerencia.send') }}">
+                @csrf
+                <div class="mb-4">
+                    <label for="texto_sugerencia" class="block text-xs text-slate-500 mb-1.5">Escribe tu sugerencia, reclamo o comentario:</label>
+                    <textarea id="texto_sugerencia" name="texto" rows="4" required minlength="10"
+                              placeholder="Escribe aquí tu sugerencia..."
+                              class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors resize-none"></textarea>
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                    <span class="text-[11px] text-slate-400 font-light">Se enviará al administrador máster del sistema.</span>
+                    <button type="submit" id="btnSubmitSugerencia"
+                            class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition-all shadow-sm flex items-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Enviar sugerencia
+                    </button>
+                </div>
+            </form>
+            <div id="sugerenciaSuccess" class="hidden mt-4 bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs px-4 py-3 rounded-xl flex items-center gap-2">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>¡Gracias! Tu sugerencia ha sido enviada con éxito.</span>
+            </div>
+            <div id="sugerenciaError" class="hidden mt-4 bg-red-50 border border-red-100 text-red-700 text-xs px-4 py-3 rounded-xl flex items-center gap-2">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span id="sugerenciaErrorText">Ocurrió un error al enviar la sugerencia. Intenta nuevamente.</span>
+            </div>
+        </div>
+
     </div>
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('sugerenciaForm');
+    const successDiv = document.getElementById('sugerenciaSuccess');
+    const errorDiv = document.getElementById('sugerenciaError');
+    const errorText = document.getElementById('sugerenciaErrorText');
+    const btn = document.getElementById('btnSubmitSugerencia');
+
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            btn.disabled = true;
+            const originalBtnHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+            
+            successDiv.classList.add('hidden');
+            errorDiv.classList.add('hidden');
+
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(response => response.json().then(data => ({ status: response.status, body: data })))
+            .then(res => {
+                btn.disabled = false;
+                btn.innerHTML = originalBtnHtml;
+                
+                if (res.status === 200 && res.body.ok) {
+                    successDiv.classList.remove('hidden');
+                    form.reset();
+                } else {
+                    errorText.textContent = res.body.error || 'Ocurrió un error al enviar la sugerencia.';
+                    errorDiv.classList.remove('hidden');
+                }
+            })
+            .catch(err => {
+                btn.disabled = false;
+                btn.innerHTML = originalBtnHtml;
+                errorText.textContent = 'Error de conexión. Por favor intenta nuevamente.';
+                errorDiv.classList.remove('hidden');
+            });
+        });
+    }
+});
+</script>
+@endpush

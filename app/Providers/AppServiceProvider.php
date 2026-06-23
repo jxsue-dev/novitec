@@ -17,5 +17,9 @@ class AppServiceProvider extends ServiceProvider
             $view->with('branches', Branch::where('active', true)->orderBy('order')->get());
             $view->with('socials', SocialLink::where('active', true)->orderBy('order')->get());
         });
+
+        \Illuminate\Support\Facades\RateLimiter::for('consulta', function (\Illuminate\Http\Request $request) {
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(5)->by($request->user()?->id ?: $request->ip());
+        });
     }
 }

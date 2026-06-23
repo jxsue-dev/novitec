@@ -17,7 +17,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="md:col-span-1">
+            <div class="md:col-span-1 space-y-6">
                 <div class="bg-white border border-slate-100 rounded-2xl p-6 text-center">
                     <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4">
                         {{ substr($user->full_name, 0, 1) }}
@@ -45,6 +45,68 @@
                             <p class="text-xs text-slate-400 font-light">Miembro desde</p>
                             <p class="text-slate-900 text-sm font-medium">{{ $user->created_at->format('d/m/Y') }}</p>
                         </div>
+                    </div>
+                </div>
+
+                {{-- CARD DE MEMBRESÍA Y DESCUENTOS --}}
+                @php
+                    $years = max(0, (int) $user->created_at->diffInYears(now()));
+                    $discountPercent = min(20, $years * 5);
+                    $nextAnniversary = $user->created_at->copy()->addYears($years + 1);
+                    $daysToNext = max(1, (int) now()->diffInDays($nextAnniversary, false));
+                @endphp
+                <div class="bg-white border border-slate-100 rounded-2xl p-6 text-center">
+                    <div class="flex items-center justify-between gap-2 mb-6 border-b border-slate-100 pb-4">
+                        <div class="text-left">
+                            <span class="text-[10px] font-bold tracking-widest uppercase text-blue-600 block">Club Novitec</span>
+                            <span class="text-[11px] text-slate-400 font-light">Programa de Lealtad</span>
+                        </div>
+                        <span class="bg-blue-50 text-blue-600 border border-blue-100 text-[10px] font-semibold px-2.5 py-1 rounded-full">
+                            Fidelidad
+                        </span>
+                    </div>
+                    
+                    <div class="space-y-4 text-left">
+                        <div>
+                            <p class="text-xs text-slate-400 font-light">Tiempo de membresía</p>
+                            <p class="text-slate-900 text-sm font-semibold mt-0.5">
+                                @if($years == 0)
+                                    Primer año como miembro
+                                @elseif($years == 1)
+                                    1 año de antigüedad
+                                @else
+                                    {{ $years }} años de antigüedad
+                                @endif
+                            </p>
+                        </div>
+
+                        <div>
+                            <p class="text-xs text-slate-400 font-light">Descuento acumulado</p>
+                            <div class="flex items-baseline gap-1 mt-0.5">
+                                <span class="text-3xl font-bold tracking-tight text-blue-600">{{ $discountPercent }}%</span>
+                                <span class="text-xs text-slate-500 font-medium">de descuento en tus órdenes</span>
+                            </div>
+                        </div>
+
+                        @if($discountPercent < 20)
+                            <div class="pt-4 border-t border-slate-100">
+                                <div class="rounded-xl p-3 flex items-start gap-2" style="background-color: rgba(239, 246, 255, 0.5); border: 1px solid rgba(191, 219, 254, 0.5);">
+                                    <i class="fa-solid fa-gift text-blue-500 mt-0.5 text-xs"></i>
+                                    <p class="text-[11px] text-slate-600 leading-relaxed font-light">
+                                        Faltan <strong>{{ $daysToNext }}</strong> días para obtener el <strong>{{ $discountPercent + 5 }}%</strong> de descuento por antigüedad.
+                                    </p>
+                                </div>
+                            </div>
+                        @else
+                            <div class="pt-4 border-t border-slate-100">
+                                <div class="rounded-xl p-3 flex items-start gap-2" style="background-color: rgba(240, 253, 244, 1); border: 1px solid rgba(187, 247, 208, 1);">
+                                    <i class="fa-solid fa-circle-check text-emerald-600 mt-0.5 text-xs"></i>
+                                    <p class="text-[11px] text-emerald-700 leading-relaxed font-light">
+                                        ¡Has alcanzado el límite máximo del <strong>20%</strong> de descuento por antigüedad!
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

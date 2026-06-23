@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Branch;
 use App\Models\SocialLink;
 use App\Models\Setting;
+use App\Rules\TurnstileRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -86,10 +87,16 @@ class PageController extends Controller
 
         public function consultaGarantia(Request $request)
     {
-        $request->validate([
+        $rules = [
             'q'    => ['required', 'string'],
-            'tipo' => ['required', 'in:nro_orden,identificacion'],
-        ]);
+            'tipo' => ['required', 'in:nro_orden,identificacion,serie'],
+        ];
+
+        if (config('services.turnstile.secret')) {
+            $rules['cf-turnstile-response'] = ['required', new TurnstileRule()];
+        }
+
+        $request->validate($rules);
 
         $q    = trim($request->q);
         $tipo = $request->tipo;
@@ -113,6 +120,8 @@ class PageController extends Controller
 
             if ($tipo === 'nro_orden') {
                 $query->where('nro_orden', 'like', '%' . $q . '%');
+            } elseif ($tipo === 'serie') {
+                $query->where('serie', 'like', '%' . $q . '%');
             } else {
                 $query->where('identificacion', $q);
             }

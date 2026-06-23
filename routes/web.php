@@ -18,7 +18,7 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\PageController;
 
-Route::post('/garantias/consulta', [PageController::class, 'consultaGarantia'])->middleware('throttle:15,1')->name('garantias.consulta');
+Route::post('/garantias/consulta', [PageController::class, 'consultaGarantia'])->middleware('throttle:consulta')->name('garantias.consulta');
 Route::get('/garantias', [PageController::class, 'garantias'])->name('garantias');
 Route::get('/soporte-autorizado', [PageController::class, 'soporteAutorizado'])->name('soporte-autorizado');
 Route::post('/contacto', [PageController::class, 'sendContacto'])->middleware('throttle:5,1')->name('contacto.send');
@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
 Route::prefix('mi-cuenta')->middleware(['auth'])->group(function () {
     Route::get('/ordenes', [ClientOrderController::class, 'index'])->name('client.orders');
     Route::get('/ordenes/{nro_orden}', [ClientOrderController::class, 'show'])->name('client.order.show');
+    Route::post('/sugerencia', [ClientOrderController::class, 'sendSugerencia'])->name('client.sugerencia.send');
 });
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {

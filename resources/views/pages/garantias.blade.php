@@ -4,6 +4,10 @@
 
 @section('content')
 
+@if(config('services.turnstile.site'))
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+@endif
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
@@ -450,8 +454,14 @@ body { font-family:var(--fb); }
                 <button type="button" class="g-tab" onclick="setTipo('identificacion',this)">
                     <i class="fa-solid fa-id-card"></i> Cédula / RUC
                 </button>
+                <button type="button" class="g-tab" onclick="setTipo('serie',this)">
+                    <i class="fa-solid fa-barcode"></i> Serie de equipo
+                </button>
             </div>
             <input type="hidden" name="tipo" id="tipoInput" value="nro_orden">
+            @if(config('services.turnstile.site'))
+            <div class="cf-turnstile mb-4 flex justify-center" data-sitekey="{{ config('services.turnstile.site') }}"></div>
+            @endif
             <div class="g-input-row">
                 <div class="g-input-wrap">
                     <i class="fa-solid fa-magnifying-glass" id="inputIcon"></i>
@@ -646,8 +656,14 @@ body { font-family:var(--fb); }
                 <button type="button" class="g-tab" onclick="setTipo('identificacion',this)">
                     <i class="fa-solid fa-id-card"></i> Cédula / RUC
                 </button>
+                <button type="button" class="g-tab" onclick="setTipo('serie',this)">
+                    <i class="fa-solid fa-barcode"></i> Serie de equipo
+                </button>
             </div>
             <input type="hidden" name="tipo" id="tipoInput" value="nro_orden">
+            @if(config('services.turnstile.site'))
+            <div class="cf-turnstile mb-4 flex justify-center" data-sitekey="{{ config('services.turnstile.site') }}"></div>
+            @endif
             <div class="g-input-row">
                 <div class="g-input-wrap">
                     <i class="fa-solid fa-magnifying-glass" id="inputIcon"></i>
@@ -821,6 +837,10 @@ function setTipo(tipo, btn){
         inp.placeholder = 'Ej: UIO-000123';
         icon.className = 'fa-solid fa-magnifying-glass';
         hint.textContent = 'Ingresa el número completo tal como aparece en tu comprobante de ingreso.';
+    } else if(tipo === 'serie'){
+        inp.placeholder = 'Ej: S123456789';
+        icon.className = 'fa-solid fa-barcode';
+        hint.textContent = 'Ingresa la serie de tu equipo (se aceptan búsquedas parciales).';
     } else {
         inp.placeholder = 'Ej: 1712345678';
         icon.className = 'fa-solid fa-id-card';
