@@ -139,21 +139,22 @@
 {{-- BOTÓN FLOTANTE CHAT IA --}}
 <style>
 @keyframes chat-pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(99,102,241,.6); }
-    70%  { box-shadow: 0 0 0 14px rgba(99,102,241,0); }
-    100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
+    0%   { box-shadow: 0 0 0 0 rgba(99,102,241,.65), 0 8px 32px rgba(99,102,241,.4); }
+    70%  { box-shadow: 0 0 0 16px rgba(99,102,241,0), 0 8px 32px rgba(99,102,241,.4); }
+    100% { box-shadow: 0 0 0 0 rgba(99,102,241,0),  0 8px 32px rgba(99,102,241,.4); }
 }
-.chat-float { animation: chat-pulse 2.2s ease-in-out infinite; }
-.chat-float:hover { animation: none; }
+#chat-fab { animation: chat-pulse 2.2s ease-in-out infinite; }
+#chat-fab:hover { animation: none; transform: scale(1.1) translateY(-3px); box-shadow: 0 12px 40px rgba(99,102,241,.55) !important; }
+#chat-fab .chat-tip { opacity:0; transition: opacity .2s ease; pointer-events:none; }
+#chat-fab:hover .chat-tip { opacity:1; }
 </style>
-<a href="{{ auth()->check() ? route('chat.index') : route('login') }}"
-   class="chat-float fixed bottom-6 right-6 z-[9999] w-16 h-16 rounded-full flex items-center justify-center transition-all hover:scale-110 hover:-translate-y-1 group"
-   style="background:linear-gradient(135deg,#4f46e5,#7c3aed);box-shadow:0 8px 32px rgba(99,102,241,.45);"
-   title="Chat IA – Asistente Novitec">
-    <i class="fa-solid fa-robot text-white text-2xl"></i>
-    {{-- Tooltip --}}
-    <span class="absolute bottom-full right-0 mb-3 bg-slate-900 text-white text-xs font-medium px-3 py-2 rounded-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none border border-white/10 shadow-xl"
-          style="min-width:130px;text-align:center;">
+<a id="chat-fab"
+   href="{{ auth()->check() ? route('chat.index') : route('login') }}"
+   title="Chat IA – Asistente Novitec"
+   style="position:fixed;bottom:24px;right:24px;z-index:9999;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:transform .2s ease,box-shadow .2s ease;cursor:pointer;">
+    <i class="fa-solid fa-robot" style="color:#fff;font-size:1.5rem;"></i>
+    <span class="chat-tip"
+          style="position:absolute;bottom:calc(100% + 10px);right:0;background:#0f172a;color:#fff;font-size:12px;font-weight:500;padding:6px 14px;border-radius:10px;white-space:nowrap;border:1px solid rgba(255,255,255,.1);box-shadow:0 4px 16px rgba(0,0,0,.3);">
         🤖 Asistente IA
     </span>
 </a>
