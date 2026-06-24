@@ -43,12 +43,16 @@ PROMPT;
         $this->apiKey = config('services.groq.api_key', '');
     }
 
-    public function chat(array $messages): string
+    public function chat(array $messages, string $extraContext = ''): string
     {
+        $systemContent = $extraContext
+            ? $this->systemPrompt . "\n\n" . $extraContext
+            : $this->systemPrompt;
+
         $payload = [
             'model'       => $this->model,
             'messages'    => array_merge(
-                [['role' => 'system', 'content' => $this->systemPrompt]],
+                [['role' => 'system', 'content' => $systemContent]],
                 $messages
             ),
             'max_tokens'  => 1024,
