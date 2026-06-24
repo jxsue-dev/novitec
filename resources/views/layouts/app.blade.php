@@ -136,28 +136,167 @@
     </div>
 </nav>
 
-{{-- BOTÓN FLOTANTE CHAT IA --}}
+{{-- ═══ CHAT WIDGET ═══════════════════════════════════════════════════════ --}}
 <style>
-@keyframes chat-pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(99,102,241,.65), 0 8px 32px rgba(99,102,241,.4); }
-    70%  { box-shadow: 0 0 0 16px rgba(99,102,241,0), 0 8px 32px rgba(99,102,241,.4); }
-    100% { box-shadow: 0 0 0 0 rgba(99,102,241,0),  0 8px 32px rgba(99,102,241,.4); }
-}
-#chat-fab { animation: chat-pulse 2.2s ease-in-out infinite; }
-#chat-fab:hover { animation: none; transform: scale(1.1) translateY(-3px); box-shadow: 0 12px 40px rgba(99,102,241,.55) !important; }
-#chat-fab .chat-tip { opacity:0; transition: opacity .2s ease; pointer-events:none; }
-#chat-fab:hover .chat-tip { opacity:1; }
+@keyframes chat-pulse{0%{box-shadow:0 0 0 0 rgba(99,102,241,.65),0 8px 32px rgba(99,102,241,.4)}70%{box-shadow:0 0 0 16px rgba(99,102,241,0),0 8px 32px rgba(99,102,241,.4)}100%{box-shadow:0 0 0 0 rgba(99,102,241,0),0 8px 32px rgba(99,102,241,.4)}}
+@keyframes widget-in{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+#chat-fab{animation:chat-pulse 2.2s ease-in-out infinite;}
+#chat-fab:hover{animation:none;transform:scale(1.1) translateY(-3px);}
+#chat-widget{animation:widget-in .25s ease;}
+#widget-msgs::-webkit-scrollbar{width:4px}
+#widget-msgs::-webkit-scrollbar-thumb{background:#334155;border-radius:4px}
+.wmsg-user{background:#4f46e5;color:#fff;border-radius:18px 18px 4px 18px;margin-left:auto;}
+.wmsg-bot{background:#1e293b;color:#e2e8f0;border-radius:18px 18px 18px 4px;}
+@keyframes wdots{0%,100%{opacity:.3}50%{opacity:1}}
+.wdot{width:6px;height:6px;border-radius:50%;background:#818cf8;display:inline-block;animation:wdots 1.2s infinite;}
+.wdot:nth-child(2){animation-delay:.2s}.wdot:nth-child(3){animation-delay:.4s}
+#widget-input::placeholder{color:#64748b}
 </style>
-<a id="chat-fab"
-   href="{{ auth()->check() ? route('chat.index') : route('login') }}"
-   title="Chat IA – Asistente Novitec"
-   style="position:fixed;bottom:24px;right:24px;z-index:9999;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;text-decoration:none;transition:transform .2s ease,box-shadow .2s ease;cursor:pointer;">
+
+{{-- WIDGET POPUP --}}
+@auth
+<div id="chat-widget" style="display:none;position:fixed;bottom:100px;right:24px;width:370px;z-index:9998;flex-direction:column;border-radius:20px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.07);">
+
+    {{-- Header --}}
+    <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:14px 18px;display:flex;align-items:center;gap:12px;">
+        <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="fa-solid fa-robot" style="color:#fff;font-size:1.1rem;"></i>
+        </div>
+        <div style="flex:1;min-width:0;">
+            <p style="color:#fff;font-weight:600;font-size:14px;margin:0;line-height:1.2;">Asistente IA Novitec</p>
+            <p style="color:rgba(255,255,255,.65);font-size:11px;margin:0;display:flex;align-items:center;gap:5px;">
+                <span style="width:7px;height:7px;border-radius:50%;background:#4ade80;display:inline-block;flex-shrink:0;"></span>En línea
+            </p>
+        </div>
+        <button onclick="toggleWidget()" style="background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+
+    {{-- Messages --}}
+    <div id="widget-msgs" style="background:#0f172a;height:380px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;">
+        <div id="widget-loading" style="display:flex;align-items:center;justify-content:center;height:100%;color:#475569;font-size:13px;">
+            <span>Cargando...</span>
+        </div>
+    </div>
+
+    {{-- Typing indicator --}}
+    <div id="widget-typing" style="display:none;padding:8px 16px;background:#0f172a;border-top:1px solid rgba(255,255,255,.04);">
+        <div class="wmsg-bot" style="display:inline-flex;align-items:center;gap:5px;padding:10px 14px;">
+            <span class="wdot"></span><span class="wdot"></span><span class="wdot"></span>
+        </div>
+    </div>
+
+    {{-- Input --}}
+    <div style="background:#1e293b;padding:12px;border-top:1px solid rgba(255,255,255,.05);">
+        <div style="display:flex;align-items:flex-end;gap:8px;background:#0f172a;border-radius:14px;padding:10px 12px;border:1px solid rgba(255,255,255,.07);">
+            <textarea id="widget-input" rows="1"
+                      placeholder="Escribe tu mensaje..."
+                      style="flex:1;background:none;border:none;color:#f1f5f9;font-size:13px;outline:none;resize:none;font-family:inherit;max-height:100px;line-height:1.5;"
+                      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();widgetSend();}"></textarea>
+            <button onclick="widgetSend()" id="widget-send-btn"
+                    style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .2s;">
+                <i class="fa-solid fa-paper-plane" style="font-size:12px;"></i>
+            </button>
+        </div>
+        <p style="color:#334155;font-size:10px;text-align:center;margin:6px 0 0;">Enter para enviar · Shift+Enter nueva línea</p>
+    </div>
+</div>
+@endauth
+
+{{-- FAB BUTTON --}}
+<button id="chat-fab" onclick="{{ auth()->check() ? 'toggleWidget()' : 'window.location=\''.route('login').'\'' }}"
+   title="Asistente IA Novitec"
+   style="position:fixed;bottom:24px;right:24px;z-index:9999;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .2s ease;">
     <i class="fa-solid fa-robot" style="color:#fff;font-size:1.5rem;"></i>
-    <span class="chat-tip"
-          style="position:absolute;bottom:calc(100% + 10px);right:0;background:#0f172a;color:#fff;font-size:12px;font-weight:500;padding:6px 14px;border-radius:10px;white-space:nowrap;border:1px solid rgba(255,255,255,.1);box-shadow:0 4px 16px rgba(0,0,0,.3);">
-        🤖 Asistente IA
-    </span>
-</a>
+</button>
+
+@auth
+<script>
+let _widgetLoaded = false;
+let _widgetConvId = null;
+const _csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+
+function toggleWidget() {
+    const w = document.getElementById('chat-widget');
+    const open = w.style.display === 'none' || w.style.display === '';
+    w.style.display = open ? 'flex' : 'none';
+    if (open && !_widgetLoaded) _loadWidget();
+}
+
+async function _loadWidget() {
+    try {
+        const res  = await fetch('{{ route('chat.widget.data') }}', { headers: { 'Accept': 'application/json' } });
+        const data = await res.json();
+        _widgetConvId = data.conversation_id;
+
+        const msgs = document.getElementById('widget-msgs');
+        msgs.innerHTML = '';
+
+        if (!data.messages || data.messages.length === 0) {
+            _appendMsg('assistant', '¡Hola! 👋 Soy el asistente de Novitec. ¿En qué puedo ayudarte hoy?');
+        } else {
+            data.messages.forEach(m => _appendMsg(m.role, m.content));
+        }
+        _widgetLoaded = true;
+        _scrollMsgs();
+    } catch(e) {
+        document.getElementById('widget-loading').textContent = 'Error al cargar. Recarga la página.';
+    }
+}
+
+async function widgetSend() {
+    const inp = document.getElementById('widget-input');
+    const msg = inp.value.trim();
+    if (!msg) return;
+    inp.value = '';
+    inp.style.height = 'auto';
+
+    _appendMsg('user', msg);
+    _scrollMsgs();
+
+    document.getElementById('widget-typing').style.display = 'block';
+    document.getElementById('widget-send-btn').style.opacity = '.4';
+    _scrollMsgs();
+
+    try {
+        const res = await fetch('{{ route('chat.widget.message') }}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': _csrf, 'Accept': 'application/json' },
+            body: JSON.stringify({ message: msg }),
+        });
+        const data = await res.json();
+        document.getElementById('widget-typing').style.display = 'none';
+        _appendMsg('assistant', data.reply ?? 'Error al responder.');
+    } catch {
+        document.getElementById('widget-typing').style.display = 'none';
+        _appendMsg('assistant', 'Error de conexión. Intenta de nuevo.');
+    } finally {
+        document.getElementById('widget-send-btn').style.opacity = '1';
+        _scrollMsgs();
+    }
+}
+
+function _appendMsg(role, content) {
+    const msgs = document.getElementById('widget-msgs');
+    const isUser = role === 'user';
+    const el = document.createElement('div');
+    el.className = isUser ? 'wmsg-user' : 'wmsg-bot';
+    el.style.cssText = `max-width:82%;padding:10px 14px;font-size:13px;line-height:1.6;white-space:pre-wrap;word-break:break-word;`;
+    el.textContent = content;
+    msgs.appendChild(el);
+}
+
+function _scrollMsgs() {
+    const msgs = document.getElementById('widget-msgs');
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+// Auto-resize textarea
+document.getElementById('widget-input')?.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+});
+</script>
+@endauth
 
 {{-- CONTENIDO --}}
 <main>

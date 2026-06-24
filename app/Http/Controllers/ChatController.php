@@ -11,46 +11,30 @@ class ChatController extends Controller
 {
     public function __construct(private GrokService $grok) {}
 
-    public function index()
+    // ── Widget endpoints ──────────────────────────────────────────────────────
+
+    public function widgetData()
     {
-        $conversations = Auth::user()->conversations()->latest()->get();
-        $conversation  = $conversations->first();
+        $conversation = $this->getSingleConversation();
+        $messages = $conversation->messages()
+            ->where('role', '!=', 'system')
+            ->orderBy('created_at')
+            ->get(['role', 'content', 'created_at']);
 
-        if (! $conversation) {
-            $conversation = $this->createConversation();
-        }
-
-        return redirect()->route('chat.show', $conversation);
+        return response()->json([
+            'conversation_id' => $conversation->id,
+            'messages'        => $messages,
+        ]);
     }
 
-    public function show(Conversation $conversation)
+    public function widgetMessage(Request $request)
     {
-        abort_if($conversation->user_id !== Auth::id(), 403);
-
-        $conversations = Auth::user()->conversations()->latest()->get();
-        $messages      = $conversation->messages()->where('role', '!=', 'system')->get();
-
-        return view('chat.show', compact('conversation', 'conversations', 'messages'));
-    }
-
-    public function store()
-    {
-        $conversation = $this->createConversation();
-        return redirect()->route('chat.show', $conversation);
-    }
-
-    public function sendMessage(Request $request, Conversation $conversation)
-    {
-        abort_if($conversation->user_id !== Auth::id(), 403);
-
         $request->validate(['message' => 'required|string|max:4000']);
 
-        $userContent = $request->input('message');
+        $conversation = $this->getSingleConversation();
+        $userContent  = $request->input('message');
 
-        $conversation->messages()->create([
-            'role'    => 'user',
-            'content' => $userContent,
-        ]);
+        $conversation->messages()->create(['role' => 'user', 'content' => $userContent]);
 
         $history = $conversation->messages()
             ->orderBy('created_at')
@@ -61,41 +45,22 @@ class ChatController extends Controller
         try {
             $reply = $this->grok->chat($history);
         } catch (\Throwable) {
-            $reply = 'Lo siento, ocurrió un error al procesar tu mensaje. Por favor intenta de nuevo.';
+            $reply = 'Lo siento, ocurrió un error. Por favor intenta de nuevo.';
         }
 
-        $conversation->messages()->create([
-            'role'    => 'assistant',
-            'content' => $reply,
-        ]);
+        $conversation->messages()->create(['role' => 'assistant', 'content' => $reply]);
 
-        if ($conversation->title === 'Nueva conversación' && $conversation->messages()->count() <= 3) {
-            $conversation->update(['title' => mb_substr($userContent, 0, 60)]);
-        }
-
-        if ($request->expectsJson()) {
-            return response()->json(['reply' => $reply]);
-        }
-
-        return back();
+        return response()->json(['reply' => $reply]);
     }
 
-    public function destroy(Conversation $conversation)
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    private function getSingleConversation(): Conversation
     {
-        abort_if($conversation->user_id !== Auth::id(), 403);
-
-        $conversation->delete();
-
-        $next = Auth::user()->conversations()->latest()->first();
-        if ($next) {
-            return redirect()->route('chat.show', $next);
+        $conv = Auth::user()->conversations()->first();
+        if (! $conv) {
+            $conv = Auth::user()->conversations()->create(['title' => 'Chat']);
         }
-
-        return redirect()->route('chat.new');
-    }
-
-    private function createConversation(): Conversation
-    {
-        return Auth::user()->conversations()->create(['title' => 'Nueva conversación']);
+        return $conv;
     }
 }

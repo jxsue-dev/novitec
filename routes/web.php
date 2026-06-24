@@ -59,11 +59,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::prefix('chat')->middleware(['auth'])->group(function () {
-    Route::get('/', [ChatController::class, 'index'])->name('chat.index');
-    Route::post('/new', [ChatController::class, 'store'])->name('chat.new');
-    Route::get('/{conversation}', [ChatController::class, 'show'])->name('chat.show');
-    Route::post('/{conversation}/message', [ChatController::class, 'sendMessage'])->name('chat.message');
-    Route::delete('/{conversation}', [ChatController::class, 'destroy'])->name('chat.destroy');
+    Route::get('/widget-data', [ChatController::class, 'widgetData'])->name('chat.widget.data');
+    Route::post('/widget-message', [ChatController::class, 'widgetMessage'])->name('chat.widget.message');
 });
 
 Route::prefix('mi-cuenta')->middleware(['auth'])->group(function () {
