@@ -324,8 +324,8 @@ document.getElementById('widget-input')?.addEventListener('input', function() {
 </script>
 @endauth
 
-{{-- ═══ BANNER COOKIES ════════════════════════════════════════════════════ --}}
-<div id="cookie-banner"
+{{-- ═══ AVISO DE PRIVACIDAD ════════════════════════════════════════════════ --}}
+<div id="nv-privacy-bar"
      style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:10000;
             background:rgba(9,11,24,.97);backdrop-filter:blur(16px);
             border-top:1px solid rgba(255,255,255,.08);
@@ -333,16 +333,15 @@ document.getElementById('widget-input')?.addEventListener('input', function() {
     <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
         <div style="flex:1;min-width:260px;">
             <p style="color:#f1f5f9;font-size:13px;font-weight:600;margin:0 0 4px;">
-                🍪 Usamos cookies
+                Tu privacidad nos importa
             </p>
             <p style="color:#94a3b8;font-size:12px;margin:0;line-height:1.6;">
-                Usamos cookies propias y de terceros para mejorar tu experiencia. Al continuar navegando aceptas nuestra
-                <a href="{{ route('privacidad') }}" style="color:#60a5fa;text-decoration:underline;">Política de privacidad</a>
-                y el uso de cookies.
+                Utilizamos tecnologías de seguimiento para mejorar tu experiencia y analizar el uso del sitio. Al continuar aceptas nuestra
+                <a href="{{ route('privacidad') }}" style="color:#60a5fa;text-decoration:underline;">Política de privacidad</a>.
             </p>
         </div>
         <div style="display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap;">
-            <button onclick="cookieDecline()"
+            <button onclick="nvPrivacyDecline()"
                     style="padding:9px 20px;border:1px solid rgba(255,255,255,.15);background:transparent;
                            color:#94a3b8;font-size:12px;font-weight:500;border-radius:10px;cursor:pointer;
                            font-family:inherit;transition:all .2s;"
@@ -350,14 +349,14 @@ document.getElementById('widget-input')?.addEventListener('input', function() {
                     onmouseout="this.style.borderColor='rgba(255,255,255,.15)';this.style.color='#94a3b8'">
                 Solo esenciales
             </button>
-            <button onclick="cookieAccept()"
+            <button onclick="nvPrivacyAccept()"
                     style="padding:9px 20px;background:linear-gradient(135deg,#2563eb,#4f46e5);
                            border:none;color:#fff;font-size:12px;font-weight:600;border-radius:10px;
                            cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(79,70,229,.4);
                            transition:all .2s;"
                     onmouseover="this.style.opacity='.9'"
                     onmouseout="this.style.opacity='1'">
-                Aceptar todas
+                Aceptar
             </button>
         </div>
     </div>
@@ -368,28 +367,32 @@ document.getElementById('widget-input')?.addEventListener('input', function() {
     const KEY = 'nv_cookie_consent';
     if (!localStorage.getItem(KEY)) {
         setTimeout(() => {
-            const b = document.getElementById('cookie-banner');
-            if (b) { b.style.display = 'block'; b.style.animation = 'none'; }
+            const b = document.getElementById('nv-privacy-bar');
+            if (b) b.style.display = 'block';
         }, 800);
     }
 })();
-function cookieAccept() {
+function nvPrivacyAccept() {
     localStorage.setItem('nv_cookie_consent', 'accepted');
     if (typeof loadGA === 'function') loadGA();
-    hideCookieBanner();
+    nvPrivacyHide();
 }
-function cookieDecline() {
+function nvPrivacyDecline() {
     localStorage.setItem('nv_cookie_consent', 'essential');
-    hideCookieBanner();
+    nvPrivacyHide();
 }
-function hideCookieBanner() {
-    const b = document.getElementById('cookie-banner');
+function nvPrivacyHide() {
+    const b = document.getElementById('nv-privacy-bar');
     if (!b) return;
     b.style.transition = 'opacity .4s ease, transform .4s ease';
     b.style.opacity = '0';
     b.style.transform = 'translateY(20px)';
     setTimeout(() => b.style.display = 'none', 420);
 }
+// Alias para compatibilidad
+function cookieAccept(){ nvPrivacyAccept(); }
+function cookieDecline(){ nvPrivacyDecline(); }
+function hideCookieBanner(){ nvPrivacyHide(); }
 </script>
 
 {{-- CONTENIDO --}}
