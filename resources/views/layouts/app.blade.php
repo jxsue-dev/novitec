@@ -56,6 +56,11 @@
         {{-- BOTONES DESKTOP --}}
         <div class="flex items-center gap-2">
             @auth
+                {{-- Chat IA (todos los usuarios autenticados) --}}
+                <a href="{{ route('chat.index') }}"
+                   class="hidden md:inline-flex items-center gap-1.5 text-sm bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white px-4 py-2 rounded-xl transition-all shadow-lg shadow-blue-600/20 hover:shadow-blue-500/30 hover:-translate-y-0.5">
+                    <i class="fa-solid fa-robot text-xs"></i> Chat IA
+                </a>
                 @if(auth()->user()->is_admin)
                 {{-- Sin botón admin en el header --}}
                 @else
@@ -109,6 +114,10 @@
 
         <div class="pt-2 flex flex-col gap-2 border-t border-white/5 mt-1">
             @auth
+                <a href="{{ route('chat.index') }}" onclick="toggleMenu()"
+                   class="block text-sm bg-gradient-to-r from-blue-600 to-violet-600 text-white text-center py-2.5 rounded-xl">
+                    <i class="fa-solid fa-robot"></i> Chat IA
+                </a>
                 @if(auth()->user()->is_admin)
                 {{-- Sin botón admin en el header --}}
                 @else
@@ -126,6 +135,18 @@
         </div>
     </div>
 </nav>
+
+{{-- BOTÓN FLOTANTE CHAT IA --}}
+@auth
+<a href="{{ route('chat.index') }}"
+   class="fixed bottom-6 right-6 z-40 w-14 h-14 bg-gradient-to-br from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white rounded-2xl flex items-center justify-center shadow-xl shadow-blue-600/30 hover:shadow-blue-500/40 hover:-translate-y-1 transition-all group"
+   title="Chat IA">
+    <i class="fa-solid fa-robot text-xl"></i>
+    <span class="absolute right-16 bg-slate-900 text-white text-xs font-medium px-3 py-1.5 rounded-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none border border-white/10">
+        Chat IA
+    </span>
+</a>
+@endauth
 
 {{-- CONTENIDO --}}
 <main>
