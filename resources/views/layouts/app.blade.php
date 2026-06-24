@@ -61,6 +61,7 @@
 
     {{-- SCHEMA.ORG LocalBusiness --}}
     <script type="application/ld+json">
+    @verbatim
     {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
@@ -116,6 +117,7 @@
         },
         "sameAs": ["https://wa.me/593960500156"]
     }
+    @endverbatim
     </script>
 
     @stack('schema')
