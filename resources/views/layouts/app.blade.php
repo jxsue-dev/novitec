@@ -137,12 +137,24 @@
 </nav>
 
 {{-- BOTÓN FLOTANTE CHAT IA --}}
+<style>
+@keyframes chat-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(99,102,241,.6); }
+    70%  { box-shadow: 0 0 0 14px rgba(99,102,241,0); }
+    100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
+}
+.chat-float { animation: chat-pulse 2.2s ease-in-out infinite; }
+.chat-float:hover { animation: none; }
+</style>
 <a href="{{ auth()->check() ? route('chat.index') : route('login') }}"
-   class="fixed bottom-6 right-6 z-40 w-14 h-14 bg-gradient-to-br from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white rounded-2xl flex items-center justify-center shadow-xl shadow-blue-600/30 hover:shadow-blue-500/40 hover:-translate-y-1 transition-all group"
-   title="Chat IA">
-    <i class="fa-solid fa-robot text-xl"></i>
-    <span class="absolute right-16 bg-slate-900 text-white text-xs font-medium px-3 py-1.5 rounded-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none border border-white/10">
-        Chat IA
+   class="chat-float fixed bottom-6 right-6 z-[9999] w-16 h-16 rounded-full flex items-center justify-center transition-all hover:scale-110 hover:-translate-y-1 group"
+   style="background:linear-gradient(135deg,#4f46e5,#7c3aed);box-shadow:0 8px 32px rgba(99,102,241,.45);"
+   title="Chat IA – Asistente Novitec">
+    <i class="fa-solid fa-robot text-white text-2xl"></i>
+    {{-- Tooltip --}}
+    <span class="absolute bottom-full right-0 mb-3 bg-slate-900 text-white text-xs font-medium px-3 py-2 rounded-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none border border-white/10 shadow-xl"
+          style="min-width:130px;text-align:center;">
+        🤖 Asistente IA
     </span>
 </a>
 
