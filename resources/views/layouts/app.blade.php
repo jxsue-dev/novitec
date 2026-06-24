@@ -20,17 +20,15 @@
         });
 
         gtag('js', new Date());
-        gtag('config', 'G-NNM63X36FH', { 'send_page_view': false });
+        gtag('config', 'G-NNM63X36FH');
 
-        // Si ya aceptó en sesión anterior, activar inmediatamente
+        // Si ya aceptó en sesión anterior, activar datos
         if (localStorage.getItem('nv_cookie_consent') === 'accepted') {
             gtag('consent', 'update', { 'analytics_storage': 'granted', 'ad_storage': 'granted' });
-            gtag('event', 'page_view');
         }
 
         function loadGA() {
             gtag('consent', 'update', { 'analytics_storage': 'granted', 'ad_storage': 'granted' });
-            gtag('event', 'page_view');
         }
     </script>
 
