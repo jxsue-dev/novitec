@@ -478,6 +478,16 @@ body { font-family: 'DM Sans', sans-serif; }
             </div>
             @endforeach
         </div>
+        {{-- CHAT IA CTA --}}
+        <div class="flex justify-center mb-6 reveal d1">
+            <a href="{{ auth()->check() ? route('chat.index') : route('login') }}"
+               class="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-semibold text-sm px-8 py-4 rounded-2xl shadow-xl shadow-blue-600/25 hover:shadow-blue-500/35 hover:-translate-y-0.5 transition-all">
+                <i class="fa-solid fa-robot text-lg"></i>
+                Hablar con nuestro asistente IA
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+
         <div class="flex justify-center gap-3 flex-wrap reveal d2">
             @foreach($socials as $social)
             <a href="{{$social->url}}" target="_blank"

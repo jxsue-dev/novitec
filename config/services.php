@@ -40,8 +40,8 @@ return [
         'secret' => env('TURNSTILE_SECRET_KEY'),
     ],
 
-    'grok' => [
-        'api_key' => env('GROK_API_KEY'),
+    'groq' => [
+        'api_key' => env('GROQ_API_KEY'),
     ],
 
 ];

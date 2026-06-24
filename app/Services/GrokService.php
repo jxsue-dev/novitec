@@ -2,14 +2,13 @@
 
 namespace App\Services;
 
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 class GrokService
 {
     private string $apiKey;
-    private string $baseUrl = 'https://api.x.ai/v1';
-    private string $model   = 'grok-3-mini';
+    private string $baseUrl = 'https://api.groq.com/openai/v1';
+    private string $model   = 'llama-3.3-70b-versatile';
 
     private string $systemPrompt = <<<PROMPT
 Eres el asistente virtual inteligente de Novitec (Novitecnología Cia. Ltda.), empresa ecuatoriana especializada en soporte tecnológico con más de 12 años de experiencia.
@@ -31,7 +30,7 @@ PROMPT;
 
     public function __construct()
     {
-        $this->apiKey = config('services.grok.api_key', '');
+        $this->apiKey = config('services.groq.api_key', '');
     }
 
     public function chat(array $messages): string
