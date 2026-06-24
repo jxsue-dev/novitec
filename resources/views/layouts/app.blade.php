@@ -327,36 +327,47 @@ document.getElementById('widget-input')?.addEventListener('input', function() {
 {{-- ═══ AVISO DE PRIVACIDAD ════════════════════════════════════════════════ --}}
 <div id="nv-privacy-bar"
      style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:10000;
-            background:rgba(9,11,24,.97);backdrop-filter:blur(16px);
-            border-top:1px solid rgba(255,255,255,.08);
-            padding:18px 24px;font-family:inherit;">
-    <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-        <div style="flex:1;min-width:260px;">
-            <p style="color:#f1f5f9;font-size:13px;font-weight:600;margin:0 0 4px;">
-                Tu privacidad nos importa
-            </p>
-            <p style="color:#94a3b8;font-size:12px;margin:0;line-height:1.6;">
-                Utilizamos tecnologías de seguimiento para mejorar tu experiencia y analizar el uso del sitio. Al continuar aceptas nuestra
-                <a href="{{ route('privacidad') }}" style="color:#60a5fa;text-decoration:underline;">Política de privacidad</a>.
-            </p>
+            background:rgba(9,11,24,.98);backdrop-filter:blur(20px);
+            border-top:2px solid rgba(79,70,229,.5);
+            padding:28px 32px;font-family:inherit;
+            box-shadow:0 -8px 40px rgba(0,0,0,.5);">
+    <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:300px;display:flex;align-items:flex-start;gap:16px;">
+            <div style="width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#4f46e5,#7c3aed);
+                        display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+            </div>
+            <div>
+                <p style="color:#f1f5f9;font-size:15px;font-weight:700;margin:0 0 6px;letter-spacing:-.01em;">
+                    Tu privacidad nos importa
+                </p>
+                <p style="color:#94a3b8;font-size:13px;margin:0;line-height:1.7;max-width:560px;">
+                    Usamos tecnologías de seguimiento para mejorar tu experiencia y analizar el uso del sitio.
+                    Puedes aceptar todas o solo las esenciales. Más info en nuestra
+                    <a href="{{ route('privacidad') }}" style="color:#818cf8;text-decoration:underline;font-weight:500;">Política de privacidad</a>.
+                </p>
+            </div>
         </div>
-        <div style="display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap;">
+        <div style="display:flex;gap:12px;flex-shrink:0;flex-wrap:wrap;align-items:center;">
             <button onclick="nvPrivacyDecline()"
-                    style="padding:9px 20px;border:1px solid rgba(255,255,255,.15);background:transparent;
-                           color:#94a3b8;font-size:12px;font-weight:500;border-radius:10px;cursor:pointer;
-                           font-family:inherit;transition:all .2s;"
-                    onmouseover="this.style.borderColor='rgba(255,255,255,.4)';this.style.color='#fff'"
-                    onmouseout="this.style.borderColor='rgba(255,255,255,.15)';this.style.color='#94a3b8'">
+                    style="padding:12px 24px;border:1px solid rgba(255,255,255,.2);background:transparent;
+                           color:#cbd5e1;font-size:13px;font-weight:500;border-radius:12px;cursor:pointer;
+                           font-family:inherit;transition:all .2s;white-space:nowrap;"
+                    onmouseover="this.style.background='rgba(255,255,255,.07)';this.style.color='#fff';this.style.borderColor='rgba(255,255,255,.4)'"
+                    onmouseout="this.style.background='transparent';this.style.color='#cbd5e1';this.style.borderColor='rgba(255,255,255,.2)'">
                 Solo esenciales
             </button>
             <button onclick="nvPrivacyAccept()"
-                    style="padding:9px 20px;background:linear-gradient(135deg,#2563eb,#4f46e5);
-                           border:none;color:#fff;font-size:12px;font-weight:600;border-radius:10px;
-                           cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(79,70,229,.4);
-                           transition:all .2s;"
-                    onmouseover="this.style.opacity='.9'"
-                    onmouseout="this.style.opacity='1'">
-                Aceptar
+                    style="padding:13px 28px;background:linear-gradient(135deg,#2563eb,#4f46e5);
+                           border:none;color:#fff;font-size:14px;font-weight:700;border-radius:12px;
+                           cursor:pointer;font-family:inherit;
+                           box-shadow:0 4px 20px rgba(79,70,229,.5);
+                           transition:all .2s;white-space:nowrap;letter-spacing:-.01em;"
+                    onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 28px rgba(79,70,229,.6)'"
+                    onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 20px rgba(79,70,229,.5)'">
+                ✓ Aceptar todo
             </button>
         </div>
     </div>
