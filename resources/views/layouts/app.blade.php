@@ -57,10 +57,10 @@
         <div class="flex items-center gap-2">
             @auth
                 {{-- Chat IA (todos los usuarios autenticados) --}}
-                <a href="{{ route('chat.index') }}"
-                   class="hidden md:inline-flex items-center gap-1.5 text-sm bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white px-4 py-2 rounded-xl transition-all shadow-lg shadow-blue-600/20 hover:shadow-blue-500/30 hover:-translate-y-0.5">
+                <button onclick="toggleWidget()"
+                   class="hidden md:inline-flex items-center gap-1.5 text-sm bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white px-4 py-2 rounded-xl transition-all shadow-lg shadow-blue-600/20 hover:shadow-blue-500/30 hover:-translate-y-0.5 border-0 cursor-pointer">
                     <i class="fa-solid fa-robot text-xs"></i> Chat IA
-                </a>
+                </button>
                 @if(auth()->user()->is_admin)
                 {{-- Sin botón admin en el header --}}
                 @else
@@ -114,10 +114,10 @@
 
         <div class="pt-2 flex flex-col gap-2 border-t border-white/5 mt-1">
             @auth
-                <a href="{{ route('chat.index') }}" onclick="toggleMenu()"
-                   class="block text-sm bg-gradient-to-r from-blue-600 to-violet-600 text-white text-center py-2.5 rounded-xl">
+                <button onclick="toggleMenu(); setTimeout(toggleWidget, 350);"
+                   class="block w-full text-sm bg-gradient-to-r from-blue-600 to-violet-600 text-white text-center py-2.5 rounded-xl border-0 cursor-pointer">
                     <i class="fa-solid fa-robot"></i> Chat IA
-                </a>
+                </button>
                 @if(auth()->user()->is_admin)
                 {{-- Sin botón admin en el header --}}
                 @else
