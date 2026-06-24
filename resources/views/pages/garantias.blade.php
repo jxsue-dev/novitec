@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Garantías – Novitec')
+@section('title', 'Consulta tu Garantía | Centro de Garantías Novitec Ecuador')
+@section('description', 'Consulta el estado de tu equipo en garantía en línea. Novitec es centro de soporte autorizado para HP, ASUS, Lenovo, Samsung, Xiaomi y más marcas en Ecuador.')
+@section('keywords', 'garantía equipo ecuador, centro garantías quito, servicio autorizado HP ecuador, consultar garantía novitec, estado orden reparación')
 
 @section('content')
 

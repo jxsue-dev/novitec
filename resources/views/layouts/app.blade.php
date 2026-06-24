@@ -33,7 +33,11 @@
     </script>
 
     {{-- SEO --}}
-    <meta name="description" content="Servicios que impulsan tu negocio. Reparamos computadores, celulares e impresoras. Soporte IT remoto y presencial, redes y CCTV para personas y empresas.">
+    <meta name="description" content="@yield('description', 'Servicio técnico profesional en Ecuador. Reparación de computadoras, laptops, celulares e impresoras. Soporte IT remoto y presencial, redes y CCTV. Novitec – Quito, Guayaquil, Manta.')">
+    <meta name="keywords" content="@yield('keywords', 'servicio técnico quito, reparación computadoras quito, reparación celulares ecuador, soporte IT empresarial, servicio técnico ecuador, novitec, novicompu')">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Novitecnología Cia. Ltda.">
+    <link rel="canonical" href="{{ url()->current() }}">
 
     {{-- FAVICON --}}
     <link rel="icon" type="image/png" href="{{ asset('images/novitec_logo.png') }}">
@@ -41,11 +45,80 @@
     <link rel="apple-touch-icon" href="{{ asset('images/novitec_logo.png') }}">
 
     {{-- OPEN GRAPH --}}
-    <meta property="og:title" content="@yield('title', 'Novitec – Servicio Técnico & Soporte IT')">
-    <meta property="og:description" content="Servicios que impulsan tu negocio. Reparamos computadores, celulares e impresoras. Soporte IT remoto y presencial, redes y CCTV.">
+    <meta property="og:title" content="@yield('title', 'Novitec – Servicio Técnico Ecuador')">
+    <meta property="og:description" content="@yield('description', 'Servicio técnico profesional en Ecuador. Reparación de computadoras, laptops, celulares. Soporte IT, redes y CCTV.')">
     <meta property="og:image" content="{{ asset('images/novitec_og.png') }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_EC">
+    <meta property="og:site_name" content="Novitec">
+
+    {{-- TWITTER CARD --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title', 'Novitec – Servicio Técnico Ecuador')">
+    <meta name="twitter:description" content="@yield('description', 'Servicio técnico profesional en Ecuador.')">
+    <meta name="twitter:image" content="{{ asset('images/novitec_og.png') }}">
+
+    {{-- SCHEMA.ORG LocalBusiness --}}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://novitec.com.ec/#business",
+        "name": "Novitec – Novitecnología Cia. Ltda.",
+        "alternateName": ["Novitec", "Novicompu", "Novitecnología"],
+        "description": "Empresa ecuatoriana especializada en servicio técnico profesional: reparación de computadoras, laptops, celulares e impresoras. Soporte IT remoto y presencial, infraestructura de redes y sistemas CCTV.",
+        "url": "https://novitec.com.ec",
+        "logo": "https://novitec.com.ec/images/novitec_logo.png",
+        "image": "https://novitec.com.ec/images/novitec_og.png",
+        "telephone": "+593960500156",
+        "email": "soporte@novitec.com.ec",
+        "foundingDate": "2013",
+        "priceRange": "$$",
+        "currenciesAccepted": "USD",
+        "paymentAccepted": "Cash, Credit Card, Bank Transfer",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Calle N73 y Mariano Paredes, Ponceano Alto",
+            "addressLocality": "Quito",
+            "addressRegion": "Pichincha",
+            "postalCode": "170102",
+            "addressCountry": "EC"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": -0.1800427,
+            "longitude": -78.5734424
+        },
+        "areaServed": [
+            {"@type": "City", "name": "Quito"},
+            {"@type": "City", "name": "Guayaquil"},
+            {"@type": "City", "name": "Manta"},
+            {"@type": "Country", "name": "Ecuador"}
+        ],
+        "openingHoursSpecification": [{
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+            "opens": "09:00",
+            "closes": "17:00"
+        }],
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Servicios Técnicos Novitec",
+            "itemListElement": [
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Reparación de Computadoras y Laptops", "description": "Diagnóstico, mantenimiento y reparación de computadoras y laptops de todas las marcas."}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Reparación de Celulares y Tablets"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Reparación de Impresoras"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Soporte IT Remoto y Presencial"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Infraestructura de Redes"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "CCTV y Videovigilancia"}}
+            ]
+        },
+        "sameAs": ["https://wa.me/593960500156"]
+    }
+    </script>
+
+    @stack('schema')
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])

@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Contacto – Novitecnología Cia. Ltda.')
+@section('title', 'Contacto – Servicio Técnico Novitec | Quito, Guayaquil y Manta')
+@section('description', 'Contáctanos para servicio técnico en Ecuador. Sucursales en Quito (0960500156), Guayaquil (0960500158) y Manta (0998879638). Atención Lun-Vie 9:00-17:00. WhatsApp disponible.')
+@section('keywords', 'contacto servicio técnico quito, teléfono novitec, sucursales novitec ecuador, whatsapp soporte técnico quito')
 
 @section('content')
 

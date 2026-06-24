@@ -17,8 +17,10 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\PageController;
 
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::post('/garantias/consulta', [PageController::class, 'consultaGarantia'])->middleware('throttle:consulta')->name('garantias.consulta');
 Route::get('/garantias', [PageController::class, 'garantias'])->name('garantias');
 Route::get('/soporte-autorizado', [PageController::class, 'soporteAutorizado'])->name('soporte-autorizado');

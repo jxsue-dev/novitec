@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Conócenos – Novitec')
+@section('title', 'Conócenos – Novitec | +12 Años de Servicio Técnico en Ecuador')
+@section('description', 'Conoce a Novitecnología Cia. Ltda., empresa ecuatoriana con más de 12 años de experiencia en servicio técnico. Técnicos certificados en Quito, Guayaquil y Manta. Misión, visión y valores.')
+@section('keywords', 'novitecnología, empresa servicio técnico ecuador, técnicos certificados quito, novitec historia, soporte tecnológico ecuador')
 
 @section('content')
 

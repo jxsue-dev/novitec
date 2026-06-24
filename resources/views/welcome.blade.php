@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Novitec – Servicio Técnico & Soporte IT')
+@section('title', 'Novitec – Servicio Técnico en Ecuador | Reparación de Computadoras, Celulares e Impresoras')
+@section('description', 'Servicio técnico profesional en Quito, Guayaquil y Manta. Reparamos computadoras, laptops, celulares e impresoras. Soporte IT remoto y presencial, redes y CCTV. +12 años de experiencia. ¡50% OFF al registrarte!')
+@section('keywords', 'servicio técnico quito, reparación computadoras quito, reparación celulares quito, soporte IT ecuador, servicio técnico guayaquil, reparación laptops ecuador, novitec, novicompu, servicio técnico manta')
 
 @section('content')
 

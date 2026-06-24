@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Servicios – Novitecnología Cia. Ltda.')
+@section('title', 'Servicios de Reparación y Soporte Técnico en Ecuador | Novitec')
+@section('description', 'Catálogo completo de servicios técnicos: reparación de computadoras, laptops, celulares, impresoras. Soporte IT remoto y presencial, redes empresariales y CCTV en Ecuador. Diagnóstico incluido.')
+@section('keywords', 'reparación computadoras ecuador, soporte IT empresarial quito, reparación celulares ecuador, instalación redes quito, cámaras seguridad ecuador, mantenimiento computadoras quito')
 
 @section('content')
 
