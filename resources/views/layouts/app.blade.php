@@ -6,6 +6,25 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Novitec – Servicio Técnico & Soporte IT')</title>
 
+    {{-- Google Analytics 4 — solo carga si el usuario aceptó cookies --}}
+    <script>
+        window._gaId = 'G-NNM63X36FH';
+        function loadGA() {
+            if (window._gaLoaded) return;
+            window._gaLoaded = true;
+            const s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + window._gaId;
+            document.head.appendChild(s);
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            window.gtag = gtag;
+            gtag('js', new Date());
+            gtag('config', window._gaId);
+        }
+        if (localStorage.getItem('nv_cookie_consent') === 'accepted') loadGA();
+    </script>
+
     {{-- SEO --}}
     <meta name="description" content="Servicios que impulsan tu negocio. Reparamos computadores, celulares e impresoras. Soporte IT remoto y presencial, redes y CCTV para personas y empresas.">
 
@@ -349,6 +368,7 @@ document.getElementById('widget-input')?.addEventListener('input', function() {
 })();
 function cookieAccept() {
     localStorage.setItem('nv_cookie_consent', 'accepted');
+    if (typeof loadGA === 'function') loadGA();
     hideCookieBanner();
 }
 function cookieDecline() {
