@@ -137,8 +137,7 @@
 </nav>
 
 {{-- BOTÓN FLOTANTE CHAT IA --}}
-@auth
-<a href="{{ route('chat.index') }}"
+<a href="{{ auth()->check() ? route('chat.index') : route('login') }}"
    class="fixed bottom-6 right-6 z-40 w-14 h-14 bg-gradient-to-br from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white rounded-2xl flex items-center justify-center shadow-xl shadow-blue-600/30 hover:shadow-blue-500/40 hover:-translate-y-1 transition-all group"
    title="Chat IA">
     <i class="fa-solid fa-robot text-xl"></i>
@@ -146,7 +145,6 @@
         Chat IA
     </span>
 </a>
-@endauth
 
 {{-- CONTENIDO --}}
 <main>
