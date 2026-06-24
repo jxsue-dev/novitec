@@ -6,23 +6,32 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Novitec – Servicio Técnico & Soporte IT')</title>
 
-    {{-- Google Analytics 4 — solo carga si el usuario aceptó cookies --}}
+    {{-- Google Analytics 4 — Consent Mode v2 --}}
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NNM63X36FH"></script>
     <script>
-        window._gaId = 'G-NNM63X36FH';
-        function loadGA() {
-            if (window._gaLoaded) return;
-            window._gaLoaded = true;
-            const s = document.createElement('script');
-            s.async = true;
-            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + window._gaId;
-            document.head.appendChild(s);
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            window.gtag = gtag;
-            gtag('js', new Date());
-            gtag('config', window._gaId);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+
+        // Consent por defecto: denegado hasta que el usuario acepte
+        gtag('consent', 'default', {
+            'analytics_storage': 'denied',
+            'ad_storage':        'denied',
+            'wait_for_update':   500
+        });
+
+        gtag('js', new Date());
+        gtag('config', 'G-NNM63X36FH', { 'send_page_view': false });
+
+        // Si ya aceptó en sesión anterior, activar inmediatamente
+        if (localStorage.getItem('nv_cookie_consent') === 'accepted') {
+            gtag('consent', 'update', { 'analytics_storage': 'granted', 'ad_storage': 'granted' });
+            gtag('event', 'page_view');
         }
-        if (localStorage.getItem('nv_cookie_consent') === 'accepted') loadGA();
+
+        function loadGA() {
+            gtag('consent', 'update', { 'analytics_storage': 'granted', 'ad_storage': 'granted' });
+            gtag('event', 'page_view');
+        }
     </script>
 
     {{-- SEO --}}
