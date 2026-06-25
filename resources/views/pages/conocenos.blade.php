@@ -58,6 +58,8 @@ body { font-family: 'Inter', sans-serif; }
                     <div class="relative rounded-3xl overflow-hidden aspect-video md:aspect-[21/8] bg-slate-100">
                         <img src="{{ $slide[0] }}"
                              alt="{{ $slide[1] }}"
+                             loading="{{ $i === 0 ? 'eager' : 'lazy' }}"
+                             width="1200" height="457"
                              class="w-full h-full object-cover">
                         <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(2,8,23,.8) 0%,transparent 60%)"></div>
                         <div class="absolute bottom-0 left-0 p-6 md:p-10">

@@ -234,7 +234,7 @@ body { font-family: 'DM Sans', sans-serif; }
             ] as $i=>$s)
             <div class="service-card reveal overflow-hidden p-0" style="transition-delay:{{$i*.1}}s; border-radius:20px;">
                 <div class="relative h-40 md:h-52 overflow-hidden">
-                    <img src="{{$s[0]}}" alt="{{$s[2]}}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105">
+                    <img src="{{$s[0]}}" alt="{{$s[2]}}" loading="lazy" width="800" height="400" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105">
                     <div class="absolute inset-0" style="background:linear-gradient(to bottom,transparent 40%,rgba(15,23,42,.6) 100%)"></div>
                     <div class="absolute bottom-3 left-4 flex items-center gap-2">
                         <i class="fa-solid {{ $s[1] }} text-white text-xl md:text-2xl"></i>
@@ -429,13 +429,25 @@ body { font-family: 'DM Sans', sans-serif; }
             <h2 class="font-serif text-3xl md:text-5xl font-bold text-white mb-4 reveal d1">Lo que dicen<br>nuestros clientes</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            @foreach([
-                ['Carlos M.','Empresa Constructora','Llevé mi laptop con pantalla rota y en menos de 5 días ya estaba lista. Excelente servicio y precio justo.'],
-                ['María F.','Diseñadora independiente','Recuperaron todos mis archivos cuando el disco duro falló. Pensé que había perdido 3 años de trabajo.'],
-                ['Roberto A.','Gerente TI','Contratamos el soporte IT mensual y ha sido excelente. Responden rápido y resuelven todo eficientemente.'],
-            ] as $i=>$t)
+            @forelse($featuredReviews as $i => $review)
             <div class="testi-card reveal" style="transition-delay:{{$i*.1}}s">
-                <p class="text-xl mb-4 text-yellow-400">@for($k=0;$k<5;$k++)<i class="fa-solid fa-star"></i>@endfor</p>
+                <p class="text-xl mb-4 text-yellow-400">
+                    @for($k=0;$k<$review->rating;$k++)<i class="fa-solid fa-star"></i>@endfor
+                </p>
+                <p class="text-slate-300 text-sm font-light leading-relaxed mb-6 italic">"{{ $review->comment }}"</p>
+                <div class="flex items-center gap-3 pt-4 border-t border-white/10">
+                    <div class="w-9 h-9 bg-violet-600 rounded-full flex items-center justify-center text-white text-sm font-bold">{{ strtoupper(substr($review->name,0,1)) }}</div>
+                    <div>
+                        <p class="text-white text-sm font-medium">{{ $review->name }}</p>
+                        <p class="text-slate-400 text-xs font-light">{{ $review->created_at->format('M Y') }}</p>
+                    </div>
+                </div>
+            </div>
+            @empty
+            {{-- Fallback si no hay reseñas destacadas aún --}}
+            @foreach([['Carlos M.','Empresa Constructora','Llevé mi laptop con pantalla rota y en menos de 5 días ya estaba lista. Excelente servicio y precio justo.',5],['María F.','Diseñadora independiente','Recuperaron todos mis archivos cuando el disco duro falló. Pensé que había perdido 3 años de trabajo.',5],['Roberto A.','Gerente TI','Contratamos el soporte IT mensual y ha sido excelente. Responden rápido y resuelven todo eficientemente.',5]] as $i=>$t)
+            <div class="testi-card reveal" style="transition-delay:{{$i*.1}}s">
+                <p class="text-xl mb-4 text-yellow-400">@for($k=0;$k<$t[3];$k++)<i class="fa-solid fa-star"></i>@endfor</p>
                 <p class="text-slate-300 text-sm font-light leading-relaxed mb-6 italic">"{{$t[2]}}"</p>
                 <div class="flex items-center gap-3 pt-4 border-t border-white/10">
                     <div class="w-9 h-9 bg-violet-600 rounded-full flex items-center justify-center text-white text-sm font-bold">{{substr($t[0],0,1)}}</div>
@@ -446,6 +458,12 @@ body { font-family: 'DM Sans', sans-serif; }
                 </div>
             </div>
             @endforeach
+            @endforelse
+        </div>
+        <div class="text-center mt-10 reveal">
+            <a href="{{ route('resenas') }}" class="inline-flex items-center gap-2 border border-white/20 hover:border-violet-400 text-slate-400 hover:text-white text-sm px-6 py-3 rounded-xl transition-all">
+                Ver todas las reseñas →
+            </a>
         </div>
     </div>
 </section>

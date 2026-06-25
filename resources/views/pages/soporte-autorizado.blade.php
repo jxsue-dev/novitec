@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Soporte Autorizado – Novitec')
+@section('title', 'Centros de Soporte Autorizado en Ecuador | Novitec')
+@section('description', 'Consulta los centros de servicio técnico autorizados en Ecuador por marca: HP, ASUS, Lenovo, Samsung, Xiaomi, Epson y más. Novitec es distribuidor y soporte oficial de múltiples marcas.')
+@section('keywords', 'soporte autorizado ecuador, servicio autorizado HP quito, garantía samsung ecuador, centro servicio lenovo quito, soporte oficial asus ecuador')
 
 @section('content')
 

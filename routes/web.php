@@ -18,6 +18,8 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\PageController;
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
@@ -31,6 +33,10 @@ Route::get('/servicios/{service:slug}', [ServiceController::class, 'show'])->nam
 Route::get('/conocenos', [PageController::class, 'conocenos'])->name('conocenos');
 Route::get('/resenas', [PageController::class, 'resenas'])->name('resenas');
 Route::post('/resenas', [ReviewController::class, 'store'])->middleware('throttle:5,1')->name('reviews.store');
+Route::get('/cita', [AppointmentController::class, 'create'])->name('cita');
+Route::post('/cita', [AppointmentController::class, 'store'])->middleware('throttle:10,1')->name('cita.store');
+Route::get('/faq', [FaqController::class, 'index'])->name('faq');
+Route::get('/portfolio', [FaqController::class, 'portfolio'])->name('portfolio');
 Route::get('/politica-de-privacidad', [PageController::class, 'privacidad'])->name('privacidad');
 Route::get('/terminos-y-condiciones', [PageController::class, 'terminos'])->name('terminos');
 
@@ -41,10 +47,11 @@ Route::post('/warranties/guardar', [WarrantyController::class, 'guardar'])->midd
 Route::post('/warranties/sugerencia', [WarrantyController::class, 'guardarSugerencia'])->middleware('throttle:5,1')->name('warranties.sugerencia');
 
 Route::get('/', function () {
-    $branches = Branch::where('active', true)->orderBy('order')->get();
-    $socials = SocialLink::where('active', true)->orderBy('order')->get();
-    $settings = Setting::pluck('value', 'key');
-    return view('welcome', compact('branches', 'socials', 'settings'));
+    $branches        = Branch::where('active', true)->orderBy('order')->get();
+    $socials         = SocialLink::where('active', true)->orderBy('order')->get();
+    $settings        = Setting::pluck('value', 'key');
+    $featuredReviews = \App\Models\Review::where('featured', true)->latest()->take(3)->get();
+    return view('welcome', compact('branches', 'socials', 'settings', 'featuredReviews'));
 });
 
 Route::get('/dashboard', function () {

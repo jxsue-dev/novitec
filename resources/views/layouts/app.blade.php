@@ -183,6 +183,9 @@
                     </button>
                 </form>
             @else
+                <a href="{{ route('cita') }}" class="hidden md:inline-flex items-center gap-1.5 text-sm border border-white/20 hover:border-blue-400 text-slate-300 hover:text-white px-4 py-2 rounded-xl transition-all">
+                    <i class="fa-solid fa-calendar-check text-xs"></i> Agendar cita
+                </a>
                 <a href="{{ route('login') }}" class="hidden md:inline-flex text-sm text-slate-300 hover:text-white px-4 py-2 rounded-xl transition-all">
                     Iniciar sesión
                 </a>
@@ -212,6 +215,9 @@
             <a href="{{ route('soporte-autorizado') }}" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2 pl-2 transition-colors"><i class="fa-solid fa-screwdriver-wrench"></i> Soporte Autorizado</a>
         </div>
         <a href="{{ route('contacto') }}" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2.5 transition-colors">Contacto</a>
+        <a href="{{ route('cita') }}" onclick="toggleMenu()" class="block text-sm text-blue-400 hover:text-blue-300 py-2.5 transition-colors"><i class="fa-solid fa-calendar-check mr-1"></i> Agendar cita</a>
+        <a href="{{ route('faq') }}" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2.5 transition-colors">FAQ</a>
+        <a href="{{ route('portfolio') }}" onclick="toggleMenu()" class="block text-sm text-slate-300 hover:text-white py-2.5 transition-colors">Galería de trabajos</a>
 
         <div class="pt-2 flex flex-col gap-2 border-t border-white/5 mt-1">
             @auth
@@ -521,6 +527,9 @@ function hideCookieBanner(){ nvPrivacyHide(); }
                 <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.75rem;">
                     <li><a href="/" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">Inicio</a></li>
                     <li><a href="{{ route('conocenos') }}" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">Conócenos</a></li>
+                    <li><a href="{{ route('cita') }}" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">📅 Agendar cita</a></li>
+                    <li><a href="{{ route('faq') }}" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">❓ FAQ</a></li>
+                    <li><a href="{{ route('portfolio') }}" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">🖼️ Galería</a></li>
                     <li><a href="{{ route('garantias') }}" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">Consultar mi garantía</a></li>
                     <li><a href="{{ route('resenas') }}" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">⭐ Reseñas</a></li>
                     <li><a href="{{ route('privacidad') }}" style="color:#94a3b8; font-size:0.875rem; font-weight:300; text-decoration:none;">Política de privacidad</a></li>

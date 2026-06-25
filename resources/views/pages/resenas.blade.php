@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Reseñas – Novitecnología Cia. Ltda.')
+@section('title', 'Reseñas y Opiniones de Clientes | Novitec Ecuador')
+@section('description', 'Lee las opiniones reales de clientes satisfechos con el servicio técnico de Novitec. Reparaciones de computadoras, celulares y soporte IT en Quito, Guayaquil y Manta.')
+@section('keywords', 'reseñas novitec, opiniones servicio técnico quito, clientes satisfechos reparación computadoras ecuador')
 
 @section('content')
 
@@ -131,7 +133,8 @@ body { font-family: 'Inter', sans-serif; }
         @endif
 
         <form method="POST" action="{{ route('reviews.store') }}"
-              style="background:#fff;border:1px solid #e2e8f0;border-radius:24px;padding:32px;" class="reveal">
+              style="background:#fff;border:1px solid #e2e8f0;border-radius:24px;padding:32px;" class="reveal"
+              onsubmit="this.querySelector('button[type=submit]').disabled=true;this.querySelector('button[type=submit]').textContent='Enviando...'">
             @csrf
 
             <div class="r-form-grid">

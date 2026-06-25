@@ -113,7 +113,7 @@ body { font-family: 'Inter', sans-serif; }
                     {{ session('success') }}
                 </div>
                 @endif
-                <form method="POST" action="{{ route('contacto.send') }}" class="space-y-4">
+                <form method="POST" action="{{ route('contacto.send') }}" class="space-y-4" onsubmit="novSubmit(this)"
                     @csrf
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
@@ -155,9 +155,10 @@ body { font-family: 'Inter', sans-serif; }
                                   class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-400 transition-colors resize-none">{{ old('message') }}</textarea>
                         @error('message')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                     </div>
-                    <button type="submit"
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-3 rounded-xl transition-colors">
-                        Enviar mensaje
+                    <button type="submit" id="contact-btn"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-3 rounded-xl transition-colors flex items-center justify-center gap-2">
+                        <span id="contact-btn-text">Enviar mensaje</span>
+                        <svg id="contact-spinner" class="hidden animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>
                     </button>
                 </form>
             </div>
@@ -208,6 +209,15 @@ body { font-family: 'Inter', sans-serif; }
 
 @push('scripts')
 <script>
+function novSubmit(form) {
+    const btn = document.getElementById('contact-btn');
+    const txt = document.getElementById('contact-btn-text');
+    const spin = document.getElementById('contact-spinner');
+    btn.disabled = true;
+    btn.classList.add('opacity-75');
+    txt.textContent = 'Enviando...';
+    spin.classList.remove('hidden');
+}
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.1 });
