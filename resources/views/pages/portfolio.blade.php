@@ -107,8 +107,8 @@ body { font-family: 'Inter', sans-serif; }
         {{-- CTA --}}
         <div class="mt-14 text-center reveal">
             <p class="text-slate-500 text-sm mb-4">¿Necesitas un servicio similar?</p>
-            <a href="{{ route('cita') }}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-8 py-3.5 rounded-xl transition-all hover:-translate-y-0.5">
-                <i class="fa-solid fa-calendar-check"></i> Agendar cita
+            <a href="{{ route('contacto') }}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-8 py-3.5 rounded-xl transition-all hover:-translate-y-0.5">
+                <i class="fa-solid fa-phone"></i> Contáctanos
             </a>
         </div>
     </div>

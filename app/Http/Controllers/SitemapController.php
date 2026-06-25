@@ -18,7 +18,6 @@ class SitemapController extends Controller
             ['url' => url('/soporte-autorizado'),        'priority' => '0.7',  'changefreq' => 'monthly'],
             ['url' => url('/resenas'),                   'priority' => '0.6',  'changefreq' => 'weekly'],
             ['url' => url('/warranties'),                'priority' => '0.7',  'changefreq' => 'monthly'],
-            ['url' => url('/cita'),                      'priority' => '0.9',  'changefreq' => 'monthly'],
             ['url' => url('/faq'),                       'priority' => '0.7',  'changefreq' => 'monthly'],
             ['url' => url('/portfolio'),                 'priority' => '0.7',  'changefreq' => 'weekly'],
             ['url' => url('/politica-de-privacidad'),    'priority' => '0.3',  'changefreq' => 'yearly'],
