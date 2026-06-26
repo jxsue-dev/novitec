@@ -157,27 +157,43 @@
         {{-- BOTONES DESKTOP --}}
         <div class="flex items-center gap-2">
             @auth
-                {{-- Chat IA solo visible en menú móvil --}}
-                @if(auth()->user()->is_admin)
-                {{-- Sin botón admin en el header --}}
-                @else
-                <div class="relative group hidden md:block">
-                    <button class="text-sm border border-white/20 hover:border-blue-400 text-slate-300 hover:text-white px-4 py-2 rounded-xl transition-all flex items-center gap-1">
-                        Mi cuenta
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                {{-- Avatar / Mi cuenta dropdown --}}
+                <div class="relative group hidden md:flex items-center">
+                    <button class="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-xl border border-white/10 hover:border-white/25 transition-all">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
+                             style="background:linear-gradient(135deg,#2563eb,#7c3aed)">
+                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                        </div>
+                        <span class="text-slate-300 text-sm max-w-[80px] truncate">{{ auth()->user()->name }}</span>
+                        <i class="fa-solid fa-chevron-down text-slate-500 text-xs"></i>
                     </button>
-                    <div class="absolute top-full right-0 mt-2 w-44 rounded-xl border border-white/10 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200" style="background:rgba(9,11,24,.97);backdrop-filter:blur(12px)">
-                        <a href="{{ route('client.orders') }}" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors"><i class="fa-solid fa-box"></i> Mis órdenes</a>
-                        <a href="{{ route('profile.edit') }}" class="block px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors border-t border-white/5"><i class="fa-solid fa-gear"></i> Mi perfil</a>
+                    <div class="absolute top-full right-0 mt-2 w-52 rounded-xl border border-white/10 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-xl"
+                         style="background:rgba(9,11,24,.97);backdrop-filter:blur(12px)">
+                        {{-- Info usuario --}}
+                        <div class="px-4 py-3 border-b border-white/5">
+                            <p class="text-white text-xs font-semibold truncate">{{ auth()->user()->name }}</p>
+                            <p class="text-slate-500 text-xs truncate">{{ auth()->user()->email }}</p>
+                        </div>
+                        @if(auth()->user()->is_admin)
+                            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
+                                <i class="fa-solid fa-gauge w-4 text-center"></i> Panel admin
+                            </a>
+                        @else
+                            <a href="{{ route('client.orders') }}" class="flex items-center gap-2 px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
+                                <i class="fa-solid fa-box w-4 text-center"></i> Mis órdenes
+                            </a>
+                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors border-t border-white/5">
+                                <i class="fa-solid fa-gear w-4 text-center"></i> Mi perfil
+                            </a>
+                        @endif
+                        <form method="POST" action="{{ route('logout') }}" class="border-t border-white/5">
+                            @csrf
+                            <button type="submit" class="w-full flex items-center gap-2 px-4 py-3 text-sm text-red-400 hover:text-red-300 hover:bg-white/5 transition-colors text-left">
+                                <i class="fa-solid fa-right-from-bracket w-4 text-center"></i> Cerrar sesión
+                            </button>
+                        </form>
                     </div>
                 </div>
-                @endif
-                <form method="POST" action="{{ route('logout') }}" class="hidden md:block">
-                    @csrf
-                    <button type="submit" class="text-sm border border-white/20 hover:border-white/50 text-slate-300 hover:text-white px-4 py-2 rounded-xl transition-all">
-                        Salir
-                    </button>
-                </form>
             @else
                 <a href="{{ route('login') }}" class="hidden md:inline-flex text-sm text-slate-300 hover:text-white px-4 py-2 rounded-xl transition-all">
                     Iniciar sesión
@@ -213,19 +229,30 @@
 
         <div class="pt-2 flex flex-col gap-2 border-t border-white/5 mt-1">
             @auth
+                {{-- Info usuario móvil --}}
+                <div class="flex items-center gap-3 px-1 py-2">
+                    <div class="w-9 h-9 rounded-lg flex items-center justify-center text-white font-bold flex-shrink-0"
+                         style="background:linear-gradient(135deg,#2563eb,#7c3aed)">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-white text-sm font-medium truncate">{{ auth()->user()->name }}</p>
+                        <p class="text-slate-500 text-xs truncate">{{ auth()->user()->email }}</p>
+                    </div>
+                </div>
                 <button onclick="toggleMenu(); setTimeout(toggleWidget, 350);"
                    class="block w-full text-sm bg-gradient-to-r from-blue-600 to-violet-600 text-white text-center py-2.5 rounded-xl border-0 cursor-pointer">
-                    <i class="fa-solid fa-robot"></i> Chat IA
+                    <i class="fa-solid fa-robot"></i> Asistente virtual
                 </button>
                 @if(auth()->user()->is_admin)
-                {{-- Sin botón admin en el header --}}
+                <a href="{{ route('admin.dashboard') }}" onclick="toggleMenu()" class="block text-sm border border-white/20 text-slate-300 text-center py-2.5 rounded-xl"><i class="fa-solid fa-gauge"></i> Panel admin</a>
                 @else
                 <a href="{{ route('client.orders') }}" onclick="toggleMenu()" class="block text-sm border border-white/20 text-slate-300 text-center py-2.5 rounded-xl"><i class="fa-solid fa-box"></i> Mis órdenes</a>
                 <a href="{{ route('profile.edit') }}" onclick="toggleMenu()" class="block text-sm border border-white/20 text-slate-300 text-center py-2.5 rounded-xl"><i class="fa-solid fa-gear"></i> Mi perfil</a>
                 @endif
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="w-full text-sm border border-white/20 text-slate-300 text-center py-2.5 rounded-xl">Salir</button>
+                    <button type="submit" class="w-full text-sm border border-red-500/30 text-red-400 text-center py-2.5 rounded-xl"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
                 </form>
             @else
                 <a href="{{ route('login') }}" onclick="toggleMenu()" class="block text-sm border border-white/20 text-slate-300 text-center py-2.5 rounded-xl">Iniciar sesión</a>

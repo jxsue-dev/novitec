@@ -34,11 +34,7 @@ class AuthenticatedSessionController extends Controller
             return redirect()->to($redirectTo);
         }
 
-        if (auth()->user()->is_admin) {
-            return redirect()->route('admin.dashboard');
-        }
-
-        return redirect()->route('client.orders');
+        return redirect()->intended('/');
     }
 
     /**
