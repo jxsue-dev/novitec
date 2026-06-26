@@ -2,101 +2,155 @@
 
 @section('title', 'Reseñas')
 @section('page-title', 'Reseñas')
-@section('page-subtitle', 'Gestiona las reseñas de clientes')
+@section('page-subtitle', 'Modera las reseñas de clientes')
 
 @section('content')
 
-<div style="display:flex;flex-direction:column;gap:16px;">
+@php
+$total    = $reviews->count();
+$featured = $reviews->where('featured', true)->count();
+$avg      = $reviews->avg('rating');
+$positive = $reviews->where('rating', '>=', 3)->count();
+@endphp
 
-    {{-- STATS --}}
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:8px;">
-        @php
-            $total = $reviews->count();
-            $featured = $reviews->where('featured', true)->count();
-            $avg = $reviews->avg('rating');
-            $positive = $reviews->where('rating', '>=', 3)->count();
-        @endphp
-        @foreach([
-            ['Total', $total, '#2563eb', null],
-            ['Destacadas', $featured . '/4', '#7c3aed', null],
-            ['Positivas (3+)', $positive, '#059669', 'fa-star'],
-            ['Promedio', number_format($avg, 1), '#d97706', 'fa-star'],
-        ] as $stat)
-        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;">
-            <p style="font-size:11px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">{{ $stat[0] }}</p>
-            <p style="font-size:24px;font-weight:700;color:{{ $stat[2] }};">{{ $stat[1] }} @if($stat[3])<i class="fa-solid {{ $stat[3] }}" style="font-size:14px;"></i>@endif</p>
+{{-- STATS --}}
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    @foreach([
+        ['Total reseñas',    $total,                      'bg-blue-50 text-blue-600',    'fa-comments'],
+        ['Destacadas',       $featured . ' de 4',         'bg-violet-50 text-violet-600', 'fa-star'],
+        ['Positivas (3+★)',  $positive,                   'bg-emerald-50 text-emerald-600','fa-thumbs-up'],
+        ['Promedio',         number_format($avg ?? 0, 1) . ' ★', 'bg-amber-50 text-amber-600', 'fa-chart-bar'],
+    ] as $s)
+    <div class="bg-white border border-slate-100 rounded-2xl p-5">
+        <div class="flex items-center gap-3 mb-2">
+            <div class="w-8 h-8 rounded-lg {{ $s[2] }} flex items-center justify-center text-sm">
+                <i class="fa-solid {{ $s[3] }}"></i>
+            </div>
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">{{ $s[0] }}</p>
         </div>
-        @endforeach
+        <p class="text-2xl font-bold text-slate-900">{{ $s[1] }}</p>
     </div>
+    @endforeach
+</div>
 
-    {{-- LISTA --}}
+{{-- FILTRO --}}
+<div class="bg-white border border-slate-100 rounded-2xl p-4 mb-4 flex items-center gap-3 flex-wrap">
+    <span class="text-xs font-medium text-slate-500">Filtrar por rating:</span>
+    <div class="flex gap-2 flex-wrap" id="filter-btns">
+        <button onclick="filterReviews('all')" data-filter="all"
+                class="filter-btn active text-xs px-3 py-1.5 rounded-lg border border-blue-500 bg-blue-500 text-white transition-all">
+            Todas
+        </button>
+        @foreach([5,4,3,2,1] as $r)
+        <button onclick="filterReviews({{ $r }})" data-filter="{{ $r }}"
+                class="filter-btn text-xs px-3 py-1.5 rounded-lg border border-slate-200 text-slate-500 hover:border-amber-400 hover:text-amber-600 transition-all">
+            {{ $r }} ★
+        </button>
+        @endforeach
+        <button onclick="filterReviews('featured')" data-filter="featured"
+                class="filter-btn text-xs px-3 py-1.5 rounded-lg border border-slate-200 text-slate-500 hover:border-violet-400 hover:text-violet-600 transition-all">
+            <i class="fa-solid fa-star text-amber-400"></i> Destacadas
+        </button>
+    </div>
+</div>
+
+{{-- LISTA --}}
+<div class="space-y-3" id="reviews-list">
     @forelse($reviews as $review)
-    <div style="background:#fff;border:1px solid {{ $review->featured ? '#bfdbfe' : '#e2e8f0' }};border-radius:16px;padding:20px;{{ $review->featured ? 'background:linear-gradient(135deg,#fff,#eff6ff);' : '' }}">
-        <div style="display:flex;align-items:start;justify-content:space-between;gap:16px;">
+    <div class="review-item bg-white rounded-2xl overflow-hidden transition-all {{ $review->featured ? 'border-2 border-blue-200' : 'border border-slate-100' }}"
+         data-rating="{{ $review->rating }}"
+         data-featured="{{ $review->featured ? 'true' : 'false' }}">
 
-            {{-- INFO --}}
-            <div style="flex:1;">
-                <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;">
-                    {{-- AVATAR --}}
-                    <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0;">
-                        {{ strtoupper(substr($review->name, 0, 1)) }}
-                    </div>
-                    <div>
-                        <p style="font-weight:600;color:#0f172a;font-size:14px;">{{ $review->name }}</p>
-                        <p style="font-size:12px;color:#94a3b8;">{{ $review->email }} · {{ $review->created_at->diffForHumans() }}</p>
-                    </div>
+        <div class="flex items-start gap-4 p-5">
+            {{-- Avatar --}}
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                 style="background:linear-gradient(135deg,#2563eb,#7c3aed)">
+                {{ strtoupper(substr($review->name, 0, 1)) }}
+            </div>
 
-                    {{-- ESTRELLAS --}}
-                    <div style="display:flex;gap:2px;margin-left:4px;">
+            {{-- Info --}}
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 flex-wrap mb-1">
+                    <p class="text-slate-900 text-sm font-semibold">{{ $review->name }}</p>
+                    {{-- Estrellas --}}
+                    <div class="flex gap-0.5">
                         @for($i = 1; $i <= 5; $i++)
-                        <svg style="width:16px;height:16px;color:{{ $i <= $review->rating ? '#f59e0b' : '#e2e8f0' }};" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                        </svg>
+                        <i class="fa-solid fa-star text-xs {{ $i <= $review->rating ? 'text-amber-400' : 'text-slate-200' }}"></i>
                         @endfor
                     </div>
-
                     @if($review->featured)
-                    <span style="font-size:11px;font-weight:600;color:#2563eb;background:#eff6ff;border:1px solid #bfdbfe;padding:2px 10px;border-radius:20px;">
-                        <i class="fa-solid fa-star"></i> Destacada
+                    <span class="text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full">
+                        <i class="fa-solid fa-star text-amber-400"></i> Destacada
                     </span>
                     @endif
-
                     @if($review->rating < 3)
-                    <span style="font-size:11px;font-weight:600;color:#dc2626;background:#fff1f2;border:1px solid #fecdd3;padding:2px 10px;border-radius:20px;">
+                    <span class="text-xs font-medium text-red-500 bg-red-50 border border-red-100 px-2 py-0.5 rounded-full">
                         No visible al público
                     </span>
                     @endif
                 </div>
-
-                <p style="color:#475569;font-size:14px;font-weight:300;line-height:1.6;">{{ $review->comment }}</p>
+                <p class="text-xs text-slate-400 mb-2">{{ $review->email }} · {{ $review->created_at->format('d M Y') }}</p>
+                <p class="text-slate-600 text-sm leading-relaxed">{{ $review->comment }}</p>
             </div>
 
-            {{-- ACCIONES --}}
-            <div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0;">
+            {{-- Acciones --}}
+            <div class="flex flex-col gap-2 flex-shrink-0">
                 <form method="POST" action="{{ route('admin.reviews.toggle', $review) }}">
                     @csrf @method('PATCH')
                     <button type="submit"
-                            style="font-size:12px;padding:6px 14px;border-radius:8px;cursor:pointer;width:100%;{{ $review->featured ? 'background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;' : 'background:#f8fafc;color:#64748b;border:1px solid #e2e8f0;' }}">
-                        @if($review->featured)<i class="fa-solid fa-star"></i> Quitar@else<i class="fa-regular fa-star"></i> Destacar@endif
+                            class="text-xs px-3 py-2 rounded-xl border transition-colors whitespace-nowrap {{ $review->featured ? 'bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100' : 'bg-slate-50 text-slate-500 border-slate-200 hover:border-amber-300 hover:text-amber-600' }}">
+                        @if($review->featured)
+                            <i class="fa-solid fa-star text-amber-400"></i> Quitar
+                        @else
+                            <i class="fa-regular fa-star"></i> Destacar
+                        @endif
                     </button>
                 </form>
                 <form method="POST" action="{{ route('admin.reviews.destroy', $review) }}"
-                      onsubmit="return confirm('¿Eliminar esta reseña?')">
+                      onsubmit="return confirm('¿Eliminar la reseña de {{ $review->name }}?')">
                     @csrf @method('DELETE')
                     <button type="submit"
-                            style="font-size:12px;padding:6px 14px;border-radius:8px;cursor:pointer;width:100%;background:#fff1f2;color:#f43f5e;border:1px solid #fecdd3;">
-                        Eliminar
+                            class="text-xs px-3 py-2 rounded-xl border border-red-100 bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 hover:border-red-200 transition-colors whitespace-nowrap w-full">
+                        <i class="fa-solid fa-trash-can"></i> Eliminar
                     </button>
                 </form>
             </div>
         </div>
     </div>
     @empty
-    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:48px;text-align:center;">
-        <p style="color:#94a3b8;font-size:14px;font-weight:300;">No hay reseñas aún.</p>
+    <div class="bg-white border border-slate-100 rounded-2xl p-12 text-center">
+        <i class="fa-solid fa-star text-slate-200 text-4xl mb-3 block"></i>
+        <p class="text-slate-400 text-sm">No hay reseñas registradas aún.</p>
     </div>
     @endforelse
-
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+function filterReviews(filter) {
+    // Update buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-500', 'text-white', 'border-blue-500');
+        btn.classList.add('border-slate-200', 'text-slate-500');
+    });
+    const active = document.querySelector(`[data-filter="${filter}"]`);
+    if (active) {
+        active.classList.add('bg-blue-500', 'text-white', 'border-blue-500');
+        active.classList.remove('border-slate-200', 'text-slate-500');
+    }
+
+    // Filter cards
+    document.querySelectorAll('.review-item').forEach(card => {
+        const rating   = parseInt(card.dataset.rating);
+        const featured = card.dataset.featured === 'true';
+        let show = false;
+        if (filter === 'all')      show = true;
+        else if (filter === 'featured') show = featured;
+        else show = rating === parseInt(filter);
+        card.style.display = show ? '' : 'none';
+    });
+}
+</script>
+@endpush

@@ -2,197 +2,290 @@
 
 @section('title', 'Servicios')
 @section('page-title', 'Servicios')
-@section('page-subtitle', 'Gestiona los servicios del catálogo')
+@section('page-subtitle', 'Gestiona el catálogo de servicios')
 
 @section('content')
 
-<div style="display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start;">
+@php
+$categories = [
+    'reparaciones'           => 'Reparaciones',
+    'redes'                  => 'Redes',
+    'servicios-it-presenciales' => 'IT Presencial',
+    'servicios-it-remotos'   => 'IT Remoto',
+];
+@endphp
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
     {{-- FORMULARIO NUEVO SERVICIO --}}
-    <div class="bg-white border border-slate-100 rounded-2xl p-6" style="position:sticky;top:24px;">
-        <h3 class="text-slate-900 text-sm font-semibold mb-5">Nuevo servicio</h3>
-        <form method="POST" action="{{ route('admin.services.store') }}" enctype="multipart/form-data">
+    <div class="bg-white border border-slate-100 rounded-2xl p-6 self-start lg:sticky lg:top-6">
+        <h3 class="text-slate-900 text-sm font-semibold mb-5 flex items-center gap-2">
+            <i class="fa-solid fa-plus text-blue-500 text-xs"></i> Nuevo servicio
+        </h3>
+        <form method="POST" action="{{ route('admin.services.store') }}" enctype="multipart/form-data" class="space-y-3">
             @csrf
-            <div class="space-y-3">
+
+            {{-- Preview imagen --}}
+            <div id="new-preview-wrap" class="hidden rounded-xl overflow-hidden border border-slate-100 aspect-video bg-slate-50">
+                <img id="new-preview" src="" alt="Preview" class="w-full h-full object-cover">
+            </div>
+
+            <div>
+                <label class="block text-xs font-medium text-slate-500 mb-1.5">Nombre *</label>
+                <input type="text" name="name" required placeholder="Ej: Reparación de laptops"
+                       class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400/20 transition-colors">
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-slate-500 mb-1.5">Categoría</label>
+                <select name="category" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-blue-400 transition-colors">
+                    @foreach($categories as $val => $label)
+                    <option value="{{ $val }}">{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-slate-500 mb-1.5">Descripción</label>
+                <textarea name="description" rows="3" placeholder="Describe brevemente el servicio…"
+                          class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400/20 transition-colors resize-none"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-slate-500 mb-1.5">Precio desde ($)</label>
+                <div class="flex items-center border border-slate-200 rounded-xl overflow-hidden focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-400/20 transition-colors">
+                    <span class="px-3 py-2.5 bg-slate-50 text-slate-400 text-sm border-r border-slate-200 flex-shrink-0">$</span>
+                    <input type="number" name="price" min="0" step="0.01" placeholder="0.00"
+                           class="flex-1 px-3 py-2.5 text-sm focus:outline-none">
+                </div>
+            </div>
+
+            {{-- Imagen: tabs archivo / URL --}}
+            <div>
+                <label class="block text-xs font-medium text-slate-500 mb-1.5">Imagen</label>
+                <div class="flex rounded-xl border border-slate-200 overflow-hidden text-xs mb-2">
+                    <button type="button" onclick="setImgMode('file','new')"
+                            id="new-tab-file"
+                            class="img-tab flex-1 py-2 font-medium bg-blue-500 text-white transition-colors">
+                        <i class="fa-solid fa-upload mr-1"></i> Archivo
+                    </button>
+                    <button type="button" onclick="setImgMode('url','new')"
+                            id="new-tab-url"
+                            class="img-tab flex-1 py-2 font-medium text-slate-500 hover:bg-slate-50 transition-colors">
+                        <i class="fa-solid fa-link mr-1"></i> URL
+                    </button>
+                </div>
+                <div id="new-file-wrap">
+                    <input type="file" name="image" accept="image/*" onchange="previewImg(this,'new')"
+                           class="w-full text-sm text-slate-500 border border-slate-200 rounded-xl px-3 py-2 cursor-pointer">
+                </div>
+                <div id="new-url-wrap" class="hidden">
+                    <input type="url" name="image_url" placeholder="https://images.unsplash.com/..."
+                           oninput="previewUrl(this,'new')"
+                           class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400/20 transition-colors">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Nombre</label>
-                    <input type="text" name="name" required
-                           class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                    <label class="block text-xs font-medium text-slate-500 mb-1.5">Orden</label>
+                    <input type="number" name="order" value="0" min="0"
+                           class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-blue-400 transition-colors">
+                    <p class="text-xs text-slate-400 mt-1">Menor = aparece primero</p>
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Categoría</label>
-                    <select name="category" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
-                        <option value="reparaciones">Reparaciones</option>
-                        <option value="redes">Redes</option>
-                        <option value="servicios-it-presenciales">IT Presencial</option>
-                        <option value="servicios-it-remotos">IT Remoto</option>
+                    <label class="block text-xs font-medium text-slate-500 mb-1.5">Estado</label>
+                    <select name="active" class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-blue-400 transition-colors">
+                        <option value="1">✅ Activo</option>
+                        <option value="0">❌ Inactivo</option>
                     </select>
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">Descripción</label>
-                    <textarea name="description" rows="3"
-                              class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400"></textarea>
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">Precio</label>
-                    <div style="display:flex;align-items:center;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">
-                        <span style="padding:8px 12px;background:#f8fafc;color:#94a3b8;font-size:13px;border-right:1px solid #e2e8f0;white-space:nowrap;">Desde $</span>
-                        <input type="number" name="price" min="0" step="0.01"
-                               style="flex:1;border:none;padding:8px 12px;font-size:13px;outline:none;">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">Imagen (archivo)</label>
-                    <input type="file" name="image" accept="image/*"
-                           class="w-full text-sm text-slate-500">
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">O URL de imagen</label>
-                    <input type="url" name="image_url" placeholder="https://..."
-                           class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Orden</label>
-                        <input type="number" name="order" value="0"
-                               class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Activo</label>
-                        <select name="active" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
-                            <option value="1">Sí</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
                 </div>
             </div>
             <button type="submit"
-                    style="margin-top:16px;width:100%;background:#2563eb;color:#fff;border:none;padding:10px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;">
-                + Agregar servicio
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2.5 rounded-xl transition-colors">
+                <i class="fa-solid fa-plus mr-1"></i> Agregar servicio
             </button>
         </form>
     </div>
 
-    {{-- LISTA DE SERVICIOS --}}
-    <div style="display:flex;flex-direction:column;gap:16px;">
-
+    {{-- LISTA --}}
+    <div class="lg:col-span-2 flex flex-col gap-4">
         <p class="text-slate-400 text-sm">{{ $services->count() }} {{ $services->count() === 1 ? 'servicio' : 'servicios' }} registrados</p>
 
         @forelse($services as $service)
-        <div class="bg-white border border-slate-100 rounded-2xl" style="overflow:hidden;">
-            <div style="display:flex;">
-                {{-- IMAGEN --}}
-                <div style="width:160px;flex-shrink:0;">
+        <div class="bg-white border border-slate-100 rounded-2xl overflow-hidden">
+            <div class="flex">
+                {{-- Imagen preview --}}
+                <div class="w-36 flex-shrink-0 bg-slate-50">
                     @if($service->image_src)
                     <img src="{{ $service->image_src }}" alt="{{ $service->name }}"
-                         style="width:100%;height:100%;object-fit:cover;min-height:160px;">
+                         class="w-full h-full object-cover" style="min-height:144px;" loading="lazy">
                     @else
-                    <div style="width:100%;min-height:160px;background:#f8fafc;display:flex;align-items:center;justify-content:center;">
-                        <svg style="width:32px;height:32px;color:#e2e8f0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
+                    <div class="w-full flex items-center justify-center" style="min-height:144px;">
+                        <i class="fa-solid fa-image text-slate-200 text-3xl"></i>
                     </div>
                     @endif
                 </div>
 
-                {{-- FORM EDITAR --}}
-                <div style="flex:1;padding:20px;">
+                {{-- Form --}}
+                <div class="flex-1 p-4">
+                    {{-- Header --}}
+                    <div class="flex items-center gap-2 mb-3 flex-wrap">
+                        <span class="w-2 h-2 rounded-full {{ $service->active ? 'bg-emerald-400' : 'bg-slate-300' }}"></span>
+                        <span class="text-slate-900 text-sm font-semibold">{{ $service->name }}</span>
+                        <span class="text-xs text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                            {{ $categories[$service->category] ?? $service->category }}
+                        </span>
+                        @if($service->price)
+                        <span class="text-xs text-blue-600 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">
+                            Desde ${{ $service->price }}
+                        </span>
+                        @endif
+                    </div>
+
                     <form method="POST" action="{{ route('admin.services.update', $service) }}" enctype="multipart/form-data">
                         @csrf @method('PATCH')
-
-                        {{-- HEADER --}}
-                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-                            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                                <span style="width:8px;height:8px;border-radius:50%;background:{{ $service->active ? '#34d399' : '#94a3b8' }};display:inline-block;"></span>
-                                <span style="font-size:14px;font-weight:600;color:#0f172a;">{{ $service->name }}</span>
-                                <span style="font-size:11px;color:#64748b;background:#f8fafc;border:1px solid #e2e8f0;padding:2px 8px;border-radius:20px;">
-                                    {{ ucwords(str_replace('-', ' ', $service->category)) }}
-                                </span>
-                                @if($service->price)
-                                <span style="font-size:11px;color:#2563eb;background:#eff6ff;border:1px solid #bfdbfe;padding:2px 8px;border-radius:20px;">
-                                    Desde ${{ $service->price }}
-                                </span>
-                                @endif
-                            </div>
-                            <button type="submit"
-                                    style="font-size:12px;background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;padding:6px 12px;border-radius:8px;cursor:pointer;">
-                                Guardar
-                            </button>
-                        </div>
-
-                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                        <div class="grid grid-cols-2 gap-2.5 mb-2.5">
                             <div>
-                                <label class="block text-xs text-slate-400 mb-1">Nombre</label>
+                                <label class="block text-xs text-slate-400 mb-1">Nombre *</label>
                                 <input type="text" name="name" value="{{ $service->name }}" required
-                                       class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                                       class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 transition-colors">
                             </div>
                             <div>
                                 <label class="block text-xs text-slate-400 mb-1">Categoría</label>
-                                <select name="category" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
-                                    <option value="reparaciones" {{ $service->category === 'reparaciones' ? 'selected' : '' }}>Reparaciones</option>
-                                    <option value="redes" {{ $service->category === 'redes' ? 'selected' : '' }}>Redes</option>
-                                    <option value="servicios-it-presenciales" {{ $service->category === 'servicios-it-presenciales' ? 'selected' : '' }}>IT Presencial</option>
-                                    <option value="servicios-it-remotos" {{ $service->category === 'servicios-it-remotos' ? 'selected' : '' }}>IT Remoto</option>
+                                <select name="category" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 transition-colors">
+                                    @foreach($categories as $val => $label)
+                                    <option value="{{ $val }}" {{ $service->category === $val ? 'selected' : '' }}>{{ $label }}</option>
+                                    @endforeach
                                 </select>
                             </div>
-                            <div style="grid-column:span 2;">
+                            <div class="col-span-2">
                                 <label class="block text-xs text-slate-400 mb-1">Descripción</label>
                                 <textarea name="description" rows="2"
-                                          class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">{{ $service->description }}</textarea>
+                                          class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 transition-colors resize-none">{{ $service->description }}</textarea>
                             </div>
                             <div>
-                                <label class="block text-xs text-slate-400 mb-1">Precio</label>
-                                <div style="display:flex;align-items:center;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">
-                                    <span style="padding:8px 12px;background:#f8fafc;color:#94a3b8;font-size:13px;border-right:1px solid #e2e8f0;white-space:nowrap;">Desde $</span>
+                                <label class="block text-xs text-slate-400 mb-1">Precio ($)</label>
+                                <div class="flex items-center border border-slate-200 rounded-lg overflow-hidden focus-within:border-blue-400 transition-colors">
+                                    <span class="px-2 py-2 bg-slate-50 text-slate-400 text-xs border-r border-slate-200">$</span>
                                     <input type="number" name="price" value="{{ $service->price }}" min="0" step="0.01"
-                                           style="flex:1;border:none;padding:8px 12px;font-size:13px;outline:none;">
+                                           class="flex-1 px-2 py-2 text-sm focus:outline-none">
                                 </div>
                             </div>
-                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                            <div class="grid grid-cols-2 gap-2">
                                 <div>
                                     <label class="block text-xs text-slate-400 mb-1">Orden</label>
                                     <input type="number" name="order" value="{{ $service->order }}"
-                                           class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+                                           class="w-full border border-slate-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-blue-400 transition-colors">
                                 </div>
                                 <div>
-                                    <label class="block text-xs text-slate-400 mb-1">Activo</label>
-                                    <select name="active" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
-                                        <option value="1" {{ $service->active ? 'selected' : '' }}>Sí</option>
-                                        <option value="0" {{ !$service->active ? 'selected' : '' }}>No</option>
+                                    <label class="block text-xs text-slate-400 mb-1">Estado</label>
+                                    <select name="active" class="w-full border border-slate-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-blue-400 transition-colors">
+                                        <option value="1" {{ $service->active ? 'selected' : '' }}>✅ Activo</option>
+                                        <option value="0" {{ !$service->active ? 'selected' : '' }}>❌ Inactivo</option>
                                     </select>
                                 </div>
                             </div>
-                            <div>
-                                <label class="block text-xs text-slate-400 mb-1">Nueva imagen</label>
-                                <input type="file" name="image" accept="image/*" class="w-full text-sm text-slate-500">
-                            </div>
-                            <div>
-                                <label class="block text-xs text-slate-400 mb-1">O URL de imagen</label>
-                                <input type="url" name="image_url" value="{{ $service->image_url }}"
-                                       class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+
+                            {{-- Imagen con tabs --}}
+                            <div class="col-span-2">
+                                <label class="block text-xs text-slate-400 mb-1">Imagen</label>
+                                <div class="flex rounded-lg border border-slate-200 overflow-hidden text-xs mb-1.5">
+                                    <button type="button" onclick="setImgMode('file','{{ $service->id }}')"
+                                            id="{{ $service->id }}-tab-file"
+                                            class="img-tab flex-1 py-1.5 font-medium bg-blue-500 text-white transition-colors">
+                                        <i class="fa-solid fa-upload mr-1"></i> Nuevo archivo
+                                    </button>
+                                    <button type="button" onclick="setImgMode('url','{{ $service->id }}')"
+                                            id="{{ $service->id }}-tab-url"
+                                            class="img-tab flex-1 py-1.5 font-medium text-slate-500 hover:bg-slate-50 transition-colors">
+                                        <i class="fa-solid fa-link mr-1"></i> URL externa
+                                    </button>
+                                </div>
+                                <div id="{{ $service->id }}-file-wrap">
+                                    <input type="file" name="image" accept="image/*"
+                                           class="w-full text-xs text-slate-500 border border-slate-200 rounded-lg px-2 py-1.5 cursor-pointer">
+                                </div>
+                                <div id="{{ $service->id }}-url-wrap" class="hidden">
+                                    <input type="url" name="image_url" value="{{ $service->image_url }}"
+                                           placeholder="https://..."
+                                           class="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-blue-400 transition-colors">
+                                </div>
                             </div>
                         </div>
-                    </form>
 
-                    <div style="margin-top:12px;display:flex;justify-content:flex-end;">
-                        <form method="POST" action="{{ route('admin.services.destroy', $service) }}"
-                              onsubmit="return confirm('¿Eliminar este servicio?')">
-                            @csrf @method('DELETE')
+                        <div class="flex items-center justify-between">
+                            <form method="POST" action="{{ route('admin.services.destroy', $service) }}"
+                                  onsubmit="return confirm('¿Eliminar {{ $service->name }}?')" class="inline">
+                                @csrf @method('DELETE')
+                                <button type="submit"
+                                        class="text-xs text-red-400 hover:text-red-600 border border-red-100 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-lg transition-colors">
+                                    <i class="fa-solid fa-trash-can mr-1"></i> Eliminar
+                                </button>
+                            </form>
                             <button type="submit"
-                                    style="font-size:12px;background:#fff1f2;color:#f43f5e;border:1px solid #fecdd3;padding:6px 12px;border-radius:8px;cursor:pointer;">
-                                Eliminar
+                                    class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-5 py-2 rounded-lg transition-colors">
+                                <i class="fa-solid fa-floppy-disk mr-1"></i> Guardar
                             </button>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
         @empty
         <div class="bg-white border border-slate-100 rounded-2xl p-12 text-center">
-            <p class="text-slate-400 text-sm font-light">No hay servicios registrados aún.</p>
+            <i class="fa-solid fa-wrench text-slate-200 text-4xl mb-3 block"></i>
+            <p class="text-slate-400 text-sm">No hay servicios registrados. Agrega el primero.</p>
         </div>
         @endforelse
     </div>
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+function setImgMode(mode, id) {
+    const fileWrap = document.getElementById(`${id}-file-wrap`);
+    const urlWrap  = document.getElementById(`${id}-url-wrap`);
+    const fileTab  = document.getElementById(`${id}-tab-file`);
+    const urlTab   = document.getElementById(`${id}-tab-url`);
+    if (!fileWrap) return;
+
+    if (mode === 'file') {
+        fileWrap.classList.remove('hidden');
+        urlWrap.classList.add('hidden');
+        fileTab.classList.add('bg-blue-500','text-white');
+        fileTab.classList.remove('text-slate-500');
+        urlTab.classList.remove('bg-blue-500','text-white');
+        urlTab.classList.add('text-slate-500');
+    } else {
+        urlWrap.classList.remove('hidden');
+        fileWrap.classList.add('hidden');
+        urlTab.classList.add('bg-blue-500','text-white');
+        urlTab.classList.remove('text-slate-500');
+        fileTab.classList.remove('bg-blue-500','text-white');
+        fileTab.classList.add('text-slate-500');
+    }
+}
+
+function previewImg(input, id) {
+    if (!input.files || !input.files[0]) return;
+    const wrap = document.getElementById(`${id}-preview-wrap`);
+    const img  = document.getElementById(`${id}-preview`);
+    if (!wrap || !img) return;
+    const url = URL.createObjectURL(input.files[0]);
+    img.src = url;
+    wrap.classList.remove('hidden');
+}
+
+function previewUrl(input, id) {
+    const wrap = document.getElementById(`${id}-preview-wrap`);
+    const img  = document.getElementById(`${id}-preview`);
+    if (!wrap || !img) return;
+    if (input.value) {
+        img.src = input.value;
+        wrap.classList.remove('hidden');
+    } else {
+        wrap.classList.add('hidden');
+    }
+}
+</script>
+@endpush
