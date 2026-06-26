@@ -157,11 +157,7 @@
         {{-- BOTONES DESKTOP --}}
         <div class="flex items-center gap-2">
             @auth
-                {{-- Chat IA (todos los usuarios autenticados) --}}
-                <button onclick="toggleWidget()"
-                   class="hidden md:inline-flex items-center gap-1.5 text-sm bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white px-4 py-2 rounded-xl transition-all shadow-lg shadow-blue-600/20 hover:shadow-blue-500/30 hover:-translate-y-0.5 border-0 cursor-pointer">
-                    <i class="fa-solid fa-robot text-xs"></i> Chat IA
-                </button>
+                {{-- Chat IA solo visible en menú móvil --}}
                 @if(auth()->user()->is_admin)
                 {{-- Sin botón admin en el header --}}
                 @else
@@ -266,7 +262,7 @@
             <i class="fa-solid fa-robot" style="color:#fff;font-size:1.1rem;"></i>
         </div>
         <div style="flex:1;min-width:0;">
-            <p style="color:#fff;font-weight:600;font-size:14px;margin:0;line-height:1.2;">Asistente IA Novitec</p>
+            <p style="color:#fff;font-weight:600;font-size:14px;margin:0;line-height:1.2;">Asistente virtual</p>
             <p style="color:rgba(255,255,255,.65);font-size:11px;margin:0;display:flex;align-items:center;gap:5px;">
                 <span style="width:7px;height:7px;border-radius:50%;background:#4ade80;display:inline-block;flex-shrink:0;"></span>En línea
             </p>
@@ -307,7 +303,7 @@
 
 {{-- FAB BUTTON --}}
 <button id="chat-fab" onclick="{{ auth()->check() ? 'toggleWidget()' : 'window.location=\''.route('login').'\'' }}"
-   title="Asistente IA Novitec"
+   title="Asistente virtual"
    style="position:fixed;bottom:24px;right:24px;z-index:9999;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .2s ease;">
     <i class="fa-solid fa-robot" style="color:#fff;font-size:1.5rem;"></i>
 </button>
