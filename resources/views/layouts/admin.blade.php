@@ -89,19 +89,22 @@
 
         {{-- USUARIO --}}
         <div class="px-4 py-4 border-t border-white/5">
-            <div class="flex items-center gap-3 px-3 py-2">
-                <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                    {{ substr(auth()->user()->name ?? 'A', 0, 1) }}
+            <a href="{{ route('admin.account') }}"
+               class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.account') ? 'bg-white/10' : 'hover:bg-white/5' }}">
+                <div class="w-8 h-8 rounded-xl flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                     style="background:linear-gradient(135deg,#2563eb,#7c3aed)">
+                    {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
                 </div>
                 <div class="flex-1 min-w-0">
                     <p class="text-white text-xs font-medium truncate">{{ auth()->user()->name ?? 'Admin' }}</p>
-                    <p class="text-slate-500 text-xs font-light truncate">{{ auth()->user()->email ?? '' }}</p>
+                    <p class="text-slate-500 text-xs font-light truncate">Mi cuenta</p>
                 </div>
-            </div>
-            <form method="POST" action="{{ route('logout') }}" class="mt-2">
+                <i class="fa-solid fa-chevron-right text-slate-600 text-xs"></i>
+            </a>
+            <form method="POST" action="{{ route('logout') }}" class="mt-1">
                 @csrf
-                <button type="submit" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-all">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                <button type="submit" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-500 hover:text-red-400 hover:bg-white/5 transition-all">
+                    <i class="fa-solid fa-right-from-bracket w-4 text-center"></i>
                     Cerrar sesión
                 </button>
             </form>

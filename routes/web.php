@@ -77,6 +77,9 @@ Route::prefix('mi-cuenta')->middleware(['auth'])->group(function () {
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/mi-cuenta', fn() => view('admin.account'))->name('admin.account');
+    Route::patch('/mi-cuenta', [ProfileController::class, 'update'])->name('admin.account.update');
+    Route::put('/mi-cuenta/password', [\App\Http\Controllers\Auth\PasswordController::class, 'update'])->name('admin.account.password');
 
     Route::get('/usuarios', [UserController::class, 'index'])->name('admin.users');
     Route::patch('/usuarios/{user}/toggle-admin', [UserController::class, 'toggleAdmin'])->name('admin.users.toggle');
