@@ -129,14 +129,14 @@
 
 {{-- NAVBAR --}}
 <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-500">
-    <div class="max-w-7xl mx-auto px-6 md:px-8 py-4 md:py-5 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4 flex items-center justify-between gap-4">
 
-        <a href="/">
-            <img src="{{ asset('images/novitec_logo.png') }}" alt="Novitec" class="h-8 md:h-9 brightness-0 invert">
+        <a href="/" class="flex-shrink-0">
+            <img src="{{ asset('images/novitec_logo.png') }}" alt="Novitec" class="h-7 md:h-8 brightness-0 invert">
         </a>
 
         {{-- LINKS DESKTOP --}}
-        <ul class="hidden md:flex items-center gap-10 text-sm text-slate-400">
+        <ul class="hidden md:flex items-center gap-5 lg:gap-8 text-sm text-slate-400 flex-1 justify-center">
             <li><a href="/" class="hover:text-white transition-colors duration-200 tracking-wide">Inicio</a></li>
             <li><a href="{{ route('conocenos') }}" class="hover:text-white transition-colors duration-200 tracking-wide">Conócenos</a></li>
             <li><a href="{{ route('servicios') }}" class="hover:text-white transition-colors duration-200 tracking-wide">Servicios</a></li>
@@ -159,13 +159,14 @@
             @auth
                 {{-- Avatar / Mi cuenta dropdown --}}
                 <div class="relative group hidden md:flex items-center">
-                    <button class="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-xl border border-white/10 hover:border-white/25 transition-all">
+                    <button class="flex items-center gap-2 p-1 rounded-xl border border-white/10 hover:border-white/25 transition-all">
                         <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
                              style="background:linear-gradient(135deg,#2563eb,#7c3aed)">
                             {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                         </div>
-                        <span class="text-slate-300 text-sm max-w-[80px] truncate">{{ auth()->user()->name }}</span>
-                        <i class="fa-solid fa-chevron-down text-slate-500 text-xs"></i>
+                        {{-- Nombre solo en pantallas grandes --}}
+                        <span class="hidden lg:block text-slate-300 text-sm max-w-[100px] truncate pr-1">{{ auth()->user()->name }}</span>
+                        <i class="fa-solid fa-chevron-down text-slate-500 text-xs pr-1"></i>
                     </button>
                     <div class="absolute top-full right-0 mt-2 w-52 rounded-xl border border-white/10 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-xl"
                          style="background:rgba(9,11,24,.97);backdrop-filter:blur(12px)">
