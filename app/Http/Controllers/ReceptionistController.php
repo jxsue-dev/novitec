@@ -21,18 +21,20 @@ class ReceptionistController extends Controller
             $base = $base->where('nro_orden', 'like', $orderPrefix . '%');
         }
 
-        $estadosActivos = ['En Revisión', 'En Reparacion', 'Esperando Repuesto'];
+        $estadosActivos  = ['En Revisión', 'En Reparacion', 'Esperando Repuesto'];
         $estadosCerrados = ['Finalizada', 'Entregada', 'Anulada', 'Nota de Credito'];
+
+        // Filtro seguro para fechas prometidas válidas (evita DATE('') en modo estricto)
+        $fechaValida = "fecha_prometido REGEXP '^[0-9]{4}-[0-9]{2}-[0-9]{2}'";
 
         // ── Stats ─────────────────────────────────────────────────────────
         $stats = [
-            'hoy'       => (clone $base)->whereRaw('DATE(fecha_de_ingreso) = CURDATE()')->count(),
+            'hoy'       => (clone $base)->whereRaw("DATE(fecha_de_ingreso) = CURDATE()")->count(),
             'listas'    => (clone $base)->where('estado_orden', 'Finalizada')->count(),
             'proceso'   => (clone $base)->whereIn('estado_orden', $estadosActivos)->count(),
             'atrasadas' => (clone $base)
-                ->whereNotNull('fecha_prometido')
-                ->whereRaw('fecha_prometido != ""')
-                ->whereRaw('DATE(fecha_prometido) < CURDATE()')
+                ->whereRaw($fechaValida)
+                ->whereRaw("DATE(fecha_prometido) < CURDATE()")
                 ->whereNotIn('estado_orden', $estadosCerrados)
                 ->count(),
         ];
@@ -40,24 +42,23 @@ class ReceptionistController extends Controller
         // ── Listas para entregar ──────────────────────────────────────────
         $listas = (clone $base)
             ->where('estado_orden', 'Finalizada')
-            ->orderByDesc('fecha_de_ingreso')
+            ->orderBy('fecha_de_ingreso', 'desc')
             ->limit(20)
             ->get(['nro_orden','nombres','apellidos','cliente','tipo','marca','modelo','tecnico','serie','telefono','numero_contacto','fecha_de_ingreso_fmt']);
 
         // ── Atrasadas ─────────────────────────────────────────────────────
         $atrasadas = (clone $base)
-            ->whereNotNull('fecha_prometido')
-            ->whereRaw('fecha_prometido != ""')
-            ->whereRaw('DATE(fecha_prometido) < CURDATE()')
+            ->whereRaw($fechaValida)
+            ->whereRaw("DATE(fecha_prometido) < CURDATE()")
             ->whereNotIn('estado_orden', $estadosCerrados)
-            ->orderBy('fecha_prometido')
+            ->orderBy('fecha_prometido', 'asc')
             ->limit(20)
             ->get(['nro_orden','nombres','apellidos','cliente','tipo','marca','modelo','estado_orden','tecnico','fecha_prometido_fmt','serie','telefono','numero_contacto']);
 
         // ── Ingresadas hoy ────────────────────────────────────────────────
         $hoy = (clone $base)
-            ->whereRaw('DATE(fecha_de_ingreso) = CURDATE()')
-            ->orderByDesc('fecha_de_ingreso')
+            ->whereRaw("DATE(fecha_de_ingreso) = CURDATE()")
+            ->orderBy('fecha_de_ingreso', 'desc')
             ->limit(20)
             ->get(['nro_orden','nombres','apellidos','cliente','tipo','marca','modelo','estado_orden','tecnico','fecha_de_ingreso_fmt','serie']);
 
@@ -65,7 +66,7 @@ class ReceptionistController extends Controller
         $porEstado = (clone $base)
             ->select('estado_orden', DB::raw('count(*) as total'))
             ->groupBy('estado_orden')
-            ->orderByDesc('total')
+            ->orderBy('total', 'desc')
             ->get();
 
         return view('recepcion.dashboard', compact(
