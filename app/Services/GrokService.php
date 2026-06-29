@@ -43,11 +43,15 @@ PROMPT;
         $this->apiKey = config('services.groq.api_key', '');
     }
 
-    public function chat(array $messages, string $extraContext = ''): string
+    public function chat(array $messages, string $extraContext = '', string $overrideSystemPrompt = ''): string
     {
-        $systemContent = $extraContext
-            ? $this->systemPrompt . "\n\n" . $extraContext
-            : $this->systemPrompt;
+        if ($overrideSystemPrompt !== '') {
+            $systemContent = $overrideSystemPrompt;
+        } elseif ($extraContext !== '') {
+            $systemContent = $this->systemPrompt . "\n\n" . $extraContext;
+        } else {
+            $systemContent = $this->systemPrompt;
+        }
 
         $payload = [
             'model'       => $this->model,

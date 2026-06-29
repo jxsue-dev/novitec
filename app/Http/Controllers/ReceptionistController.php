@@ -9,6 +9,71 @@ use Illuminate\Support\Facades\DB;
 
 class ReceptionistController extends Controller
 {
+    public function aiChat(Request $request)
+    {
+        $request->validate([
+            'message'       => 'required|string|max:2000',
+            'order_context' => 'nullable|string|max:4000',
+            'history'       => 'nullable|array|max:20',
+        ]);
+
+        $systemPrompt = <<<PROMPT
+Eres un asistente de apoyo para RECEPCIONISTAS de Novitec (empresa ecuatoriana de servicio técnico).
+Las recepcionistas NO tienen conocimiento técnico. Tu misión es ayudarlas a entender y comunicar el estado de los equipos.
+
+PUEDES AYUDAR CON:
+- Explicar términos técnicos en lenguaje simple (sin jerga)
+- Decirles cómo informar al cliente sobre el estado de su equipo
+- Explicar qué significa el trabajo que realizó el técnico
+- Sugerir respuestas amables para dar al cliente
+- Interpretar el diagnóstico o informe técnico
+- Explicar estados: "En Revisión", "En Reparación", "Esperando Repuesto", "Finalizada", "Entregada"
+- Responder preguntas sobre tiempos, garantías o procesos de Novitec
+
+NO PUEDES:
+- Dar información de otras empresas
+- Comprometerte con precios o fechas exactas sin autorización del técnico
+- Modificar órdenes o datos del sistema
+
+TONO: Amigable, claro, sin tecnicismos. Si hay términos técnicos, explícalos con analogías simples.
+Responde siempre en español ecuatoriano.
+PROMPT;
+
+        $messages = [];
+
+        // Inyectar contexto de orden si se proporcionó
+        if ($request->filled('order_context')) {
+            $messages[] = [
+                'role'    => 'user',
+                'content' => '[CONTEXTO DE LA ORDEN]\n' . $request->order_context,
+            ];
+            $messages[] = [
+                'role'    => 'assistant',
+                'content' => 'Entendido. Tengo el contexto de esta orden. ¿En qué te puedo ayudar?',
+            ];
+        }
+
+        // Historial de la conversación actual
+        if ($request->filled('history')) {
+            foreach ($request->history as $msg) {
+                if (isset($msg['role'], $msg['content']) && in_array($msg['role'], ['user', 'assistant'])) {
+                    $messages[] = ['role' => $msg['role'], 'content' => (string)$msg['content']];
+                }
+            }
+        }
+
+        $messages[] = ['role' => 'user', 'content' => $request->message];
+
+        try {
+            $grok = app(\App\Services\GrokService::class);
+            $reply = $grok->chat($messages, '', $systemPrompt);
+        } catch (\Throwable) {
+            $reply = 'Lo siento, hubo un error al consultar el asistente. Intenta de nuevo.';
+        }
+
+        return response()->json(['reply' => $reply]);
+    }
+
     public function fotoInforme(int $fotoId)
     {
         $foto = DB::connection('novitecdb')

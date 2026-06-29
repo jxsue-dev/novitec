@@ -102,6 +102,13 @@
         $falla   = trim(($o->falla ?? '').(($o->falla && $o->observacion) ? ' — ' : '').($o->observacion ?? ''));
         $informe = $informes->get($o->orden_id ?? null);
         $fotos   = $informe ? ($informeFotos->get($informe->id) ?? collect()) : collect();
+
+        // Contexto para el asistente IA
+        $aiCtx = "ORDEN: {$o->nro_orden}\nESTADO: {$o->estado_orden}\nCLIENTE: {$cliente}\nEQUIPO: {$equipo}\nSERIE: {$o->serie}\nFALLA REPORTADA: {$o->falla}\nOBSERVACION: {$o->observacion}\nTECNICO: {$o->tecnico}\nSUCURSAL: {$o->sucursal}\nMOTIVO INGRESO: {$o->motivo_ingreso}";
+        if ($informe) {
+            $aiCtx .= "\n\nINFORME TECNICO:\nAntecedentes: {$informe->antecedentes}\nProceso: {$informe->proceso}\nConclusión: {$informe->conclusion}\nRecomendaciones: {$informe->recomendaciones}\nEstado equipo: {$informe->estado_equipo}";
+        }
+        $aiCtxJs = addslashes(str_replace(["\r","\n"], ['',"\\n"], $aiCtx));
     @endphp
 
     <div class="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
@@ -123,9 +130,17 @@
                 </span>
                 @endif
             </div>
-            <span class="text-xs font-bold px-3 py-1.5 rounded-full border flex items-center gap-1.5 flex-shrink-0 {{ $sc }}">
-                <i class="fa-solid {{ $si }}"></i> {{ $o->estado_orden ?? '—' }}
-            </span>
+            <div class="flex items-center gap-2 flex-shrink-0">
+                <span class="text-xs font-bold px-3 py-1.5 rounded-full border flex items-center gap-1.5 {{ $sc }}">
+                    <i class="fa-solid {{ $si }}"></i> {{ $o->estado_orden ?? '—' }}
+                </span>
+                <button onclick="analizarOrden('{{ $aiCtxJs }}')"
+                        title="Analizar con IA"
+                        class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border border-indigo-200 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 hover:border-indigo-400 transition-colors">
+                    <i class="fa-solid fa-robot text-xs"></i>
+                    <span class="hidden sm:inline">Analizar con IA</span>
+                </button>
+            </div>
         </div>
 
         {{-- Cuerpo --}}

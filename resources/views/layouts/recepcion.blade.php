@@ -127,6 +127,177 @@
     </div>
 </div>
 
+{{-- ═══ ASISTENTE IA RECEPCIÓN ═══════════════════════════════════════════ --}}
+<style>
+@keyframes recep-pulse{0%{box-shadow:0 0 0 0 rgba(99,102,241,.65),0 6px 24px rgba(99,102,241,.4)}70%{box-shadow:0 0 0 14px rgba(99,102,241,0),0 6px 24px rgba(99,102,241,.4)}100%{box-shadow:0 0 0 0 rgba(99,102,241,0),0 6px 24px rgba(99,102,241,.4)}}
+@keyframes ai-in{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+#recep-ai-fab{animation:recep-pulse 2.5s ease-in-out infinite;}
+#recep-ai-fab:hover{animation:none;transform:scale(1.08);}
+#recep-ai-widget{animation:ai-in .22s ease;}
+#recep-ai-msgs::-webkit-scrollbar{width:4px}
+#recep-ai-msgs::-webkit-scrollbar-thumb{background:#e2e8f0;border-radius:4px}
+.rai-user{background:#4f46e5;color:#fff;border-radius:18px 18px 4px 18px;margin-left:auto;max-width:82%;}
+.rai-bot{background:#f8fafc;border:1px solid #e2e8f0;color:#1e293b;border-radius:18px 18px 18px 4px;max-width:88%;}
+@keyframes rdots{0%,100%{opacity:.3}50%{opacity:1}}
+.rdot{width:6px;height:6px;border-radius:50%;background:#6366f1;display:inline-block;animation:rdots 1.2s infinite;}
+.rdot:nth-child(2){animation-delay:.2s}.rdot:nth-child(3){animation-delay:.4s}
+</style>
+
+{{-- WIDGET --}}
+<div id="recep-ai-widget"
+     style="display:none;position:fixed;bottom:90px;right:24px;width:370px;z-index:9997;flex-direction:column;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.18);border:1px solid rgba(99,102,241,.2);">
+
+    {{-- Header --}}
+    <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:14px 18px;display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="fa-solid fa-robot" style="color:#fff;font-size:1rem;"></i>
+        </div>
+        <div style="flex:1;">
+            <p style="color:#fff;font-weight:700;font-size:13px;margin:0;">Asistente IA — Recepción</p>
+            <p style="color:rgba(255,255,255,.65);font-size:11px;margin:0;">Explica órdenes en lenguaje simple</p>
+        </div>
+        <button onclick="toggleRecepAI()" style="background:rgba(255,255,255,.15);border:none;color:#fff;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:13px;">✕</button>
+    </div>
+
+    {{-- Mensajes --}}
+    <div id="recep-ai-msgs" style="background:#fff;height:360px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;">
+        <div class="rai-bot" style="padding:10px 14px;font-size:13px;line-height:1.6;">
+            👋 Hola! Soy tu asistente para entender las órdenes.<br><br>
+            Puedo ayudarte a:
+            <ul style="margin:6px 0 0 16px;padding:0;font-size:12px;color:#475569;">
+                <li>Explicar términos técnicos en palabras simples</li>
+                <li>Decirte cómo comunicar el estado al cliente</li>
+                <li>Interpretar el informe del técnico</li>
+            </ul>
+            <br>¿Sobre qué orden necesitas ayuda? Puedes usar el botón <strong>"Analizar con IA"</strong> en la orden, o preguntarme directamente.
+        </div>
+    </div>
+
+    {{-- Typing indicator --}}
+    <div id="recep-ai-typing" style="display:none;padding:8px 14px;background:#fff;border-top:1px solid #f1f5f9;">
+        <div class="rai-bot" style="display:inline-flex;align-items:center;gap:5px;padding:8px 12px;">
+            <span class="rdot"></span><span class="rdot"></span><span class="rdot"></span>
+        </div>
+    </div>
+
+    {{-- Input --}}
+    <div style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:10px;">
+        <div style="display:flex;align-items:flex-end;gap:8px;background:#fff;border-radius:14px;padding:8px 12px;border:1px solid #e2e8f0;">
+            <textarea id="recep-ai-input" rows="1"
+                      placeholder="Pregunta sobre esta orden…"
+                      style="flex:1;background:none;border:none;color:#1e293b;font-size:13px;outline:none;resize:none;font-family:inherit;max-height:80px;line-height:1.5;"
+                      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendRecepAI();}"></textarea>
+            <button onclick="sendRecepAI()" id="recep-ai-send"
+                    style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .2s;">
+                <i class="fa-solid fa-paper-plane" style="font-size:11px;"></i>
+            </button>
+        </div>
+        <p style="color:#94a3b8;font-size:10px;text-align:center;margin:5px 0 0;">Solo para análisis de órdenes de Novitec</p>
+    </div>
+</div>
+
+{{-- FAB --}}
+<button id="recep-ai-fab" onclick="toggleRecepAI()"
+        title="Asistente IA Recepción"
+        style="position:fixed;bottom:24px;right:24px;z-index:9998;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .2s ease;">
+    <i class="fa-solid fa-robot" style="color:#fff;font-size:1.3rem;"></i>
+</button>
+
+<script>
+let _recepOpen = false;
+let _recepHistory = [];
+let _recepContext = '';
+const _recepCsrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+
+function toggleRecepAI() {
+    _recepOpen = !_recepOpen;
+    document.getElementById('recep-ai-widget').style.display = _recepOpen ? 'flex' : 'none';
+    if (_recepOpen) {
+        document.getElementById('recep-ai-input').focus();
+        _scrollRecep();
+    }
+}
+
+// Llamado desde botón "Analizar con IA" en cada orden
+function analizarOrden(orderData) {
+    _recepContext = orderData;
+    _recepHistory = [];
+
+    // Limpiar mensajes y mostrar contexto cargado
+    const msgs = document.getElementById('recep-ai-msgs');
+    msgs.innerHTML = '';
+    _appendRecepMsg('bot', '✅ Orden cargada. ¿Qué quieres saber sobre ella?\n\nPuedo explicarte:\n• Qué hizo el técnico\n• Cómo informar al cliente\n• Qué significa el estado\n• Cualquier término técnico');
+
+    _recepOpen = true;
+    document.getElementById('recep-ai-widget').style.display = 'flex';
+    document.getElementById('recep-ai-input').placeholder = 'Ej: ¿Cómo le explico al cliente el diagnóstico?';
+    document.getElementById('recep-ai-input').focus();
+    _scrollRecep();
+}
+
+async function sendRecepAI() {
+    const inp = document.getElementById('recep-ai-input');
+    const msg = inp.value.trim();
+    if (!msg) return;
+    inp.value = '';
+    inp.style.height = 'auto';
+
+    _appendRecepMsg('user', msg);
+    _scrollRecep();
+
+    document.getElementById('recep-ai-typing').style.display = 'block';
+    document.getElementById('recep-ai-send').style.opacity = '.4';
+    _scrollRecep();
+
+    // Agregar al historial
+    _recepHistory.push({ role: 'user', content: msg });
+
+    try {
+        const res = await fetch('{{ route('recepcion.ai-chat') }}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': _recepCsrf, 'Accept': 'application/json' },
+            body: JSON.stringify({
+                message:       msg,
+                order_context: _recepContext || null,
+                history:       _recepHistory.slice(-10), // últimos 10 mensajes
+            }),
+        });
+        const data = await res.json();
+        const reply = data.reply ?? 'Error al responder.';
+        _recepHistory.push({ role: 'assistant', content: reply });
+        document.getElementById('recep-ai-typing').style.display = 'none';
+        _appendRecepMsg('bot', reply);
+    } catch {
+        document.getElementById('recep-ai-typing').style.display = 'none';
+        _appendRecepMsg('bot', 'Error de conexión. Intenta de nuevo.');
+    } finally {
+        document.getElementById('recep-ai-send').style.opacity = '1';
+        _scrollRecep();
+        // Limpiar contexto después del primer mensaje (ya está en el historial)
+        _recepContext = '';
+    }
+}
+
+function _appendRecepMsg(role, content) {
+    const msgs = document.getElementById('recep-ai-msgs');
+    const el = document.createElement('div');
+    el.className = role === 'user' ? 'rai-user' : 'rai-bot';
+    el.style.cssText = 'padding:10px 14px;font-size:13px;line-height:1.6;white-space:pre-wrap;word-break:break-word;';
+    el.textContent = content;
+    msgs.appendChild(el);
+}
+
+function _scrollRecep() {
+    const msgs = document.getElementById('recep-ai-msgs');
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+document.getElementById('recep-ai-input')?.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 80) + 'px';
+});
+</script>
+
 @stack('scripts')
 </body>
 </html>
