@@ -36,6 +36,13 @@
 
             <p class="text-slate-600 text-xs font-semibold tracking-widest uppercase px-3 mb-3">Gestión</p>
 
+            <a href="{{ route('recepcion.dashboard') }}"
+               class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all
+               {{ request()->routeIs('recepcion.dashboard') ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                <i class="fa-solid fa-gauge w-4 text-center"></i>
+                Dashboard del día
+            </a>
+
             <a href="{{ route('recepcion.ordenes') }}"
                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all
                {{ request()->routeIs('recepcion.ordenes') ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">

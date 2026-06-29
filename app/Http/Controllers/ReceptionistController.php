@@ -9,6 +9,71 @@ use Illuminate\Support\Facades\DB;
 
 class ReceptionistController extends Controller
 {
+    public function dashboard()
+    {
+        $user        = Auth::user();
+        $branchCode  = $user->is_admin ? 'UIO' : $user->branch_code;
+        $branchName  = User::BRANCHES[$branchCode] ?? 'NOVITEC';
+        $orderPrefix = User::BRANCH_ORDER_PREFIX[$branchCode] ?? '';
+
+        $base = DB::connection('novitecdb')->table('vista_ordenes');
+        if ($orderPrefix) {
+            $base = $base->where('nro_orden', 'like', $orderPrefix . '%');
+        }
+
+        $estadosActivos = ['En Revisión', 'En Reparacion', 'Esperando Repuesto'];
+        $estadosCerrados = ['Finalizada', 'Entregada', 'Anulada', 'Nota de Credito'];
+
+        // ── Stats ─────────────────────────────────────────────────────────
+        $stats = [
+            'hoy'       => (clone $base)->whereRaw('DATE(fecha_de_ingreso) = CURDATE()')->count(),
+            'listas'    => (clone $base)->where('estado_orden', 'Finalizada')->count(),
+            'proceso'   => (clone $base)->whereIn('estado_orden', $estadosActivos)->count(),
+            'atrasadas' => (clone $base)
+                ->whereNotNull('fecha_prometido')
+                ->whereRaw('fecha_prometido != ""')
+                ->whereRaw('DATE(fecha_prometido) < CURDATE()')
+                ->whereNotIn('estado_orden', $estadosCerrados)
+                ->count(),
+        ];
+
+        // ── Listas para entregar ──────────────────────────────────────────
+        $listas = (clone $base)
+            ->where('estado_orden', 'Finalizada')
+            ->orderByDesc('fecha_de_ingreso')
+            ->limit(20)
+            ->get(['nro_orden','nombres','apellidos','cliente','tipo','marca','modelo','tecnico','serie','telefono','numero_contacto','fecha_de_ingreso_fmt']);
+
+        // ── Atrasadas ─────────────────────────────────────────────────────
+        $atrasadas = (clone $base)
+            ->whereNotNull('fecha_prometido')
+            ->whereRaw('fecha_prometido != ""')
+            ->whereRaw('DATE(fecha_prometido) < CURDATE()')
+            ->whereNotIn('estado_orden', $estadosCerrados)
+            ->orderBy('fecha_prometido')
+            ->limit(20)
+            ->get(['nro_orden','nombres','apellidos','cliente','tipo','marca','modelo','estado_orden','tecnico','fecha_prometido_fmt','serie','telefono','numero_contacto']);
+
+        // ── Ingresadas hoy ────────────────────────────────────────────────
+        $hoy = (clone $base)
+            ->whereRaw('DATE(fecha_de_ingreso) = CURDATE()')
+            ->orderByDesc('fecha_de_ingreso')
+            ->limit(20)
+            ->get(['nro_orden','nombres','apellidos','cliente','tipo','marca','modelo','estado_orden','tecnico','fecha_de_ingreso_fmt','serie']);
+
+        // ── Por estado ────────────────────────────────────────────────────
+        $porEstado = (clone $base)
+            ->select('estado_orden', DB::raw('count(*) as total'))
+            ->groupBy('estado_orden')
+            ->orderByDesc('total')
+            ->get();
+
+        return view('recepcion.dashboard', compact(
+            'stats', 'listas', 'atrasadas', 'hoy', 'porEstado',
+            'branchName', 'branchCode', 'user'
+        ));
+    }
+
     public function aiChat(Request $request)
     {
         $request->validate([

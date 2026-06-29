@@ -41,7 +41,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         if ($user->isReceptionist()) {
-            return redirect()->intended(route('recepcion.ordenes'));
+            return redirect()->intended(route('recepcion.dashboard'));
         }
 
         return redirect()->intended('/');
