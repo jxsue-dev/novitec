@@ -44,7 +44,7 @@ class ReceptionistController extends Controller
             ->where('estado_orden', 'Finalizada')
             ->orderBy('fecha_de_ingreso', 'desc')
             ->limit(20)
-            ->get(['nro_orden','nombres','apellidos','cliente','tipo','marca','modelo','tecnico','serie','telefono','numero_contacto','fecha_de_ingreso_fmt']);
+            ->get(['nro_orden','nombres','apellidos','cliente','tipo','marca','modelo','tecnico','serie','numero_contacto','fecha_de_ingreso_fmt']);
 
         // ── Atrasadas ─────────────────────────────────────────────────────
         $atrasadas = (clone $base)
@@ -53,7 +53,7 @@ class ReceptionistController extends Controller
             ->whereNotIn('estado_orden', $estadosCerrados)
             ->orderBy('fecha_prometido', 'asc')
             ->limit(20)
-            ->get(['nro_orden','nombres','apellidos','cliente','tipo','marca','modelo','estado_orden','tecnico','fecha_prometido_fmt','serie','telefono','numero_contacto']);
+            ->get(['nro_orden','nombres','apellidos','cliente','tipo','marca','modelo','estado_orden','tecnico','fecha_prometido_fmt','serie','numero_contacto']);
 
         // ── Ingresadas hoy ────────────────────────────────────────────────
         $hoy = (clone $base)
