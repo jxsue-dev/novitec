@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
+use App\Models\ServiceOrder;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -11,7 +11,7 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::with('user')->latest()->paginate(15);
+        $orders = ServiceOrder::with('user')->latest()->paginate(15);
         return view('admin.orders', compact('orders'));
     }
 
@@ -29,7 +29,7 @@ class OrderController extends Controller
             'issue'   => ['required', 'string'],
         ]);
 
-        Order::create([
+        ServiceOrder::create([
             'user_id'      => $request->user_id,
             'code'         => 'NV-' . strtoupper(uniqid()),
             'device'       => $request->device,
@@ -45,7 +45,7 @@ class OrderController extends Controller
         return redirect()->route('admin.orders')->with('success', 'Orden creada correctamente.');
     }
 
-    public function update(Request $request, Order $order)
+    public function update(Request $request, ServiceOrder $order)
     {
         $request->validate([
             'status' => ['required', 'in:recibido,diagnostico,reparacion,listo,entregado'],
@@ -61,7 +61,7 @@ class OrderController extends Controller
         return back()->with('success', 'Orden actualizada correctamente.');
     }
 
-    public function destroy(Order $order)
+    public function destroy(ServiceOrder $order)
     {
         $order->delete();
         return back()->with('success', 'Orden eliminada.');
