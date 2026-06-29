@@ -17,7 +17,6 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\ChatController;
-use App\Http\Controllers\ReceptionistController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\PageController;
@@ -65,15 +64,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::prefix('recepcion')->middleware(['auth', 'receptionist'])->group(function () {
-    Route::get('/', [ReceptionistController::class, 'dashboard'])->name('recepcion.dashboard');
-    Route::get('/ordenes', [ReceptionistController::class, 'index'])->name('recepcion.ordenes');
-    Route::get('/informe-foto/{fotoId}', [ReceptionistController::class, 'fotoInforme'])->name('recepcion.foto');
-    Route::post('/ai-chat', [ReceptionistController::class, 'aiChat'])->name('recepcion.ai-chat')->middleware('throttle:30,1');
-    Route::get('/cuenta', fn() => view('recepcion.cuenta'))->name('recepcion.cuenta');
-    Route::patch('/cuenta', [ProfileController::class, 'update'])->name('recepcion.cuenta.update');
-    Route::put('/cuenta/password', [\App\Http\Controllers\Auth\PasswordController::class, 'update'])->name('recepcion.cuenta.password');
-});
 
 Route::prefix('chat')->middleware(['auth'])->group(function () {
     Route::get('/widget-data', [ChatController::class, 'widgetData'])->name('chat.widget.data');
@@ -94,8 +84,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/usuarios', [UserController::class, 'index'])->name('admin.users');
     Route::patch('/usuarios/{user}/toggle-admin', [UserController::class, 'toggleAdmin'])->name('admin.users.toggle');
-    Route::patch('/usuarios/{user}/assign-branch', [UserController::class, 'assignBranch'])->name('admin.users.assign-branch');
-    Route::delete('/usuarios/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+Route::delete('/usuarios/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
 
     Route::get('/sucursales', [BranchController::class, 'index'])->name('admin.branches');
     Route::post('/sucursales', [BranchController::class, 'store'])->name('admin.branches.store');
