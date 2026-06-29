@@ -67,6 +67,9 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('recepcion')->middleware(['auth', 'receptionist'])->group(function () {
     Route::get('/ordenes', [ReceptionistController::class, 'index'])->name('recepcion.ordenes');
+    Route::get('/cuenta', fn() => view('recepcion.cuenta'))->name('recepcion.cuenta');
+    Route::patch('/cuenta', [ProfileController::class, 'update'])->name('recepcion.cuenta.update');
+    Route::put('/cuenta/password', [\App\Http\Controllers\Auth\PasswordController::class, 'update'])->name('recepcion.cuenta.password');
 });
 
 Route::prefix('chat')->middleware(['auth'])->group(function () {
