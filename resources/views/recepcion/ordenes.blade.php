@@ -100,6 +100,8 @@
         $equipo  = trim(implode(' ', array_filter([$o->tipo ?? '', $o->marca ?? '', $o->modelo ?? ''])));
         $cliente = trim(($o->nombres ?? '').' '.($o->apellidos ?? '')) ?: ($o->cliente ?? '—');
         $falla   = trim(($o->falla ?? '').(($o->falla && $o->observacion) ? ' — ' : '').($o->observacion ?? ''));
+        $informe = $informes->get($o->orden_id ?? null);
+        $fotos   = $informe ? ($informeFotos->get($informe->id) ?? collect()) : collect();
     @endphp
 
     <div class="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
@@ -153,10 +155,24 @@
                         </a>
                     </div>
                     @endif
+                    @if(!empty($o->numero_contacto))
+                    <div>
+                        <p class="text-xs text-slate-400 font-medium mb-0.5">Nro. Contacto</p>
+                        <a href="tel:{{ $o->numero_contacto }}" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                            <i class="fa-solid fa-phone text-xs mr-1"></i>{{ $o->numero_contacto }}
+                        </a>
+                    </div>
+                    @endif
                     @if(!empty($o->correo))
                     <div>
                         <p class="text-xs text-slate-400 font-medium mb-0.5">Email</p>
                         <p class="text-sm text-slate-600">{{ $o->correo }}</p>
+                    </div>
+                    @endif
+                    @if(!empty($o->direccion))
+                    <div>
+                        <p class="text-xs text-slate-400 font-medium mb-0.5">Dirección</p>
+                        <p class="text-sm text-slate-700">{{ $o->direccion }}</p>
                     </div>
                     @endif
                     @if(!empty($o->ciudad_procedencia))
@@ -231,6 +247,18 @@
                         <p class="text-sm text-slate-700">{{ $o->motivo_ingreso }}</p>
                     </div>
                     @endif
+                    @if(!empty($o->fecha_prometido_fmt))
+                    <div>
+                        <p class="text-xs text-slate-400 font-medium mb-0.5">Fecha prometida</p>
+                        <p class="text-sm text-slate-700">{{ $o->fecha_prometido_fmt }}</p>
+                    </div>
+                    @endif
+                    @if(!empty($o->fecha_entrega_fmt))
+                    <div>
+                        <p class="text-xs text-slate-400 font-medium mb-0.5">Fecha entrega</p>
+                        <p class="text-sm font-medium text-emerald-700">{{ $o->fecha_entrega_fmt }}</p>
+                    </div>
+                    @endif
                     @if(!empty($o->precio))
                     <div>
                         <p class="text-xs text-slate-400 font-medium mb-0.5">Precio</p>
@@ -241,15 +269,127 @@
             </div>
         </div>
 
+        {{-- Campos extra de vista_ordenes --}}
+        @php
+            $extras = array_filter([
+                'Tipo de orden'    => $o->tipo_orden ?? null,
+                'Estado repuesto'  => $o->estado_repuesto ?? null,
+                'Fecha prometida'  => $o->fecha_prometido_fmt ?? null,
+                'Fecha entrega'    => $o->fecha_entrega_fmt ?? null,
+                'Ingresado por'    => $o->ingresado_por ?? null,
+                'Dirección'        => $o->direccion ?? null,
+                'Nro. Factura 2'   => $o->nro_factura_2 ?? null,
+            ]);
+        @endphp
+        @if(!empty($extras))
+        <div class="px-6 pt-4 pb-2 border-t border-slate-50">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                @foreach($extras as $label => $val)
+                <div>
+                    <p class="text-xs text-slate-400 font-medium mb-0.5">{{ $label }}</p>
+                    <p class="text-sm text-slate-700">{{ $val }}</p>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
         {{-- Descripción del problema --}}
         @if($falla)
-        <div class="px-6 pb-5 border-t border-slate-50 pt-4">
+        <div class="px-6 pb-4 border-t border-slate-50 pt-4">
             <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                <i class="fa-solid fa-comment-dots text-slate-300"></i> Descripción del problema
+                <i class="fa-solid fa-comment-dots text-slate-300"></i> Descripción del problema reportada
             </p>
             <p class="text-sm text-slate-600 leading-relaxed bg-slate-50 border border-slate-100 rounded-xl px-4 py-3">
                 {{ $falla }}
             </p>
+        </div>
+        @endif
+
+        {{-- ═══ INFORME TÉCNICO ══════════════════════════════════════════ --}}
+        @if($informe)
+        <div class="border-t-4 border-blue-100">
+            {{-- Header informe --}}
+            <div class="flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50">
+                <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-file-lines text-white text-sm"></i>
+                </div>
+                <div>
+                    <p class="text-blue-900 text-sm font-bold">Informe Técnico</p>
+                    <p class="text-blue-600 text-xs">
+                        Fecha: {{ $informe->fecha_informe ?? '—' }}
+                        @if(!empty($informe->estado_equipo))
+                        · Estado equipo: <strong>{{ $informe->estado_equipo }}</strong>
+                        @endif
+                    </p>
+                </div>
+            </div>
+
+            <div class="px-6 py-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+                @if(!empty($informe->antecedentes))
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-clock-rotate-left text-slate-300"></i> Antecedentes
+                    </p>
+                    <p class="text-sm text-slate-700 leading-relaxed bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 whitespace-pre-wrap">{{ $informe->antecedentes }}</p>
+                </div>
+                @endif
+
+                @if(!empty($informe->proceso))
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-screwdriver-wrench text-slate-300"></i> Proceso realizado
+                    </p>
+                    <p class="text-sm text-slate-700 leading-relaxed bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 whitespace-pre-wrap">{{ $informe->proceso }}</p>
+                </div>
+                @endif
+
+                @if(!empty($informe->conclusion))
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-check text-slate-300"></i> Conclusión
+                    </p>
+                    <p class="text-sm text-slate-700 leading-relaxed bg-green-50 border border-green-100 rounded-xl px-4 py-3 whitespace-pre-wrap">{{ $informe->conclusion }}</p>
+                </div>
+                @endif
+
+                @if(!empty($informe->recomendaciones))
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-lightbulb text-slate-300"></i> Recomendaciones
+                    </p>
+                    <p class="text-sm text-slate-700 leading-relaxed bg-amber-50 border border-amber-100 rounded-xl px-4 py-3 whitespace-pre-wrap">{{ $informe->recomendaciones }}</p>
+                </div>
+                @endif
+            </div>
+
+            {{-- Fotos del informe --}}
+            @if($fotos->count() > 0)
+            <div class="px-6 pb-5">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                    <i class="fa-solid fa-images text-slate-300"></i> Fotos del informe ({{ $fotos->count() }})
+                </p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                    @foreach($fotos as $foto)
+                    <a href="{{ route('recepcion.foto', $foto->id) }}" target="_blank"
+                       class="block rounded-xl overflow-hidden border border-slate-200 hover:border-blue-400 transition-colors group relative aspect-square bg-slate-100">
+                        <img src="{{ route('recepcion.foto', $foto->id) }}"
+                             alt="{{ $foto->caption ?? 'Foto ' . $loop->iteration }}"
+                             loading="lazy"
+                             class="w-full h-full object-cover group-hover:opacity-90 transition-opacity">
+                        @if(!empty($foto->caption))
+                        <div class="absolute bottom-0 inset-x-0 bg-black/50 px-2 py-1">
+                            <p class="text-white text-xs truncate">{{ $foto->caption }}</p>
+                        </div>
+                        @endif
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                            <i class="fa-solid fa-up-right-and-down-left-from-center text-white text-lg"></i>
+                        </div>
+                    </a>
+                    @endforeach
+                </div>
+            </div>
+            @endif
         </div>
         @endif
     </div>

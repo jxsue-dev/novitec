@@ -9,6 +9,21 @@ use Illuminate\Support\Facades\DB;
 
 class ReceptionistController extends Controller
 {
+    public function fotoInforme(int $fotoId)
+    {
+        $foto = DB::connection('novitecdb')
+            ->table('informefotos')
+            ->where('id', $fotoId)
+            ->select('foto_data', 'tipo_mime', 'nombre_archivo')
+            ->first();
+
+        abort_if(!$foto || !$foto->foto_data, 404);
+
+        return response($foto->foto_data)
+            ->header('Content-Type', $foto->tipo_mime ?: 'image/jpeg')
+            ->header('Cache-Control', 'public, max-age=3600');
+    }
+
     public function index(Request $request)
     {
         $user    = Auth::user();
@@ -50,6 +65,24 @@ class ReceptionistController extends Controller
 
                 if ($results->isEmpty()) {
                     $error = 'No se encontraron órdenes en ' . $branchName . ' con ese criterio.';
+                } else {
+                    // Cargar informes por orden_id
+                    $ordenIds = $results->pluck('orden_id')->filter()->values()->toArray();
+                    if (!empty($ordenIds)) {
+                        $informes = DB::connection('novitecdb')
+                            ->table('informes')
+                            ->whereIn('orden_id', $ordenIds)
+                            ->get()
+                            ->keyBy('orden_id');
+
+                        $informeFotos = DB::connection('novitecdb')
+                            ->table('informefotos')
+                            ->whereIn('informe_id', $informes->pluck('id')->toArray())
+                            ->select('id', 'informe_id', 'caption', 'nombre_archivo', 'tipo_mime', 'orden_foto')
+                            ->orderBy('orden_foto')
+                            ->get()
+                            ->groupBy('informe_id');
+                    }
                 }
             } catch (\Throwable) {
                 $error = 'Error al consultar las órdenes. Intenta de nuevo.';
@@ -66,6 +99,8 @@ class ReceptionistController extends Controller
             'orderPrefix'  => $orderPrefix,
             'branches'     => User::BRANCHES,
             'user'         => $user,
+            'informes'     => $informes ?? collect(),
+            'informeFotos' => $informeFotos ?? collect(),
         ]);
     }
 }
