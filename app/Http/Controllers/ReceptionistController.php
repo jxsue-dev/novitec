@@ -131,8 +131,30 @@ PROMPT;
                 if ($results->isEmpty()) {
                     $error = 'No se encontraron órdenes en ' . $branchName . ' con ese criterio.';
                 } else {
-                    // Cargar informes por orden_id
                     $ordenIds = $results->pluck('orden_id')->filter()->values()->toArray();
+
+                    // Resolver nombres de "ingresado_por" (IDs → nombres)
+                    $ingresadoPorIds = $results->pluck('ingresado_por')
+                        ->filter(fn($v) => is_numeric($v) && $v > 0)
+                        ->unique()->values()->toArray();
+
+                    $usuariosMap = collect();
+                    if (!empty($ingresadoPorIds)) {
+                        $usuariosMap = DB::connection('novitecdb')
+                            ->table('usuarios')
+                            ->whereIn('id', $ingresadoPorIds)
+                            ->pluck('nombre_tecnico', 'id'); // id => nombre_tecnico
+                    }
+
+                    // Mutamos la colección para resolver el nombre
+                    $results = $results->map(function ($r) use ($usuariosMap) {
+                        if (is_numeric($r->ingresado_por) && $r->ingresado_por > 0) {
+                            $r->ingresado_por = $usuariosMap->get($r->ingresado_por, "ID {$r->ingresado_por}");
+                        }
+                        return $r;
+                    });
+
+                    // Cargar informes por orden_id
                     if (!empty($ordenIds)) {
                         $informes = DB::connection('novitecdb')
                             ->table('informes')
