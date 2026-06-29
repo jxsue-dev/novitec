@@ -34,6 +34,16 @@ class AuthenticatedSessionController extends Controller
             return redirect()->to($redirectTo);
         }
 
+        $user = auth()->user();
+
+        if ($user->is_admin) {
+            return redirect()->intended(route('admin.dashboard'));
+        }
+
+        if ($user->isReceptionist()) {
+            return redirect()->intended(route('recepcion.ordenes'));
+        }
+
         return redirect()->intended('/');
     }
 

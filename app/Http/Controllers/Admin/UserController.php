@@ -27,6 +27,32 @@ class UserController extends Controller
         return back()->with('success', 'Rol actualizado correctamente.');
     }
 
+    public function assignBranch(User $user, \Illuminate\Http\Request $request)
+    {
+        if ($user->is(auth()->user())) {
+            return back()->with('error', 'No puedes modificar tu propio rol.');
+        }
+
+        $branchCode = $request->input('branch_code') ?: null;
+
+        $allowedCodes = array_keys(User::BRANCHES);
+        if ($branchCode !== null && !in_array($branchCode, $allowedCodes)) {
+            return back()->with('error', 'Sucursal inválida.');
+        }
+
+        // Si se asigna sucursal, quitar admin (no puede ser ambos)
+        $user->update([
+            'branch_code' => $branchCode,
+            'is_admin'    => false,
+        ]);
+
+        $message = $branchCode
+            ? 'Usuario asignado como recepcionista de ' . User::BRANCHES[$branchCode] . '.'
+            : 'Rol de recepcionista removido.';
+
+        return back()->with('success', $message);
+    }
+
     public function destroy(User $user)
     {
         if ($user->is(auth()->user())) {

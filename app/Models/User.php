@@ -14,6 +14,20 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    // Mapa de código → nombre de sucursal
+    const BRANCHES = [
+        'UIO' => 'NOVITEC QUITO',
+        'GYE' => 'NOVITEC GUAYAQUIL',
+        'MTA' => 'NOVITEC MANTA',
+    ];
+
+    // Prefijo de nro_orden para cada sucursal
+    const BRANCH_ORDER_PREFIX = [
+        'UIO' => 'UIO-',
+        'GYE' => 'GYE-',
+        'MTA' => 'MTA-',
+    ];
+
     protected $fillable = [
         'name',
         'cedula',
@@ -27,6 +41,7 @@ class User extends Authenticatable
         'email',
         'password',
         'is_admin',
+        'branch_code',
     ];
 
     protected $hidden = [
@@ -40,6 +55,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isReceptionist(): bool
+    {
+        return !$this->is_admin && $this->branch_code !== null;
+    }
+
+    public function getBranchNameAttribute(): string
+    {
+        return self::BRANCHES[$this->branch_code] ?? '—';
+    }
+
+    public function getOrderPrefixAttribute(): string
+    {
+        return self::BRANCH_ORDER_PREFIX[$this->branch_code] ?? '';
     }
 
     public function orders()
