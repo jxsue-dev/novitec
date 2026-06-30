@@ -52,19 +52,7 @@
                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all
                {{ request()->routeIs('recepcion.dashboard') ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                 <i class="fa-solid fa-gauge w-4 text-center"></i>
-                <span class="flex-1">Dashboard del día</span>
-                @if($__atrasadas > 0)
-                <span class="text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">{{ $__atrasadas }}</span>
-                @endif
-            </a>
-
-            <a href="{{ route('recepcion.dashboard', ['tab' => 'listas']) }}"
-               class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all text-slate-400 hover:text-white hover:bg-white/5">
-                <i class="fa-solid fa-circle-check w-4 text-center text-green-400"></i>
-                <span class="flex-1">Listas p/ entregar</span>
-                @if($__listas > 0)
-                <span class="text-xs bg-green-500 text-white px-1.5 py-0.5 rounded-full font-bold">{{ $__listas }}</span>
-                @endif
+                Dashboard del día
             </a>
 
             <a href="{{ route('recepcion.ordenes') }}"
