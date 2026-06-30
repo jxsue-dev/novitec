@@ -179,6 +179,13 @@
                             <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
                                 <i class="fa-solid fa-gauge w-4 text-center"></i> Panel admin
                             </a>
+                        @elseif(auth()->user()->isReceptionist())
+                            <a href="{{ route('recepcion.ordenes') }}" class="flex items-center gap-2 px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
+                                <i class="fa-solid fa-magnifying-glass w-4 text-center"></i> Panel recepción
+                            </a>
+                            <a href="{{ route('recepcion.cuenta') }}" class="flex items-center gap-2 px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors border-t border-white/5">
+                                <i class="fa-solid fa-gear w-4 text-center"></i> Mi cuenta
+                            </a>
                         @else
                             <a href="{{ route('client.orders') }}" class="flex items-center gap-2 px-4 py-3 text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
                                 <i class="fa-solid fa-box w-4 text-center"></i> Mis órdenes
@@ -247,6 +254,9 @@
                 </button>
                 @if(auth()->user()->is_admin)
                 <a href="{{ route('admin.dashboard') }}" onclick="toggleMenu()" class="block text-sm border border-white/20 text-slate-300 text-center py-2.5 rounded-xl"><i class="fa-solid fa-gauge"></i> Panel admin</a>
+                @elseif(auth()->user()->isReceptionist())
+                <a href="{{ route('recepcion.ordenes') }}" onclick="toggleMenu()" class="block text-sm bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-2.5 rounded-xl"><i class="fa-solid fa-magnifying-glass"></i> Panel recepción</a>
+                <a href="{{ route('recepcion.cuenta') }}" onclick="toggleMenu()" class="block text-sm border border-white/20 text-slate-300 text-center py-2.5 rounded-xl"><i class="fa-solid fa-gear"></i> Mi cuenta</a>
                 @else
                 <a href="{{ route('client.orders') }}" onclick="toggleMenu()" class="block text-sm border border-white/20 text-slate-300 text-center py-2.5 rounded-xl"><i class="fa-solid fa-box"></i> Mis órdenes</a>
                 <a href="{{ route('profile.edit') }}" onclick="toggleMenu()" class="block text-sm border border-white/20 text-slate-300 text-center py-2.5 rounded-xl"><i class="fa-solid fa-gear"></i> Mi perfil</a>
