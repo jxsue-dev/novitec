@@ -50,18 +50,20 @@ class LlamadaController extends Controller
             return response()->json(['ok' => false, 'msg' => 'Token inválido'], 401);
         }
 
-        $numero   = preg_replace('/[^0-9+]/', '', $request->input('numero', ''));
-        // Acepta 'duracion' o 'call_duration' (distintas versiones de MacroDroid)
-        $duracion = (int) ($request->input('duracion') ?? $request->input('call_duration') ?? 0);
-        // Acepta 'contesto', 'call_was_answered', 'call_answered'
-        $contestoRaw = $request->input('contesto') ?? $request->input('call_was_answered') ?? $request->input('call_answered') ?? null;
-        // Si no se envía, determinamos por duración (>5 seg = contestada)
-        $contesto = $contestoRaw !== null
-            ? filter_var($contestoRaw, FILTER_VALIDATE_BOOLEAN)
-            : $duracion > 5;
+        // Log completo para debug — así vemos exactamente qué envía MacroDroid
+        \Illuminate\Support\Facades\Log::info('Webhook llamada', $request->all());
+
+        $numeroRaw = $request->input('numero') ?? $request->input('number') ?? $request->input('phone') ?? '';
+        $numero    = preg_replace('/[^0-9+]/', '', $numeroRaw);
+        if (empty($numero)) $numero = $numeroRaw; // si queda vacío, guardar raw para debug
+
+        $duracion = (int) ($request->input('duracion') ?? $request->input('call_duration') ?? $request->input('duration') ?? 0);
+
+        $contestoRaw = $request->input('contesto') ?? $request->input('call_was_answered') ?? $request->input('call_answered') ?? $request->input('answered') ?? null;
+        $contesto = $contestoRaw !== null ? filter_var($contestoRaw, FILTER_VALIDATE_BOOLEAN) : $duracion > 5;
 
         if (empty($numero)) {
-            return response()->json(['ok' => false, 'msg' => 'Número requerido'], 422);
+            return response()->json(['ok' => false, 'msg' => 'Número requerido', 'recibido' => $request->all()], 422);
         }
 
         $estado = $contesto ? 'contestada' : 'no_contestada';
@@ -132,7 +134,10 @@ class LlamadaController extends Controller
             ->orderByDesc('iniciada_at');
 
         if (! $user->is_admin) {
-            $query->where('user_id', $user->id);
+            // Muestra llamadas propias + las sin usuario asignado (vienen de MacroDroid)
+            $query->where(function ($q) use ($user) {
+                $q->where('user_id', $user->id)->orWhereNull('user_id');
+            });
         }
 
         $llamadas = $query->paginate(20)->withQueryString();
