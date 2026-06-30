@@ -58,26 +58,53 @@ class LlamadaController extends Controller
             return response()->json(['ok' => false, 'msg' => 'Número requerido'], 422);
         }
 
-        // Busca la llamada más reciente a ese número que esté pendiente (últimos 30 min)
+        $estado = $contesto ? 'contestada' : 'no_contestada';
+
+        // Busca llamada iniciada desde el panel (últimos 30 min)
         $llamada = Llamada::where('numero', 'like', '%' . ltrim($numero, '0'))
             ->where('estado', 'iniciada')
             ->where('iniciada_at', '>=', now()->subMinutes(30))
             ->latest('iniciada_at')
             ->first();
 
-        if (! $llamada) {
-            // Crea un registro aunque no haya uno iniciado desde el web (llamada externa)
-            return response()->json(['ok' => false, 'msg' => 'No se encontró llamada activa en los últimos 30 min'], 404);
+        if ($llamada) {
+            // Actualiza registro existente (llamada iniciada desde el panel)
+            $llamada->update([
+                'estado'            => $estado,
+                'duracion_segundos' => $duracion > 0 ? $duracion : null,
+                'completada_at'     => now(),
+                'webhook_token'     => null,
+            ]);
+        } else {
+            // Crea registro nuevo (llamada manual desde el teléfono, no iniciada en el panel)
+            // Intenta asignarla al usuario recepcionista activo de la sucursal según prefijo
+            $userId = null;
+            $prefixMap = array_flip(\App\Models\User::BRANCH_ORDER_PREFIX);
+            $branchCode = null;
+            foreach ($prefixMap as $prefix => $code) {
+                if (str_starts_with($numero, ltrim($prefix, '+'))) {
+                    $branchCode = $code;
+                    break;
+                }
+            }
+            if ($branchCode) {
+                $receptionist = \App\Models\User::where('branch_code', $branchCode)->first();
+                $userId = $receptionist?->id;
+            }
+
+            $llamada = Llamada::create([
+                'user_id'           => $userId,
+                'numero'            => $numero,
+                'nro_orden'         => null,
+                'cliente'           => null,
+                'estado'            => $estado,
+                'duracion_segundos' => $duracion > 0 ? $duracion : null,
+                'iniciada_at'       => now()->subSeconds($duracion),
+                'completada_at'     => now(),
+            ]);
         }
 
-        $llamada->update([
-            'estado'            => $contesto ? 'contestada' : 'no_contestada',
-            'duracion_segundos' => $duracion > 0 ? $duracion : null,
-            'completada_at'     => now(),
-            'webhook_token'     => null,
-        ]);
-
-        return response()->json(['ok' => true, 'estado' => $llamada->estado, 'llamada_id' => $llamada->id]);
+        return response()->json(['ok' => true, 'estado' => $llamada->estado, 'llamada_id' => $llamada->id, 'creada' => $llamada->wasRecentlyCreated]);
     }
 
     // ── Agregar notas a una llamada
