@@ -25,6 +25,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin'         => \App\Http\Middleware\AdminMiddleware::class,
             'receptionist'  => \App\Http\Middleware\ReceptionistMiddleware::class,
         ]);
+
+        // Excluir webhook de MacroDroid del CSRF (usa token propio en el body)
+        $middleware->validateCsrfTokens(except: [
+            '/api/llamada-webhook',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
