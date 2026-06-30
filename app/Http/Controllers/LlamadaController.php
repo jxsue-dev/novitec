@@ -51,8 +51,14 @@ class LlamadaController extends Controller
         }
 
         $numero   = preg_replace('/[^0-9+]/', '', $request->input('numero', ''));
-        $duracion = (int) $request->input('duracion', 0);
-        $contesto = filter_var($request->input('contesto', false), FILTER_VALIDATE_BOOLEAN);
+        // Acepta 'duracion' o 'call_duration' (distintas versiones de MacroDroid)
+        $duracion = (int) ($request->input('duracion') ?? $request->input('call_duration') ?? 0);
+        // Acepta 'contesto', 'call_was_answered', 'call_answered'
+        $contestoRaw = $request->input('contesto') ?? $request->input('call_was_answered') ?? $request->input('call_answered') ?? null;
+        // Si no se envía, determinamos por duración (>5 seg = contestada)
+        $contesto = $contestoRaw !== null
+            ? filter_var($contestoRaw, FILTER_VALIDATE_BOOLEAN)
+            : $duracion > 5;
 
         if (empty($numero)) {
             return response()->json(['ok' => false, 'msg' => 'Número requerido'], 422);
