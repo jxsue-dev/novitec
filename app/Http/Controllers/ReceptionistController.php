@@ -9,69 +9,80 @@ use Illuminate\Support\Facades\DB;
 
 class ReceptionistController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         $user        = Auth::user();
-        $branchCode  = $user->is_admin ? 'UIO' : $user->branch_code;
+        $branchCode  = $user->is_admin ? $request->input('branch', 'UIO') : $user->branch_code;
         $branchName  = User::BRANCHES[$branchCode] ?? 'NOVITEC';
         $orderPrefix = User::BRANCH_ORDER_PREFIX[$branchCode] ?? '';
+
+        $tab     = $request->input('tab', 'listas');
+        $buscar  = trim($request->input('q', ''));
+        $fecha   = $request->input('fecha', now()->format('Y-m-d'));
+        $tecnico = trim($request->input('tecnico', ''));
+
+        $fechaValida     = "fecha_prometido REGEXP '^[0-9]{4}-[0-9]{2}-[0-9]{2}'";
+        $estadosActivos  = ['En Revisión', 'En Reparacion', 'Esperando Repuesto'];
+        $estadosCerrados = ['Finalizada', 'Entregada', 'Anulada', 'Nota de Credito'];
 
         $base = DB::connection('novitecdb')->table('vista_ordenes');
         if ($orderPrefix) {
             $base = $base->where('nro_orden', 'like', $orderPrefix . '%');
         }
 
-        $estadosActivos  = ['En Revisión', 'En Reparacion', 'Esperando Repuesto'];
-        $estadosCerrados = ['Finalizada', 'Entregada', 'Anulada', 'Nota de Credito'];
-
-        // Filtro seguro para fechas prometidas válidas (evita DATE('') en modo estricto)
-        $fechaValida = "fecha_prometido REGEXP '^[0-9]{4}-[0-9]{2}-[0-9]{2}'";
-
-        // ── Stats ─────────────────────────────────────────────────────────
+        // ── Stats (siempre) ───────────────────────────────────────────────
         $stats = [
-            'hoy'       => (clone $base)->whereRaw("DATE(fecha_de_ingreso) = CURDATE()")->count(),
             'listas'    => (clone $base)->where('estado_orden', 'Finalizada')->count(),
+            'atrasadas' => (clone $base)->whereRaw($fechaValida)->whereRaw("DATE(fecha_prometido) < CURDATE()")->whereNotIn('estado_orden', $estadosCerrados)->count(),
+            'hoy'       => (clone $base)->whereRaw("DATE(fecha_de_ingreso) = CURDATE()")->count(),
             'proceso'   => (clone $base)->whereIn('estado_orden', $estadosActivos)->count(),
-            'atrasadas' => (clone $base)
-                ->whereRaw($fechaValida)
-                ->whereRaw("DATE(fecha_prometido) < CURDATE()")
-                ->whereNotIn('estado_orden', $estadosCerrados)
-                ->count(),
         ];
 
-        // ── Listas para entregar ──────────────────────────────────────────
-        $listas = (clone $base)
-            ->where('estado_orden', 'Finalizada')
-            ->orderBy('fecha_de_ingreso', 'desc')
-            ->limit(20)
-            ->get(['nro_orden','nombres','apellidos','cliente','tipo','marca','modelo','tecnico','serie','numero_contacto','fecha_de_ingreso_fmt']);
+        // Helper: aplicar filtros comunes de búsqueda y técnico
+        $applyFilters = function ($q) use ($buscar, $tecnico) {
+            if ($buscar) {
+                $q->where(function ($sub) use ($buscar) {
+                    $sub->where('nro_orden', 'like', "%{$buscar}%")
+                        ->orWhere('nombres', 'like', "%{$buscar}%")
+                        ->orWhere('apellidos', 'like', "%{$buscar}%")
+                        ->orWhere('cliente', 'like', "%{$buscar}%")
+                        ->orWhere('serie', 'like', "%{$buscar}%");
+                });
+            }
+            if ($tecnico) {
+                $q->where('tecnico', 'like', "%{$tecnico}%");
+            }
+            return $q;
+        };
 
-        // ── Atrasadas ─────────────────────────────────────────────────────
-        $atrasadas = (clone $base)
-            ->whereRaw($fechaValida)
-            ->whereRaw("DATE(fecha_prometido) < CURDATE()")
-            ->whereNotIn('estado_orden', $estadosCerrados)
-            ->orderBy('fecha_prometido', 'asc')
-            ->limit(20)
-            ->get(['nro_orden','nombres','apellidos','cliente','tipo','marca','modelo','estado_orden','tecnico','fecha_prometido_fmt','serie','numero_contacto']);
+        $cols = ['nro_orden','nombres','apellidos','cliente','tipo','marca','modelo','estado_orden','tecnico','serie','numero_contacto','fecha_de_ingreso_fmt','fecha_prometido_fmt'];
 
-        // ── Ingresadas hoy ────────────────────────────────────────────────
-        $hoy = (clone $base)
-            ->whereRaw("DATE(fecha_de_ingreso) = CURDATE()")
-            ->orderBy('fecha_de_ingreso', 'desc')
-            ->limit(20)
-            ->get(['nro_orden','nombres','apellidos','cliente','tipo','marca','modelo','estado_orden','tecnico','fecha_de_ingreso_fmt','serie']);
+        $listas = $atrasadas = $ingresadas = $porEstado = null;
 
-        // ── Por estado ────────────────────────────────────────────────────
-        $porEstado = (clone $base)
-            ->select('estado_orden', DB::raw('count(*) as total'))
-            ->groupBy('estado_orden')
-            ->orderBy('total', 'desc')
-            ->get();
+        switch ($tab) {
+            case 'listas':
+                $q = $applyFilters(clone $base)->where('estado_orden', 'Finalizada')->orderBy('fecha_de_ingreso', 'desc');
+                $listas = $q->paginate(12, $cols)->withQueryString();
+                break;
+
+            case 'atrasadas':
+                $q = $applyFilters(clone $base)->whereRaw($fechaValida)->whereRaw("DATE(fecha_prometido) < CURDATE()")->whereNotIn('estado_orden', $estadosCerrados)->orderBy('fecha_prometido', 'asc');
+                $atrasadas = $q->paginate(12, $cols)->withQueryString();
+                break;
+
+            case 'hoy':
+                $q = $applyFilters(clone $base)->whereRaw("DATE(fecha_de_ingreso) = ?", [$fecha])->orderBy('fecha_de_ingreso', 'desc');
+                $ingresadas = $q->paginate(12, $cols)->withQueryString();
+                break;
+
+            case 'resumen':
+                $porEstado = (clone $base)->select('estado_orden', DB::raw('count(*) as total'))->groupBy('estado_orden')->orderBy('total', 'desc')->get();
+                break;
+        }
 
         return view('recepcion.dashboard', compact(
-            'stats', 'listas', 'atrasadas', 'hoy', 'porEstado',
-            'branchName', 'branchCode', 'user'
+            'stats', 'listas', 'atrasadas', 'ingresadas', 'porEstado',
+            'branchName', 'branchCode', 'user', 'tab', 'buscar', 'fecha', 'tecnico'
         ));
     }
 
