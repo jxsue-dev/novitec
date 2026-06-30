@@ -37,28 +37,47 @@ class LlamadaController extends Controller
         ]);
     }
 
-    // ── Recibe resultado desde MacroDroid (sin auth de sesión, usa token)
-    public function webhook(Request $request, string $token)
+    // ── Recibe resultado desde MacroDroid
+    // URL fija: POST /api/llamada-webhook
+    // Body: token=SECRET&numero=0960500156&duracion=65&contesto=true
+    public function webhook(Request $request)
     {
-        $llamada = Llamada::where('webhook_token', $token)
+        // Verificar token fijo (configurado una vez en MacroDroid)
+        $tokenEnvio = $request->input('token') ?? $request->header('X-Webhook-Token');
+        $tokenConfig = config('services.llamadas.webhook_token', env('LLAMADAS_WEBHOOK_TOKEN', ''));
+
+        if (empty($tokenConfig) || $tokenEnvio !== $tokenConfig) {
+            return response()->json(['ok' => false, 'msg' => 'Token inválido'], 401);
+        }
+
+        $numero   = preg_replace('/[^0-9+]/', '', $request->input('numero', ''));
+        $duracion = (int) $request->input('duracion', 0);
+        $contesto = filter_var($request->input('contesto', false), FILTER_VALIDATE_BOOLEAN);
+
+        if (empty($numero)) {
+            return response()->json(['ok' => false, 'msg' => 'Número requerido'], 422);
+        }
+
+        // Busca la llamada más reciente a ese número que esté pendiente (últimos 30 min)
+        $llamada = Llamada::where('numero', 'like', '%' . ltrim($numero, '0'))
             ->where('estado', 'iniciada')
+            ->where('iniciada_at', '>=', now()->subMinutes(30))
+            ->latest('iniciada_at')
             ->first();
 
         if (! $llamada) {
-            return response()->json(['ok' => false, 'msg' => 'Llamada no encontrada o ya registrada'], 404);
+            // Crea un registro aunque no haya uno iniciado desde el web (llamada externa)
+            return response()->json(['ok' => false, 'msg' => 'No se encontró llamada activa en los últimos 30 min'], 404);
         }
 
-        $duracion  = (int) $request->input('duracion', 0); // segundos
-        $contesto  = filter_var($request->input('contesto', false), FILTER_VALIDATE_BOOLEAN);
-
         $llamada->update([
-            'estado'              => $contesto ? 'contestada' : 'no_contestada',
-            'duracion_segundos'   => $duracion > 0 ? $duracion : null,
-            'completada_at'       => now(),
-            'webhook_token'       => null, // invalidar token usado
+            'estado'            => $contesto ? 'contestada' : 'no_contestada',
+            'duracion_segundos' => $duracion > 0 ? $duracion : null,
+            'completada_at'     => now(),
+            'webhook_token'     => null,
         ]);
 
-        return response()->json(['ok' => true, 'estado' => $llamada->estado]);
+        return response()->json(['ok' => true, 'estado' => $llamada->estado, 'llamada_id' => $llamada->id]);
     }
 
     // ── Agregar notas a una llamada
