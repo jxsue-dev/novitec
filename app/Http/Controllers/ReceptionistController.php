@@ -57,7 +57,9 @@ class ReceptionistController extends Controller
 
         $cols = ['nro_orden','nombres','apellidos','cliente','tipo','marca','modelo','estado_orden','tecnico','serie','numero_contacto','fecha_de_ingreso_fmt','fecha_prometido_fmt'];
 
-        $listas = $atrasadas = $ingresadas = $porEstado = null;
+        $listas = $atrasadas = $ingresadas = $porEstado = $preordenes = null;
+        $fechaDesde = $request->input('fecha_desde', $fecha);
+        $fechaHasta = $request->input('fecha_hasta', $fecha);
 
         switch ($tab) {
             case 'listas':
