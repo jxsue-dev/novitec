@@ -34,6 +34,7 @@
                     'nro_orden'      => ['fa-hashtag',  'Nro. Orden',   $orderPrefix.'000123'],
                     'identificacion' => ['fa-id-card',  'CI / RUC',     '1712345678'],
                     'serie'          => ['fa-barcode',  'Serie equipo', 'SN123456789'],
+                    'nombre'         => ['fa-user',     'Nombre',       'Nombre del cliente'],
                 ] as $val => [$icon, $label, $ph])
                 <button type="button" onclick="setTipo('{{ $val }}','{{ $ph }}')" data-tipo="{{ $val }}"
                         class="tipo-btn flex-1 py-3 flex items-center justify-center gap-2 text-sm font-medium transition-colors border-r border-slate-200 last:border-r-0
@@ -130,15 +131,49 @@
                 </span>
                 @endif
             </div>
-            <div class="flex items-center gap-2 flex-shrink-0">
+            <div class="flex items-center gap-2 flex-shrink-0 flex-wrap justify-end">
                 <span class="text-xs font-bold px-3 py-1.5 rounded-full border flex items-center gap-1.5 {{ $sc }}">
                     <i class="fa-solid {{ $si }}"></i> {{ $o->estado_orden ?? '—' }}
                 </span>
+
+                {{-- WhatsApp templates por estado --}}
+                @php
+                    $contactoWa = $o->numero_contacto ?? '';
+                    $clienteNom = trim(($o->nombres ?? '').' '.($o->apellidos ?? '')) ?: ($o->cliente ?? '');
+                    $equipoWa   = trim(implode(' ', array_filter([$o->tipo ?? '', $o->marca ?? '', $o->modelo ?? ''])));
+                    $waMessages = [
+                        'En Revisión'        => "Hola {$clienteNom}, le informamos que su equipo ({$o->nro_orden}) ya está siendo revisado por nuestro técnico. Le avisaremos en cuanto tengamos el diagnóstico. Gracias por su paciencia.",
+                        'En Reparacion'      => "Hola {$clienteNom}, su equipo ({$o->nro_orden}) está en proceso de reparación. Le notificaremos cuando esté listo. Cualquier duda estamos aquí.",
+                        'Esperando Repuesto' => "Hola {$clienteNom}, su equipo ({$o->nro_orden}) está a la espera de un repuesto. En cuanto llegue continuamos con la reparación. Gracias por su comprensión.",
+                        'Finalizada'         => "Hola {$clienteNom}, ¡su equipo ({$o->nro_orden}) está listo para retiro! Puede pasar a {$branchName} en horario Lun-Vie 9:00-17:00. Gracias por confiar en Novitec.",
+                        'Entregada'          => null,
+                    ];
+                    $waMsgActual = $waMessages[$o->estado_orden ?? ''] ?? null;
+                @endphp
+                @if($contactoWa && $waMsgActual)
+                <a href="https://wa.me/593{{ ltrim($contactoWa, '0') }}?text={{ urlencode($waMsgActual) }}"
+                   target="_blank"
+                   class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border border-green-200 bg-green-50 text-green-700 hover:bg-green-100 transition-colors"
+                   title="Enviar WhatsApp sobre el estado">
+                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                    <span class="hidden sm:inline">WhatsApp</span>
+                </a>
+                @endif
+
+                {{-- Link de seguimiento --}}
+                <a href="{{ route('garantias') }}?tipo=nro_orden&q={{ urlencode($o->nro_orden ?? '') }}"
+                   target="_blank"
+                   class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100 transition-colors"
+                   title="Link de seguimiento público">
+                    <i class="fa-solid fa-share-nodes text-xs"></i>
+                    <span class="hidden sm:inline">Seguimiento</span>
+                </a>
+
                 <button onclick="analizarOrden('{{ $aiCtxJs }}')"
                         title="Analizar con IA"
                         class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border border-indigo-200 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 hover:border-indigo-400 transition-colors">
                     <i class="fa-solid fa-robot text-xs"></i>
-                    <span class="hidden sm:inline">Analizar con IA</span>
+                    <span class="hidden sm:inline">IA</span>
                 </button>
             </div>
         </div>

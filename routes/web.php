@@ -68,6 +68,8 @@ Route::middleware('auth')->group(function () {
 Route::prefix('recepcion')->middleware(['auth', 'receptionist'])->group(function () {
     Route::get('/', [ReceptionistController::class, 'dashboard'])->name('recepcion.dashboard');
     Route::get('/ordenes', [ReceptionistController::class, 'index'])->name('recepcion.ordenes');
+    Route::get('/historial', [ReceptionistController::class, 'historial'])->name('recepcion.historial');
+    Route::get('/pdf', [ReceptionistController::class, 'exportPdf'])->name('recepcion.pdf');
     Route::get('/informe-foto/{fotoId}', [ReceptionistController::class, 'fotoInforme'])->name('recepcion.foto');
     Route::post('/ai-chat', [ReceptionistController::class, 'aiChat'])->name('recepcion.ai-chat')->middleware('throttle:30,1');
     Route::get('/cuenta', fn() => view('recepcion.cuenta'))->name('recepcion.cuenta');

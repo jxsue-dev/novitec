@@ -33,10 +33,11 @@
     {{-- TABS --}}
     <div class="flex border-b border-slate-100 overflow-x-auto">
         @foreach([
-            ['listas',    'fa-circle-check',         'Listas para entregar', $stats['listas'],    'text-green-600 border-green-500'],
-            ['atrasadas', 'fa-triangle-exclamation', 'Atrasadas',            $stats['atrasadas'], 'text-red-600 border-red-500'],
-            ['hoy',       'fa-calendar-day',         'Ingresadas hoy',       $stats['hoy'],       'text-blue-600 border-blue-500'],
-            ['resumen',   'fa-chart-pie',             'Resumen por estado',   null,                'text-slate-700 border-slate-400'],
+            ['listas',     'fa-circle-check',         'Listas p/ entregar',  $stats['listas'],    'text-green-600 border-green-500'],
+            ['atrasadas',  'fa-triangle-exclamation', 'Atrasadas',           $stats['atrasadas'], 'text-red-600 border-red-500'],
+            ['hoy',        'fa-calendar-day',         'Por fecha',           $stats['hoy'],       'text-blue-600 border-blue-500'],
+            ['preordenes', 'fa-file-circle-plus',     'Preórdenes',          null,                'text-violet-600 border-violet-500'],
+            ['resumen',    'fa-chart-pie',             'Resumen',             null,                'text-slate-700 border-slate-400'],
         ] as [$t, $ico, $lbl, $cnt, $activeColor])
         <a href="{{ route('recepcion.dashboard', array_merge(request()->query(), ['tab' => $t, 'page' => 1])) }}"
            class="flex items-center gap-2 px-5 py-3.5 text-sm font-medium whitespace-nowrap border-b-2 transition-all
@@ -60,27 +61,31 @@
             @endif
 
             {{-- Búsqueda --}}
-            <div class="relative flex-1 min-w-[180px]">
+            <div class="relative flex-1 min-w-[160px]">
                 <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                 <input type="text" name="q" value="{{ $buscar }}"
-                       placeholder="Buscar por orden, cliente o serie…"
+                       placeholder="Buscar orden, cliente, serie…"
                        class="w-full pl-8 pr-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/10 transition-all bg-white">
             </div>
 
             {{-- Filtro técnico --}}
+            @if($tab !== 'preordenes')
             <div class="relative">
                 <i class="fa-solid fa-user-gear absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                 <input type="text" name="tecnico" value="{{ $tecnico }}"
-                       placeholder="Filtrar técnico…"
-                       class="pl-8 pr-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all bg-white w-44">
+                       placeholder="Técnico…"
+                       class="pl-8 pr-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all bg-white w-36">
             </div>
+            @endif
 
-            {{-- Filtro fecha (solo tab hoy) --}}
+            {{-- Rango fechas (tab hoy) --}}
             @if($tab === 'hoy')
-            <div class="relative">
-                <i class="fa-solid fa-calendar absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                <input type="date" name="fecha" value="{{ $fecha }}"
-                       class="pl-8 pr-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 transition-all bg-white">
+            <div class="flex items-center gap-1.5">
+                <input type="date" name="fecha_desde" value="{{ $fechaDesde ?? $fecha }}"
+                       class="py-2 px-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 bg-white">
+                <span class="text-slate-400 text-xs">al</span>
+                <input type="date" name="fecha_hasta" value="{{ $fechaHasta ?? $fecha }}"
+                       class="py-2 px-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 bg-white">
             </div>
             @endif
 
@@ -89,10 +94,19 @@
                 <i class="fa-solid fa-filter text-xs"></i> Filtrar
             </button>
 
-            @if($buscar || $tecnico || ($tab === 'hoy' && $fecha !== now()->format('Y-m-d')))
+            @if($buscar || $tecnico || (isset($fechaDesde) && $fechaDesde !== now()->format('Y-m-d')))
             <a href="{{ route('recepcion.dashboard', ['tab' => $tab]) }}"
                class="text-sm text-slate-400 hover:text-slate-600 border border-slate-200 px-3 py-2 rounded-xl transition-colors">
-                <i class="fa-solid fa-xmark"></i> Limpiar
+                <i class="fa-solid fa-xmark"></i>
+            </a>
+            @endif
+
+            {{-- Exportar PDF --}}
+            @if(in_array($tab, ['listas', 'atrasadas', 'hoy']))
+            <a href="{{ route('recepcion.pdf', ['tipo' => $tab === 'hoy' ? 'hoy' : $tab, 'branch' => $branchCode]) }}"
+               target="_blank"
+               class="ml-auto text-sm text-slate-500 hover:text-slate-700 border border-slate-200 hover:border-slate-300 px-3 py-2 rounded-xl transition-colors flex items-center gap-1.5">
+                <i class="fa-solid fa-print text-xs"></i> Imprimir
             </a>
             @endif
         </form>
@@ -113,8 +127,14 @@
         @else
         <div class="divide-y divide-slate-50">
             @foreach($listas as $o)
-            @php $nombre = trim(($o->nombres ?? '').' '.($o->apellidos ?? '')) ?: ($o->cliente ?? '—'); @endphp
+            @php
+                $nombre = trim(($o->nombres ?? '').' '.($o->apellidos ?? '')) ?: ($o->cliente ?? '—');
+                $dias = null;
+                try { $dias = !empty($o->fecha_de_ingreso) ? now()->diffInDays(\Carbon\Carbon::parse($o->fecha_de_ingreso)) : null; } catch(\Throwable){}
+                $sem = match(true) { $dias === null => 'bg-slate-300', $dias <= 3 => 'bg-green-400', $dias <= 7 => 'bg-amber-400', default => 'bg-red-500' };
+            @endphp
             <div class="flex items-center gap-4 px-5 py-4 hover:bg-slate-50/60 transition-colors">
+                <div class="w-2 h-2 rounded-full flex-shrink-0 {{ $sem }}" title="{{ $dias }}d en taller"></div>
                 <div class="w-10 h-10 bg-green-50 border border-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
                     <i class="fa-solid fa-laptop text-green-500 text-sm"></i>
                 </div>
@@ -123,6 +143,7 @@
                         <span class="font-mono text-sm font-bold text-blue-600">{{ $o->nro_orden }}</span>
                         <span class="text-xs text-slate-400">{{ trim(implode(' ', array_filter([$o->tipo ?? '', $o->marca ?? '', $o->modelo ?? '']))) }}</span>
                         @if($o->tecnico)<span class="text-xs text-slate-300">· {{ $o->tecnico }}</span>@endif
+                        @if($dias !== null)<span class="text-xs text-slate-400">{{ $dias }}d</span>@endif
                     </div>
                     <p class="text-sm font-semibold text-slate-800 truncate">{{ $nombre }}</p>
                     @if($o->serie)<p class="text-xs text-slate-400 font-mono">Serie: {{ $o->serie }}</p>@endif
@@ -240,6 +261,44 @@
         </div>
         <div class="px-5 py-4 border-t border-slate-100 bg-slate-50/30">
             {{ $ingresadas->links() }}
+        </div>
+        @endif
+
+        {{-- ── PREÓRDENES ───────────────────────────────────────────── --}}
+        @elseif($tab === 'preordenes')
+        @php $preordenes = $preordenes ?? null; @endphp
+        @if(!$preordenes || $preordenes->isEmpty())
+        <div class="py-16 text-center">
+            <i class="fa-solid fa-file-circle-plus text-slate-200 text-5xl mb-4 block"></i>
+            <p class="text-slate-500 font-medium">No hay preórdenes de garantía</p>
+            @if($buscar)<p class="text-slate-400 text-sm mt-1">Prueba con otros filtros</p>@endif
+        </div>
+        @else
+        <div class="divide-y divide-slate-50">
+            @foreach($preordenes as $p)
+            <div class="flex items-center gap-4 px-5 py-4 hover:bg-violet-50/30 transition-colors">
+                <div class="w-10 h-10 bg-violet-50 border border-violet-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-file-circle-plus text-violet-500 text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap mb-0.5">
+                        <span class="font-mono text-sm font-bold text-violet-600">{{ $p->nro_preorden }}</span>
+                        <span class="text-xs bg-violet-100 text-violet-700 px-2 py-0.5 rounded-full">Preorden</span>
+                    </div>
+                    <p class="text-sm font-semibold text-slate-800 truncate">
+                        {{ strtoupper(trim(($p->nombres ?? '').' '.($p->apellidos ?? ''))) ?: '—' }}
+                    </p>
+                    <p class="text-xs text-slate-400">{{ $p->marca_producto ?? '' }} {{ $p->desc_producto ?? '' }} · Serie: {{ $p->serie ?? '—' }}</p>
+                </div>
+                <div class="text-right flex-shrink-0">
+                    <p class="text-xs text-slate-500 font-mono">{{ $p->nro_factura ?? '—' }}</p>
+                    <p class="text-xs text-slate-400">{{ isset($p->created_at) ? \Carbon\Carbon::parse($p->created_at)->format('d/m/Y') : '—' }}</p>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        <div class="px-5 py-4 border-t border-slate-100 bg-slate-50/30">
+            {{ $preordenes->links() }}
         </div>
         @endif
 

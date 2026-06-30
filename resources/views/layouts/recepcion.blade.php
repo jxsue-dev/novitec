@@ -31,6 +31,18 @@
             </div>
         </div>
 
+        {{-- Badges contadores --}}
+        @php
+        try {
+            $__bc  = auth()->user()->is_admin ? 'UIO' : auth()->user()->branch_code;
+            $__pfx = \App\Models\User::BRANCH_ORDER_PREFIX[$__bc] ?? '';
+            $__q   = \Illuminate\Support\Facades\DB::connection('novitecdb')->table('vista_ordenes');
+            if ($__pfx) $__q->where('nro_orden', 'like', $__pfx . '%');
+            $__listas    = (clone $__q)->where('estado_orden', 'Finalizada')->count();
+            $__atrasadas = (clone $__q)->whereRaw("fecha_prometido REGEXP '^[0-9]{4}-[0-9]{2}-[0-9]{2}'")->whereRaw("DATE(fecha_prometido) < CURDATE()")->whereNotIn('estado_orden', ['Finalizada','Entregada','Anulada','Nota de Credito'])->count();
+        } catch (\Throwable) { $__listas = 0; $__atrasadas = 0; }
+        @endphp
+
         {{-- NAV --}}
         <nav class="flex-1 px-4 py-5 space-y-1 overflow-y-auto">
 
@@ -40,7 +52,19 @@
                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all
                {{ request()->routeIs('recepcion.dashboard') ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                 <i class="fa-solid fa-gauge w-4 text-center"></i>
-                Dashboard del día
+                <span class="flex-1">Dashboard del día</span>
+                @if($__atrasadas > 0)
+                <span class="text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">{{ $__atrasadas }}</span>
+                @endif
+            </a>
+
+            <a href="{{ route('recepcion.dashboard', ['tab' => 'listas']) }}"
+               class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all text-slate-400 hover:text-white hover:bg-white/5">
+                <i class="fa-solid fa-circle-check w-4 text-center text-green-400"></i>
+                <span class="flex-1">Listas p/ entregar</span>
+                @if($__listas > 0)
+                <span class="text-xs bg-green-500 text-white px-1.5 py-0.5 rounded-full font-bold">{{ $__listas }}</span>
+                @endif
             </a>
 
             <a href="{{ route('recepcion.ordenes') }}"
@@ -48,6 +72,13 @@
                {{ request()->routeIs('recepcion.ordenes') ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                 <i class="fa-solid fa-magnifying-glass w-4 text-center"></i>
                 Consulta de Órdenes
+            </a>
+
+            <a href="{{ route('recepcion.historial') }}"
+               class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all
+               {{ request()->routeIs('recepcion.historial') ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                <i class="fa-solid fa-clock-rotate-left w-4 text-center"></i>
+                Historial de cliente
             </a>
 
             {{-- Admin también puede ir al panel admin --}}

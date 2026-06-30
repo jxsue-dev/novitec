@@ -78,12 +78,111 @@ class ReceptionistController extends Controller
             case 'resumen':
                 $porEstado = (clone $base)->select('estado_orden', DB::raw('count(*) as total'))->groupBy('estado_orden')->orderBy('total', 'desc')->get();
                 break;
+
+            case 'preordenes':
+                $preordenes = DB::connection('novitecdb')->table('preordenes')
+                    ->when($orderPrefix, fn($q) => $q->where('nro_preorden', 'like', 'PRE-' . $branchCode . '-%'))
+                    ->when($buscar, fn($q) => $q->where(function ($s) use ($buscar) {
+                        $s->where('nro_preorden', 'like', "%{$buscar}%")
+                          ->orWhere('nombres', 'like', "%{$buscar}%")
+                          ->orWhere('apellidos', 'like', "%{$buscar}%")
+                          ->orWhere('serie', 'like', "%{$buscar}%")
+                          ->orWhere('identificacion', 'like', "%{$buscar}%");
+                    }))
+                    ->orderByDesc('created_at')
+                    ->paginate(12)
+                    ->withQueryString();
+                break;
+        }
+
+        // Rango de fechas para ingresadas
+        $fechaDesde = $request->input('fecha_desde', $fecha);
+        $fechaHasta = $request->input('fecha_hasta', $fecha);
+        if ($tab === 'hoy' && $fechaDesde !== $fechaHasta) {
+            $q = clone $base;
+            if ($buscar) $q->where(fn($s) => $s->where('nro_orden','like',"%{$buscar}%")->orWhere('nombres','like',"%{$buscar}%")->orWhere('cliente','like',"%{$buscar}%"));
+            if ($tecnico) $q->where('tecnico','like',"%{$tecnico}%");
+            $ingresadas = $q->whereRaw("DATE(fecha_de_ingreso) BETWEEN ? AND ?", [$fechaDesde, $fechaHasta])->orderBy('fecha_de_ingreso','desc')->paginate(12, $cols)->withQueryString();
         }
 
         return view('recepcion.dashboard', compact(
-            'stats', 'listas', 'atrasadas', 'ingresadas', 'porEstado',
-            'branchName', 'branchCode', 'user', 'tab', 'buscar', 'fecha', 'tecnico'
+            'stats', 'listas', 'atrasadas', 'ingresadas', 'porEstado', 'preordenes',
+            'branchName', 'branchCode', 'user', 'tab', 'buscar', 'fecha', 'tecnico',
+            'fechaDesde', 'fechaHasta'
         ));
+    }
+
+    public function historial(Request $request)
+    {
+        $user        = Auth::user();
+        $branchCode  = $user->is_admin ? $request->input('branch', 'UIO') : $user->branch_code;
+        $branchName  = User::BRANCHES[$branchCode] ?? 'NOVITEC';
+        $orderPrefix = User::BRANCH_ORDER_PREFIX[$branchCode] ?? '';
+
+        $ci     = trim($request->input('ci', ''));
+        $nombre = trim($request->input('nombre', ''));
+        $orders = null;
+        $clienteInfo = null;
+
+        if ($ci || $nombre) {
+            $q = DB::connection('novitecdb')->table('vista_ordenes');
+            if ($orderPrefix) $q->where('nro_orden', 'like', $orderPrefix . '%');
+
+            if ($ci) {
+                $q->where('identificacion', 'like', "%{$ci}%");
+            } elseif ($nombre) {
+                $q->where(function ($s) use ($nombre) {
+                    $s->where('nombres', 'like', "%{$nombre}%")
+                      ->orWhere('apellidos', 'like', "%{$nombre}%")
+                      ->orWhere('cliente', 'like', "%{$nombre}%");
+                });
+            }
+
+            $orders = $q->orderByDesc('fecha_de_ingreso')->paginate(15)->withQueryString();
+
+            if ($orders->isNotEmpty()) {
+                $first = $orders->first();
+                $clienteInfo = [
+                    'nombre'         => trim(($first->nombres ?? '') . ' ' . ($first->apellidos ?? '')) ?: ($first->cliente ?? ''),
+                    'identificacion' => $first->identificacion ?? '',
+                    'contacto'       => $first->numero_contacto ?? '',
+                    'correo'         => $first->correo ?? '',
+                    'total'          => $orders->total(),
+                ];
+            }
+        }
+
+        return view('recepcion.historial', compact('orders', 'clienteInfo', 'ci', 'nombre', 'branchName', 'branchCode', 'user'));
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $user        = Auth::user();
+        $branchCode  = $user->is_admin ? $request->input('branch', 'UIO') : $user->branch_code;
+        $branchName  = User::BRANCHES[$branchCode] ?? 'NOVITEC';
+        $orderPrefix = User::BRANCH_ORDER_PREFIX[$branchCode] ?? '';
+        $tipo        = $request->input('tipo', 'listas');
+
+        $fechaValida     = "fecha_prometido REGEXP '^[0-9]{4}-[0-9]{2}-[0-9]{2}'";
+        $estadosCerrados = ['Finalizada', 'Entregada', 'Anulada', 'Nota de Credito'];
+        $cols            = ['nro_orden','nombres','apellidos','cliente','tipo','marca','modelo','estado_orden','tecnico','serie','numero_contacto','fecha_de_ingreso_fmt','fecha_prometido_fmt'];
+
+        $base = DB::connection('novitecdb')->table('vista_ordenes');
+        if ($orderPrefix) $base->where('nro_orden', 'like', $orderPrefix . '%');
+
+        $rows = match($tipo) {
+            'atrasadas' => (clone $base)->whereRaw($fechaValida)->whereRaw("DATE(fecha_prometido) < CURDATE()")->whereNotIn('estado_orden', $estadosCerrados)->orderBy('fecha_prometido')->get($cols),
+            'hoy'       => (clone $base)->whereRaw("DATE(fecha_de_ingreso) = CURDATE()")->orderByDesc('fecha_de_ingreso')->get($cols),
+            default     => (clone $base)->where('estado_orden', 'Finalizada')->orderBy('fecha_de_ingreso', 'desc')->get($cols),
+        };
+
+        $titulo = match($tipo) {
+            'atrasadas' => 'Órdenes Atrasadas',
+            'hoy'       => 'Ingresadas Hoy — ' . now()->format('d/m/Y'),
+            default     => 'Listas para Entregar',
+        };
+
+        return view('recepcion.pdf', compact('rows', 'titulo', 'branchName', 'tipo'));
     }
 
     public function aiChat(Request $request)
@@ -201,6 +300,12 @@ PROMPT;
                     $query->where('serie', 'like', '%' . $q . '%');
                 } elseif ($tipo === 'identificacion') {
                     $query->where('identificacion', 'like', '%' . $q . '%');
+                } elseif ($tipo === 'nombre') {
+                    $query->where(function ($s) use ($q) {
+                        $s->where('nombres', 'like', '%' . $q . '%')
+                          ->orWhere('apellidos', 'like', '%' . $q . '%')
+                          ->orWhere('cliente', 'like', '%' . $q . '%');
+                    });
                 }
 
                 $results = $query->orderByDesc('fecha_de_ingreso')->limit(30)->get();
