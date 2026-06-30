@@ -20,6 +20,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ReceptionistController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\LlamadaController;
 use App\Http\Controllers\PageController;
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
@@ -70,6 +71,11 @@ Route::prefix('recepcion')->middleware(['auth', 'receptionist'])->group(function
     Route::get('/ordenes', [ReceptionistController::class, 'index'])->name('recepcion.ordenes');
     Route::get('/historial', [ReceptionistController::class, 'historial'])->name('recepcion.historial');
     Route::get('/pdf', [ReceptionistController::class, 'exportPdf'])->name('recepcion.pdf');
+    Route::post('/llamadas', [LlamadaController::class, 'iniciar'])->name('recepcion.llamadas.iniciar')->middleware('throttle:60,1');
+    Route::patch('/llamadas/{llamada}/notas', [LlamadaController::class, 'notas'])->name('recepcion.llamadas.notas');
+    Route::get('/llamadas', [LlamadaController::class, 'historial'])->name('recepcion.llamadas');
+// Webhook público — MacroDroid llama aquí (no necesita sesión, usa token)
+Route::post('/api/llamada-webhook/{token}', [LlamadaController::class, 'webhook'])->name('llamadas.webhook')->withoutMiddleware(['web']);
     Route::get('/informe-foto/{fotoId}', [ReceptionistController::class, 'fotoInforme'])->name('recepcion.foto');
     Route::post('/ai-chat', [ReceptionistController::class, 'aiChat'])->name('recepcion.ai-chat')->middleware('throttle:30,1');
     Route::get('/cuenta', fn() => view('recepcion.cuenta'))->name('recepcion.cuenta');

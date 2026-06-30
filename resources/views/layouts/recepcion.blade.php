@@ -69,6 +69,13 @@
                 Historial de cliente
             </a>
 
+            <a href="{{ route('recepcion.llamadas') }}"
+               class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all
+               {{ request()->routeIs('recepcion.llamadas') ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                <i class="fa-solid fa-phone w-4 text-center"></i>
+                Registro de llamadas
+            </a>
+
             {{-- Admin también puede ir al panel admin --}}
             @if(auth()->user()->is_admin)
             <a href="{{ route('recepcion.ordenes', ['branch' => 'GYE']) }}"
@@ -323,6 +330,60 @@ document.getElementById('recep-ai-input')?.addEventListener('input', function() 
     this.style.height = 'auto';
     this.style.height = Math.min(this.scrollHeight, 80) + 'px';
 });
+</script>
+
+{{-- ═══ SISTEMA DE LLAMADAS ════════════════════════════════════════════ --}}
+{{-- Indicador flotante de llamada en curso --}}
+<div id="llamada-indicator" style="display:none;position:fixed;bottom:88px;right:24px;z-index:9996;
+     background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;
+     padding:10px 18px;border-radius:14px;box-shadow:0 8px 24px rgba(22,163,74,.4);
+     font-size:13px;font-weight:600;display:none;align-items:center;gap:10px;min-width:200px;">
+    <span style="width:8px;height:8px;border-radius:50%;background:#fff;animation:llamada-pulse 1s infinite;flex-shrink:0;"></span>
+    <div>
+        <div id="llamada-numero" style="font-family:monospace;font-size:14px;"></div>
+        <div id="llamada-estado" style="font-size:11px;opacity:.8;">Llamando…</div>
+    </div>
+    <button onclick="cerrarIndicadorLlamada()"
+            style="margin-left:auto;background:rgba(255,255,255,.2);border:none;color:#fff;width:24px;height:24px;border-radius:6px;cursor:pointer;font-size:12px;">✕</button>
+</div>
+<style>@keyframes llamada-pulse{0%,100%{opacity:1}50%{opacity:.4}}</style>
+
+<script>
+const _recepCsrfLayout = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+let _llamadaActualId = null;
+
+async function iniciarLlamada(numero, nroOrden = '', cliente = '') {
+    // 1. Registrar en la DB
+    try {
+        const res = await fetch('{{ route("recepcion.llamadas.iniciar") }}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': _recepCsrfLayout, 'Accept': 'application/json' },
+            body: JSON.stringify({ numero, nro_orden: nroOrden, cliente }),
+        });
+        const data = await res.json();
+        if (data.ok) {
+            _llamadaActualId = data.llamada_id;
+            mostrarIndicadorLlamada(numero);
+        }
+    } catch(e) {
+        console.error('Error registrando llamada:', e);
+    }
+
+    // 2. Abrir enlace tel: (activa Phone Link → Android)
+    window.location.href = 'tel:' + numero.replace(/[^0-9+]/g,'');
+}
+
+function mostrarIndicadorLlamada(numero) {
+    const el = document.getElementById('llamada-indicator');
+    document.getElementById('llamada-numero').textContent = numero;
+    document.getElementById('llamada-estado').textContent = 'Llamando… (MacroDroid registrará el resultado)';
+    el.style.display = 'flex';
+}
+
+function cerrarIndicadorLlamada() {
+    document.getElementById('llamada-indicator').style.display = 'none';
+    _llamadaActualId = null;
+}
 </script>
 
 @stack('scripts')

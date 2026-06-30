@@ -208,9 +208,10 @@
                     @if(!empty($o->numero_contacto))
                     <div>
                         <p class="text-xs text-slate-400 font-medium mb-0.5">Nro. Contacto</p>
-                        <a href="tel:{{ $o->numero_contacto }}" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
-                            <i class="fa-solid fa-phone text-xs mr-1"></i>{{ $o->numero_contacto }}
-                        </a>
+                        <button onclick="iniciarLlamada('{{ $o->numero_contacto }}','{{ $o->nro_orden ?? '' }}','{{ addslashes(trim(($o->nombres??'').' '.($o->apellidos??''))) }}')"
+                                class="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1 transition-colors">
+                            <i class="fa-solid fa-phone text-xs"></i>{{ $o->numero_contacto }}
+                        </button>
                     </div>
                     @endif
                     @if(!empty($o->correo))
