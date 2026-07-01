@@ -75,9 +75,14 @@
             <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2 flex-wrap mb-0.5">
                     <span class="font-mono text-sm font-bold text-slate-800">{{ $llamada->numero }}</span>
-                    @if($llamada->nro_orden)
-                    <span class="text-xs font-mono text-blue-600">{{ $llamada->nro_orden }}</span>
+                    @if($llamada->cliente)
+                    <span class="text-sm font-semibold text-slate-700">{{ $llamada->cliente }}</span>
                     @endif
+                    @if($llamada->nro_orden)
+                    <span class="text-xs font-mono text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">{{ $llamada->nro_orden }}</span>
+                    @endif
+                </div>
+                <div class="flex items-center gap-2 flex-wrap">
                     <span class="text-xs px-2 py-0.5 rounded-full font-medium {{ $estadoCls[0] }}">{{ $estadoCls[1] }}</span>
                     <span class="text-xs px-2 py-0.5 rounded-full {{ $entrante ? 'bg-blue-50 text-blue-600' : 'bg-slate-100 text-slate-500' }}">
                         {{ $entrante ? '↙ Entrante' : '↗ Saliente' }}
@@ -86,8 +91,7 @@
                     <span class="text-xs text-slate-400"><i class="fa-solid fa-stopwatch mr-1"></i>{{ $llamada->duracion_formateada }}</span>
                     @endif
                 </div>
-                <p class="text-sm text-slate-700 truncate">{{ $llamada->cliente ?? '—' }}</p>
-                <p class="text-xs text-slate-400">{{ $llamada->iniciada_at->setTimezone('America/Guayaquil')->format('H:i') }} · {{ $llamada->user->name ?? '—' }}</p>
+                <p class="text-xs text-slate-400 mt-0.5">{{ $llamada->iniciada_at->setTimezone('America/Guayaquil')->format('H:i') }} · {{ $llamada->user->name ?? '—' }}</p>
                 @if($llamada->notas)
                 <p class="text-xs text-slate-500 mt-1 italic">{{ $llamada->notas }}</p>
                 @endif
