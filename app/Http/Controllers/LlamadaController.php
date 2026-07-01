@@ -10,6 +10,48 @@ use Illuminate\Support\Str;
 class LlamadaController extends Controller
 {
     // ── Inicia el registro cuando la recepcionista hace click en el número
+    // Normaliza número a formato local ecuatoriano: 0XXXXXXXXX
+    private function normalizeNumero(string $raw): string
+    {
+        $n = preg_replace('/[^0-9]/', '', $raw);
+        // Quita prefijo 593 → agrega 0
+        if (str_starts_with($n, '593') && strlen($n) >= 11) {
+            $n = '0' . substr($n, 3);
+        }
+        // Sin cero inicial (9 dígitos) → agrega 0
+        if (strlen($n) === 9 && str_starts_with($n, '9')) {
+            $n = '0' . $n;
+        }
+        return $n;
+    }
+
+    // Busca la orden más reciente de un número en vista_ordenes y devuelve datos del cliente
+    private function buscarClientePorNumero(string $numero): array
+    {
+        if (empty($numero)) return [];
+
+        $orden = DB::connection('novitecdb')
+            ->table('vista_ordenes')
+            ->where(function ($q) use ($numero) {
+                $q->where('numero_contacto', $numero)
+                  ->orWhere('numero_contacto', ltrim($numero, '0')) // sin 0 inicial
+                  ->orWhere('telefono', $numero);
+            })
+            ->orderByDesc('fecha_de_ingreso')
+            ->select('nro_orden', 'nombres', 'apellidos', 'cliente', 'identificacion')
+            ->first();
+
+        if (!$orden) return [];
+
+        $cliente = trim(($orden->nombres ?? '') . ' ' . ($orden->apellidos ?? ''))
+            ?: ($orden->cliente ?? '');
+
+        return [
+            'nro_orden' => $orden->nro_orden,
+            'cliente'   => $cliente,
+        ];
+    }
+
     public function iniciar(Request $request)
     {
         $request->validate([
@@ -18,13 +60,19 @@ class LlamadaController extends Controller
             'cliente'   => 'nullable|string|max:150',
         ]);
 
-        $token = Str::random(32);
+        $token  = Str::random(32);
+        $numero = $this->normalizeNumero($request->numero);
+
+        // Auto-vincular si no se pasó cliente/orden
+        $infoCliente = ($request->filled('nro_orden') || $request->filled('cliente'))
+            ? []
+            : $this->buscarClientePorNumero($numero);
 
         $llamada = Llamada::create([
             'user_id'       => Auth::id(),
-            'numero'        => preg_replace('/[^0-9+]/', '', $request->numero),
-            'nro_orden'     => $request->nro_orden,
-            'cliente'       => $request->cliente,
+            'numero'        => $numero,
+            'nro_orden'     => $request->nro_orden ?? ($infoCliente['nro_orden'] ?? null),
+            'cliente'       => $request->cliente   ?? ($infoCliente['cliente']   ?? null),
             'estado'        => 'iniciada',
             'webhook_token' => $token,
             'iniciada_at'   => now(),
@@ -54,8 +102,8 @@ class LlamadaController extends Controller
         \Illuminate\Support\Facades\Log::info('Webhook llamada', $request->all());
 
         $numeroRaw = $request->input('numero') ?? $request->input('number') ?? $request->input('phone') ?? '';
-        $numero    = preg_replace('/[^0-9+]/', '', $numeroRaw);
-        if (empty($numero)) $numero = $numeroRaw; // si queda vacío, guardar raw para debug
+        $numero    = $this->normalizeNumero($numeroRaw);
+        if (empty($numero)) $numero = $numeroRaw;
 
         $duracion = (int) ($request->input('duracion') ?? $request->input('call_duration') ?? $request->input('duration') ?? 0);
 
@@ -100,11 +148,14 @@ class LlamadaController extends Controller
                 $userId = $receptionist?->id;
             }
 
+            // Auto-vincular al cliente/orden
+            $infoCliente = $this->buscarClientePorNumero($numero);
+
             $llamada = Llamada::create([
                 'user_id'           => $userId,
                 'numero'            => $numero,
-                'nro_orden'         => null,
-                'cliente'           => null,
+                'nro_orden'         => $infoCliente['nro_orden'] ?? null,
+                'cliente'           => $infoCliente['cliente']   ?? null,
                 'estado'            => $estado,
                 'duracion_segundos' => $duracion > 0 ? $duracion : null,
                 'iniciada_at'       => now()->subSeconds($duracion),
