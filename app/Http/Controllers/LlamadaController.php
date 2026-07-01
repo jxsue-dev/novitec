@@ -114,6 +114,7 @@ class LlamadaController extends Controller
             return response()->json(['ok' => false, 'msg' => 'Número requerido', 'recibido' => $request->all()], 422);
         }
 
+        $tipo   = in_array($request->input('tipo'), ['entrante', 'saliente']) ? $request->input('tipo') : 'saliente';
         $estado = $contesto ? 'contestada' : 'no_contestada';
 
         // Busca llamada iniciada desde el panel (últimos 30 min)
@@ -124,9 +125,9 @@ class LlamadaController extends Controller
             ->first();
 
         if ($llamada) {
-            // Actualiza registro existente (llamada iniciada desde el panel)
             $llamada->update([
                 'estado'            => $estado,
+                'tipo'              => $tipo,
                 'duracion_segundos' => $duracion > 0 ? $duracion : null,
                 'completada_at'     => now(),
                 'webhook_token'     => null,
@@ -154,6 +155,7 @@ class LlamadaController extends Controller
             $llamada = Llamada::create([
                 'user_id'           => $userId,
                 'numero'            => $numero,
+                'tipo'              => $tipo,
                 'nro_orden'         => $infoCliente['nro_orden'] ?? null,
                 'cliente'           => $infoCliente['cliente']   ?? null,
                 'estado'            => $estado,

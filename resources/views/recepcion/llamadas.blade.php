@@ -53,17 +53,22 @@
     <div class="divide-y divide-slate-50">
         @foreach($llamadas as $llamada)
         @php
-            $estadoCls = match($llamada->estado) {
-                'contestada'    => ['bg-green-100 text-green-700', 'fa-phone-volume', 'Contestó'],
-                'no_contestada' => ['bg-red-100 text-red-600',    'fa-phone-slash',  'No contestó'],
-                'iniciada'      => ['bg-amber-100 text-amber-700','fa-clock',        'Sin respuesta'],
-                default         => ['bg-slate-100 text-slate-500','fa-phone',        'Error'],
+            $entrante   = ($llamada->tipo ?? 'saliente') === 'entrante';
+            $estadoCls  = match($llamada->estado) {
+                'contestada'    => ['bg-green-100 text-green-700', 'Contestó'],
+                'no_contestada' => ['bg-red-100 text-red-600',    $entrante ? 'Perdida' : 'No contestó'],
+                'iniciada'      => ['bg-amber-100 text-amber-700','Sin respuesta'],
+                default         => ['bg-slate-100 text-slate-500','Error'],
             };
+            // Icono de dirección
+            $iconDir = $entrante
+                ? ($llamada->estado === 'contestada' ? 'fa-phone-arrow-down-left text-blue-500' : 'fa-phone-missed text-red-400')
+                : ($llamada->estado === 'contestada' ? 'fa-phone-arrow-up-right text-green-500' : 'fa-phone-slash text-red-400');
         @endphp
         <div class="flex items-center gap-4 px-5 py-4 hover:bg-slate-50/50 transition-colors" id="llamada-{{ $llamada->id }}">
-            {{-- Estado icono --}}
+            {{-- Icono dirección + estado --}}
             <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 {{ $estadoCls[0] }}">
-                <i class="fa-solid {{ $estadoCls[1] }} text-sm"></i>
+                <i class="fa-solid {{ $iconDir }} text-sm"></i>
             </div>
 
             {{-- Info --}}
@@ -73,13 +78,16 @@
                     @if($llamada->nro_orden)
                     <span class="text-xs font-mono text-blue-600">{{ $llamada->nro_orden }}</span>
                     @endif
-                    <span class="text-xs px-2 py-0.5 rounded-full font-medium {{ $estadoCls[0] }}">{{ $estadoCls[2] }}</span>
+                    <span class="text-xs px-2 py-0.5 rounded-full font-medium {{ $estadoCls[0] }}">{{ $estadoCls[1] }}</span>
+                    <span class="text-xs px-2 py-0.5 rounded-full {{ $entrante ? 'bg-blue-50 text-blue-600' : 'bg-slate-100 text-slate-500' }}">
+                        {{ $entrante ? '↙ Entrante' : '↗ Saliente' }}
+                    </span>
                     @if($llamada->duracion_segundos)
                     <span class="text-xs text-slate-400"><i class="fa-solid fa-stopwatch mr-1"></i>{{ $llamada->duracion_formateada }}</span>
                     @endif
                 </div>
                 <p class="text-sm text-slate-700 truncate">{{ $llamada->cliente ?? '—' }}</p>
-                <p class="text-xs text-slate-400">{{ $llamada->iniciada_at->format('H:i') }} · {{ $llamada->user->name ?? '—' }}</p>
+                <p class="text-xs text-slate-400">{{ $llamada->iniciada_at->setTimezone('America/Guayaquil')->format('H:i') }} · {{ $llamada->user->name ?? '—' }}</p>
                 @if($llamada->notas)
                 <p class="text-xs text-slate-500 mt-1 italic">{{ $llamada->notas }}</p>
                 @endif
