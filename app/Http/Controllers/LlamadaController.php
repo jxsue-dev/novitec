@@ -254,6 +254,17 @@ class LlamadaController extends Controller
             'pendientes'     => Llamada::whereDate('iniciada_at', $fecha)->where('estado','iniciada')->when(!$user->is_admin, fn($q) => $q->where('user_id', $user->id))->count(),
         ];
 
-        return view('recepcion.llamadas', compact('llamadas', 'stats', 'fecha', 'user'));
+        // Pre-cargar identificaciones en una sola query (evita N+1)
+        $nrosConOrden = $llamadas->pluck('nro_orden')->filter()->unique()->values()->toArray();
+        $identificaciones = [];
+        if (!empty($nrosConOrden)) {
+            $rows = DB::connection('novitecdb')
+                ->table('vista_ordenes')
+                ->whereIn('nro_orden', $nrosConOrden)
+                ->pluck('identificacion', 'nro_orden');
+            $identificaciones = $rows->toArray();
+        }
+
+        return view('recepcion.llamadas', compact('llamadas', 'stats', 'fecha', 'user', 'identificaciones'));
     }
 }
