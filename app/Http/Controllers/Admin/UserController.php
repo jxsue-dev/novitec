@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -40,10 +41,15 @@ class UserController extends Controller
             return back()->with('error', 'Sucursal inválida.');
         }
 
-        // Si se asigna sucursal, quitar admin (no puede ser ambos)
+        // Generar token personal si se asigna sucursal (y no tiene uno aún)
+        $token = $branchCode
+            ? ($user->call_webhook_token ?? Str::random(32))
+            : null;
+
         $user->update([
-            'branch_code' => $branchCode,
-            'is_admin'    => false,
+            'branch_code'         => $branchCode,
+            'is_admin'            => false,
+            'call_webhook_token'  => $token,
         ]);
 
         $message = $branchCode

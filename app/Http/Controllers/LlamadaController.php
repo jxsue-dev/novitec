@@ -91,13 +91,23 @@ class LlamadaController extends Controller
     // Body: token=SECRET&numero=0960500156&duracion=65&contesto=true
     public function webhook(Request $request)
     {
-        // Verificar token fijo (configurado una vez en MacroDroid)
-        $tokenEnvio = $request->input('token') ?? $request->header('X-Webhook-Token');
-        $tokenConfig = config('services.llamadas.webhook_token', env('LLAMADAS_WEBHOOK_TOKEN', ''));
+        $tokenEnvio = $request->input('token') ?? $request->header('X-Webhook-Token') ?? '';
 
-        if (empty($tokenConfig) || $tokenEnvio !== $tokenConfig) {
-            return response()->json(['ok' => false, 'msg' => 'Token inválido'], 401);
+        // 1. Buscar recepcionista por su token personal
+        $receptionist = \App\Models\User::where('call_webhook_token', $tokenEnvio)
+            ->whereNotNull('branch_code')
+            ->first();
+
+        // 2. Fallback: token global del .env (compatibilidad)
+        if (! $receptionist) {
+            $tokenGlobal = config('services.llamadas.webhook_token', env('LLAMADAS_WEBHOOK_TOKEN', ''));
+            if (empty($tokenEnvio) || $tokenEnvio !== $tokenGlobal) {
+                return response()->json(['ok' => false, 'msg' => 'Token inválido'], 401);
+            }
         }
+
+        $userId      = $receptionist?->id;
+        $branchCode  = $receptionist?->branch_code;
 
         // Log completo para debug — así vemos exactamente qué envía MacroDroid
         \Illuminate\Support\Facades\Log::info('Webhook llamada', $request->all());
@@ -134,23 +144,18 @@ class LlamadaController extends Controller
                 'webhook_token'     => null,
             ]);
         } else {
-            // Crea registro nuevo (llamada manual desde el teléfono, no iniciada en el panel)
-            // Intenta asignarla al usuario recepcionista activo de la sucursal según prefijo
-            $userId = null;
-            $prefixMap = array_flip(\App\Models\User::BRANCH_ORDER_PREFIX);
-            $branchCode = null;
-            foreach ($prefixMap as $prefix => $code) {
-                if (str_starts_with($numero, ltrim($prefix, '+'))) {
-                    $branchCode = $code;
-                    break;
+            // Si no hay recepcionista por token, intentar por prefijo del número
+            if (! $userId) {
+                $prefixMap = array_flip(\App\Models\User::BRANCH_ORDER_PREFIX);
+                foreach ($prefixMap as $prefix => $code) {
+                    if (str_starts_with($numero, ltrim($prefix, '+'))) {
+                        $byBranch = \App\Models\User::where('branch_code', $code)->first();
+                        $userId   = $byBranch?->id;
+                        break;
+                    }
                 }
             }
-            if ($branchCode) {
-                $receptionist = \App\Models\User::where('branch_code', $branchCode)->first();
-                $userId = $receptionist?->id;
-            }
 
-            // Auto-vincular al cliente/orden
             $infoCliente = $this->buscarClientePorNumero($numero);
 
             $llamada = Llamada::create([

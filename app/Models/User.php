@@ -42,6 +42,7 @@ class User extends Authenticatable
         'password',
         'is_admin',
         'branch_code',
+        'call_webhook_token',
     ];
 
     protected $hidden = [

@@ -36,6 +36,12 @@ $branches = \App\Models\User::BRANCHES;
                     <p class="text-blue-500 text-xs font-medium mt-0.5">
                         <i class="fa-solid fa-location-dot text-xs mr-1"></i>{{ $user->branch_name }}
                     </p>
+                    @if($user->call_webhook_token)
+                    <p class="text-slate-400 text-xs font-mono mt-0.5" title="Token MacroDroid/Automate">
+                        <i class="fa-solid fa-robot text-xs mr-1 text-indigo-400"></i>
+                        <span class="select-all">{{ $user->call_webhook_token }}</span>
+                    </p>
+                    @endif
                     @endif
                 </div>
             </div>

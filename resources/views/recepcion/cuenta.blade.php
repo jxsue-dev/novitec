@@ -59,6 +59,34 @@
         </form>
     </div>
 
+    {{-- TOKEN MACRODROID --}}
+    <div class="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
+        <div class="px-6 py-4 border-b border-slate-100">
+            <p class="text-slate-900 text-sm font-semibold flex items-center gap-2">
+                <i class="fa-solid fa-robot text-indigo-500 text-xs"></i> Token de MacroDroid / Automate
+            </p>
+            <p class="text-xs text-slate-400 mt-0.5">Usa este token en tu app de automatización para registrar llamadas automáticamente</p>
+        </div>
+        <div class="p-6">
+            @if(auth()->user()->call_webhook_token)
+            <div class="bg-slate-900 rounded-xl p-4 flex items-center gap-3">
+                <code class="flex-1 text-green-400 font-mono text-sm break-all" id="user-token">{{ auth()->user()->call_webhook_token }}</code>
+                <button onclick="copyToken()" title="Copiar token"
+                        class="flex-shrink-0 text-slate-400 hover:text-white border border-slate-600 hover:border-slate-400 px-3 py-1.5 rounded-lg text-xs transition-colors">
+                    <i class="fa-solid fa-copy mr-1"></i> Copiar
+                </button>
+            </div>
+            <div class="mt-3 bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 text-xs text-blue-700">
+                <p class="font-semibold mb-1">Configuración en Automate / MacroDroid:</p>
+                <p>URL: <code class="bg-white px-1 rounded">https://novitec.com.ec/api/llamada-webhook</code></p>
+                <p class="mt-1">Body: <code class="bg-white px-1 rounded">token={{ auth()->user()->call_webhook_token }}&numero={numero}</code></p>
+            </div>
+            @else
+            <p class="text-slate-400 text-sm">No tienes un token asignado. Contacta al administrador.</p>
+            @endif
+        </div>
+    </div>
+
     {{-- CONTRASEÑA --}}
     <div class="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
         <div class="px-6 py-4 border-b border-slate-100">
@@ -107,3 +135,16 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+function copyToken() {
+    const t = document.getElementById('user-token')?.textContent ?? '';
+    navigator.clipboard.writeText(t).then(() => {
+        const btn = event.currentTarget;
+        btn.innerHTML = '<i class="fa-solid fa-check mr-1"></i> Copiado';
+        setTimeout(() => btn.innerHTML = '<i class="fa-solid fa-copy mr-1"></i> Copiar', 2000);
+    });
+}
+</script>
+@endpush
