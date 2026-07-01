@@ -104,6 +104,17 @@
         $informe = $informes->get($o->orden_id ?? null);
         $fotos   = $informe ? ($informeFotos->get($informe->id) ?? collect()) : collect();
 
+        // Detectar si la orden pertenece a otra sucursal
+        $otrasSucursales = [
+            'UIO' => ['nombre' => 'NOVITEC QUITO',     'tel' => '0960500156', 'wa' => '593960500156'],
+            'GYE' => ['nombre' => 'NOVITEC GUAYAQUIL', 'tel' => '0960500158', 'wa' => '593960500158'],
+            'MTA' => ['nombre' => 'NOVITEC MANTA',     'tel' => '0998879638', 'wa' => '593998879638'],
+        ];
+        $nroOrden      = $o->nro_orden ?? '';
+        $prefijOrden   = strtoupper(substr($nroOrden, 0, 3));
+        $branchActual  = auth()->user()->is_admin ? null : (auth()->user()->branch_code ?? null);
+        $esOtraSucursal = $branchActual && isset($otrasSucursales[$prefijOrden]) && $prefijOrden !== $branchActual;
+
         // Contexto para el asistente IA
         $aiCtx = "ORDEN: {$o->nro_orden}\nESTADO: {$o->estado_orden}\nCLIENTE: {$cliente}\nEQUIPO: {$equipo}\nSERIE: {$o->serie}\nFALLA REPORTADA: {$o->falla}\nOBSERVACION: {$o->observacion}\nTECNICO: {$o->tecnico}\nSUCURSAL: {$o->sucursal}\nMOTIVO INGRESO: {$o->motivo_ingreso}";
         if ($informe) {
@@ -112,6 +123,44 @@
         $aiCtxJs = addslashes(str_replace(["\r","\n"], ['',"\\n"], $aiCtx));
     @endphp
 
+    {{-- ── AVISO OTRA SUCURSAL ──────────────────────────────────────────── --}}
+    @if($esOtraSucursal)
+    @php $sucInfo = $otrasSucursales[$prefijOrden]; @endphp
+    <div class="bg-white border border-amber-200 rounded-2xl overflow-hidden shadow-sm">
+        <div class="flex items-center justify-between px-6 py-4 bg-amber-50 border-b border-amber-100">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-amber-400 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-triangle-exclamation text-white text-sm"></i>
+                </div>
+                <div>
+                    <p class="text-amber-900 font-bold text-sm">Orden de otra sucursal</p>
+                    <p class="text-amber-700 text-xs font-mono">{{ $nroOrden }} · {{ $cliente }}</p>
+                </div>
+            </div>
+            <span class="text-xs font-bold px-3 py-1.5 rounded-full border {{ $sc }} flex items-center gap-1.5 flex-shrink-0">
+                <i class="fa-solid {{ $si }}"></i> {{ $o->estado_orden ?? '—' }}
+            </span>
+        </div>
+        <div class="px-6 py-5 flex items-center gap-6 flex-wrap">
+            <div>
+                <p class="text-xs text-slate-400 font-medium mb-1">Esta orden pertenece a</p>
+                <p class="text-slate-900 font-bold text-base">{{ $sucInfo['nombre'] }}</p>
+            </div>
+            <div class="h-10 w-px bg-slate-100 hidden sm:block"></div>
+            <div>
+                <p class="text-xs text-slate-400 font-medium mb-1">Teléfono</p>
+                <a href="tel:{{ $sucInfo['tel'] }}" class="text-blue-600 font-semibold text-base hover:text-blue-800">
+                    <i class="fa-solid fa-phone text-sm mr-1"></i>{{ $sucInfo['tel'] }}
+                </a>
+            </div>
+            <a href="https://wa.me/{{ $sucInfo['wa'] }}?text={{ urlencode('Hola, consulto por la orden '.$nroOrden.' del cliente '.$cliente) }}"
+               target="_blank"
+               class="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors">
+                <i class="fa-brands fa-whatsapp"></i> Contactar sucursal
+            </a>
+        </div>
+    </div>
+    @else
     <div class="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
 
         {{-- Header --}}
@@ -444,6 +493,7 @@
         </div>
         @endif
     </div>
+    @endif
     @endforeach
 </div>
 
