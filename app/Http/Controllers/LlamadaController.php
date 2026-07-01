@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Llamada;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class LlamadaController extends Controller
@@ -30,12 +31,12 @@ class LlamadaController extends Controller
     {
         if (empty($numero)) return [];
 
+        $numeroSin0 = ltrim($numero, '0');
         $orden = DB::connection('novitecdb')
             ->table('vista_ordenes')
-            ->where(function ($q) use ($numero) {
+            ->where(function ($q) use ($numero, $numeroSin0) {
                 $q->where('numero_contacto', $numero)
-                  ->orWhere('numero_contacto', ltrim($numero, '0')) // sin 0 inicial
-                  ->orWhere('telefono', $numero);
+                  ->orWhere('numero_contacto', $numeroSin0);
             })
             ->orderByDesc('fecha_de_ingreso')
             ->select('nro_orden', 'nombres', 'apellidos', 'cliente', 'identificacion')
