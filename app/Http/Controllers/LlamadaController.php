@@ -169,6 +169,57 @@ class LlamadaController extends Controller
         return response()->json(['ok' => true, 'estado' => $llamada->estado, 'llamada_id' => $llamada->id, 'creada' => $llamada->wasRecentlyCreated]);
     }
 
+    // ── Buscar orden para preview (AJAX)
+    public function buscarOrdenAjax(Request $request)
+    {
+        $nro = strtoupper(trim($request->input('q', '')));
+        if (empty($nro)) return response()->json(['ok' => false]);
+
+        $orden = DB::connection('novitecdb')
+            ->table('vista_ordenes')
+            ->where('nro_orden', 'like', "%{$nro}%")
+            ->select('nro_orden', 'nombres', 'apellidos', 'cliente', 'tipo', 'marca', 'modelo', 'estado_orden', 'numero_contacto')
+            ->limit(5)
+            ->get();
+
+        return response()->json(['ok' => true, 'ordenes' => $orden]);
+    }
+
+    // ── Vincular llamada a una orden
+    public function vincular(Request $request, Llamada $llamada)
+    {
+        abort_if($llamada->user_id !== Auth::id() && !Auth::user()->is_admin, 403);
+
+        $nroOrden = trim($request->input('nro_orden', ''));
+
+        if (empty($nroOrden)) {
+            $llamada->update(['nro_orden' => null, 'cliente' => null]);
+            return response()->json(['ok' => true, 'msg' => 'Desvinculada']);
+        }
+
+        $orden = DB::connection('novitecdb')
+            ->table('vista_ordenes')
+            ->where('nro_orden', $nroOrden)
+            ->select('nro_orden', 'nombres', 'apellidos', 'cliente', 'tipo', 'marca', 'modelo', 'estado_orden')
+            ->first();
+
+        if (!$orden) {
+            return response()->json(['ok' => false, 'msg' => 'Orden no encontrada'], 404);
+        }
+
+        $cliente = trim(($orden->nombres ?? '') . ' ' . ($orden->apellidos ?? '')) ?: ($orden->cliente ?? '');
+
+        $llamada->update(['nro_orden' => $orden->nro_orden, 'cliente' => $cliente]);
+
+        return response()->json([
+            'ok'      => true,
+            'orden'   => $orden->nro_orden,
+            'cliente' => $cliente,
+            'equipo'  => trim(implode(' ', array_filter([$orden->tipo ?? '', $orden->marca ?? '', $orden->modelo ?? '']))),
+            'estado'  => $orden->estado_orden,
+        ]);
+    }
+
     // ── Agregar notas a una llamada
     public function notas(Request $request, Llamada $llamada)
     {

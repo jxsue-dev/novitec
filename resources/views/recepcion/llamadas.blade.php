@@ -95,6 +95,12 @@
 
             {{-- Acciones --}}
             <div class="flex items-center gap-2 flex-shrink-0">
+                {{-- Vincular a orden --}}
+                <button onclick="abrirVincular({{ $llamada->id }}, '{{ addslashes($llamada->nro_orden ?? '') }}')"
+                        class="w-8 h-8 border {{ $llamada->nro_orden ? 'border-blue-300 bg-blue-50 text-blue-600' : 'border-slate-200 text-slate-400 hover:border-blue-300 hover:text-blue-600' }} rounded-lg flex items-center justify-center transition-colors text-xs"
+                        title="{{ $llamada->nro_orden ? 'Cambiar orden vinculada' : 'Vincular a orden' }}">
+                    <i class="fa-solid fa-link"></i>
+                </button>
                 {{-- Agregar nota --}}
                 <button onclick="agregarNota({{ $llamada->id }}, '{{ addslashes($llamada->notas ?? '') }}')"
                         class="w-8 h-8 border border-slate-200 hover:border-blue-300 text-slate-400 hover:text-blue-600 rounded-lg flex items-center justify-center transition-colors text-xs"
@@ -115,6 +121,44 @@
         {{ $llamadas->links() }}
     </div>
     @endif
+</div>
+
+{{-- Modal vincular orden --}}
+<div id="modal-vincular" class="fixed inset-0 z-50 hidden items-center justify-center" style="background:rgba(0,0,0,.5);backdrop-filter:blur(4px)">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl mx-4">
+        <h3 class="text-slate-900 font-semibold mb-1">Vincular llamada a orden</h3>
+        <p class="text-slate-400 text-xs mb-4">Escribe el número de orden (ej: UIO-000123)</p>
+        <input type="hidden" id="vincular-llamada-id">
+        <div class="flex gap-2 mb-3">
+            <input type="text" id="vincular-nro-orden" placeholder="UIO-000123"
+                   class="flex-1 border border-slate-200 rounded-xl px-4 py-3 text-sm font-mono focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/10 transition-all"
+                   onkeydown="if(event.key==='Enter') buscarOrden()">
+            <button onclick="buscarOrden()"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl text-sm font-semibold transition-colors">
+                Buscar
+            </button>
+        </div>
+        {{-- Resultado de búsqueda --}}
+        <div id="vincular-resultado" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-3 mb-4 text-sm">
+            <p id="vincular-res-orden" class="font-mono font-bold text-blue-600 text-sm"></p>
+            <p id="vincular-res-cliente" class="text-slate-800 font-medium"></p>
+            <p id="vincular-res-equipo" class="text-slate-500 text-xs mt-0.5"></p>
+            <p id="vincular-res-estado" class="text-xs mt-0.5"></p>
+        </div>
+        <div id="vincular-error" class="hidden bg-red-50 border border-red-200 text-red-600 text-sm px-3 py-2 rounded-xl mb-4"></div>
+        <div class="flex gap-3">
+            <button onclick="cerrarVincular()" class="flex-1 border border-slate-200 text-slate-500 py-2.5 rounded-xl text-sm hover:bg-slate-50 transition-colors">
+                Cancelar
+            </button>
+            <button onclick="desvincularOrden()" class="border border-red-100 text-red-400 hover:bg-red-50 px-4 py-2.5 rounded-xl text-sm transition-colors" title="Quitar vínculo">
+                <i class="fa-solid fa-unlink"></i>
+            </button>
+            <button onclick="confirmarVinculo()" id="btn-confirmar-vinculo" disabled
+                    class="flex-1 bg-blue-600 text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                Vincular
+            </button>
+        </div>
+    </div>
 </div>
 
 {{-- Modal nota --}}
@@ -140,6 +184,78 @@
 @push('scripts')
 <script>
 const _csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+let _nroConfirmado = null;
+
+function abrirVincular(id, nroActual) {
+    document.getElementById('vincular-llamada-id').value = id;
+    document.getElementById('vincular-nro-orden').value = nroActual || '';
+    document.getElementById('vincular-resultado').classList.add('hidden');
+    document.getElementById('vincular-error').classList.add('hidden');
+    document.getElementById('btn-confirmar-vinculo').disabled = true;
+    _nroConfirmado = null;
+    const m = document.getElementById('modal-vincular');
+    m.classList.remove('hidden'); m.classList.add('flex');
+    setTimeout(() => document.getElementById('vincular-nro-orden').focus(), 100);
+}
+
+function cerrarVincular() {
+    document.getElementById('modal-vincular').classList.add('hidden');
+    document.getElementById('modal-vincular').classList.remove('flex');
+    _nroConfirmado = null;
+}
+
+async function buscarOrden() {
+    const q = document.getElementById('vincular-nro-orden').value.trim();
+    const errEl = document.getElementById('vincular-error');
+    const resEl = document.getElementById('vincular-resultado');
+    errEl.classList.add('hidden'); resEl.classList.add('hidden');
+    document.getElementById('btn-confirmar-vinculo').disabled = true;
+    _nroConfirmado = null;
+    if (!q) return;
+
+    try {
+        const res = await fetch(`{{ route('recepcion.llamadas.buscar-orden') }}?q=${encodeURIComponent(q)}`, {
+            headers: { 'Accept': 'application/json' }
+        });
+        const data = await res.json();
+        if (data.ok && data.ordenes.length > 0) {
+            const o = data.ordenes[0];
+            const nombre = ((o.nombres || '') + ' ' + (o.apellidos || '')).trim() || o.cliente || '—';
+            const equipo = [o.tipo, o.marca, o.modelo].filter(Boolean).join(' ');
+            document.getElementById('vincular-res-orden').textContent = o.nro_orden;
+            document.getElementById('vincular-res-cliente').textContent = nombre;
+            document.getElementById('vincular-res-equipo').textContent = equipo;
+            document.getElementById('vincular-res-estado').textContent = o.estado_orden ? `Estado: ${o.estado_orden}` : '';
+            resEl.classList.remove('hidden');
+            document.getElementById('btn-confirmar-vinculo').disabled = false;
+            _nroConfirmado = o.nro_orden;
+        } else {
+            errEl.textContent = 'Orden no encontrada';
+            errEl.classList.remove('hidden');
+        }
+    } catch { errEl.textContent = 'Error de conexión'; errEl.classList.remove('hidden'); }
+}
+
+async function confirmarVinculo() {
+    if (!_nroConfirmado) return;
+    const id = document.getElementById('vincular-llamada-id').value;
+    await fetch(`/recepcion/llamadas/${id}/vincular`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': _csrf, 'Accept': 'application/json' },
+        body: JSON.stringify({ nro_orden: _nroConfirmado }),
+    });
+    cerrarVincular(); location.reload();
+}
+
+async function desvincularOrden() {
+    const id = document.getElementById('vincular-llamada-id').value;
+    await fetch(`/recepcion/llamadas/${id}/vincular`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': _csrf, 'Accept': 'application/json' },
+        body: JSON.stringify({ nro_orden: '' }),
+    });
+    cerrarVincular(); location.reload();
+}
 
 function agregarNota(id, notaActual) {
     document.getElementById('nota-llamada-id').value = id;

@@ -73,6 +73,8 @@ Route::prefix('recepcion')->middleware(['auth', 'receptionist'])->group(function
     Route::get('/pdf', [ReceptionistController::class, 'exportPdf'])->name('recepcion.pdf');
     Route::post('/llamadas', [LlamadaController::class, 'iniciar'])->name('recepcion.llamadas.iniciar')->middleware('throttle:60,1');
     Route::patch('/llamadas/{llamada}/notas', [LlamadaController::class, 'notas'])->name('recepcion.llamadas.notas');
+    Route::patch('/llamadas/{llamada}/vincular', [LlamadaController::class, 'vincular'])->name('recepcion.llamadas.vincular');
+    Route::get('/llamadas/buscar-orden', [LlamadaController::class, 'buscarOrdenAjax'])->name('recepcion.llamadas.buscar-orden');
     Route::get('/llamadas', [LlamadaController::class, 'historial'])->name('recepcion.llamadas');
     Route::get('/informe-foto/{fotoId}', [ReceptionistController::class, 'fotoInforme'])->name('recepcion.foto');
     Route::post('/ai-chat', [ReceptionistController::class, 'aiChat'])->name('recepcion.ai-chat')->middleware('throttle:30,1');
